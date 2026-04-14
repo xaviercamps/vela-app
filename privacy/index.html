@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela HRV — Privacy Policy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-deep: #060D1A;
+      --primary: #4A9EFF;
+      --primary-bright: #8ECFFF;
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.6);
+      --text-tertiary: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(74,158,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--primary-bright);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 3rem auto;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    p {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    p + p { margin-top: 0.75rem; }
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid rgba(74,158,255,0.15);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--primary-bright);
+    }
+    .contact-link {
+      color: var(--primary-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(142,207,255,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    footer {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="/vela-app/">← Back to support</a>
+      <h1 class="page-title">Privacy Policy</h1>
+      <p class="page-meta">Last updated: April 2026</p>
+    </header>
+
+    <div class="highlight-card fade-in">
+      <p>Vela does not collect, transmit, or store any personal data on external servers. Everything stays on your device and your private iCloud.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section>
+        <h2>What data Vela uses</h2>
+        <p>Vela reads heart rate variability (HRV) data from Apple HealthKit to calculate your personal stress score. This data is already collected automatically by your Apple Watch.</p>
+        <p>Vela also stores the readings it calculates — your stress score history, your personal HRV baseline, and raw HRV samples used for baseline calculation.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Where your data lives</h2>
+        <p>All data is stored locally on your Apple Watch and synced privately through your own iCloud account using Apple's CloudKit framework. Vela has no servers. No data ever passes through systems owned or operated by Vela.</p>
+        <p>Only you can access your data. Not us, not third parties.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Third parties</h2>
+        <p>Vela does not share any data with third parties. We do not use analytics services, advertising SDKs, or any external tracking tools.</p>
+      </section>
+
+      <section>
+        <h2>Health data</h2>
+        <p>Vela accesses health data solely to provide its core functionality — measuring and tracking your stress level. Health data is never used for advertising or sold to any party.</p>
+      </section>
+
+      <section>
+        <h2>Children</h2>
+        <p>Vela is not directed at children under the age of 13 and does not knowingly collect data from them.</p>
+      </section>
+
+      <section>
+        <h2>Changes to this policy</h2>
+        <p>If this privacy policy changes, the updated version will be published at this URL with a new date. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>Questions about this privacy policy? Reach out at <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a>.</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Vela HRV · All rights reserved</p>
+    </footer>
+  </div>
+</body>
+</html>
