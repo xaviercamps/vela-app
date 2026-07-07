@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela HRV — Accesibilidad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-deep: #060D1A;
+      --primary: #4A9EFF;
+      --primary-bright: #8ECFFF;
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.6);
+      --text-tertiary: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(74,158,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--primary-bright);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 3rem auto;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    p {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid rgba(74,158,255,0.15);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--primary-bright);
+    }
+    .contact-link {
+      color: var(--primary-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(142,207,255,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    footer {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in { animation: none; opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="/vela-app/es/">← Volver al soporte</a>
+      <h1 class="page-title">Accesibilidad</h1>
+      <p class="page-meta">Última actualización: julio 2026 · <a class="contact-link" href="/vela-app/accessibility/" lang="en" hreflang="en">English version</a></p>
+    </header>
+
+    <div class="highlight-card fade-in">
+      <p>Vela está diseñada para poder usarse por completo sin ver la pantalla: todas las pantallas funcionan con VoiceOver y ninguna información depende únicamente del color.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Nuestro enfoque</h2>
+        <p>Vela mide el estrés a través de la variabilidad de la frecuencia cardiaca en el Apple Watch. Entender tu propio cuerpo no debería depender de cómo ves, así que la accesibilidad se trata como una funcionalidad central: el principio rector es que una persona ciega pueda consultar su nivel de estrés, explorar su historial, leer sus análisis semanales y configurar la app de forma completamente autónoma.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Compatibilidad en Apple Watch</h2>
+        <ul>
+          <li><strong>VoiceOver.</strong> Todos los elementos tienen etiqueta, valor y descripción con significado. Los gráficos se exponen como Audio Graphs: el historial de estrés puede explorarse mediante sonido con la corona digital.</li>
+          <li><strong>Texto más grande.</strong> La interfaz usa Dynamic Type en toda la app. Los indicadores compactos, como el anillo de puntuación, ofrecen el visor de contenido ampliado.</li>
+          <li><strong>Interfaz oscura.</strong> La interfaz de Vela es oscura por diseño en todas las pantallas, sin destellos brillantes.</li>
+          <li><strong>Diferenciar no solo con color.</strong> Los niveles de estrés se refuerzan siempre con una cifra y una palabra — nunca solo con color. Los gráficos añaden líneas de zona al activar "Diferenciar sin color".</li>
+          <li><strong>Contraste suficiente.</strong> Todo el texto cumple la ratio de contraste WCAG AA (4,5:1 o superior) sobre el fondo oscuro.</li>
+          <li><strong>Reducir movimiento.</strong> Las animaciones se desactivan o se sustituyen por alternativas estáticas con "Reducir movimiento" activado. Vela también respeta Reducir transparencia y Texto en negrita.</li>
+        </ul>
+        <p>Vela no contiene audio ni vídeo, por lo que los subtítulos y las audiodescripciones no aplican.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Cómo lo verificamos</h2>
+        <p>Todas las pantallas pasan por las auditorías automáticas de accesibilidad de Apple — etiquetas, contraste, tamaño de las áreas táctiles y escalado de texto — como parte de la batería de tests de la app, junto con revisión manual con VoiceOver. Estas comprobaciones se repiten con cada cambio de interfaz, de modo que la accesibilidad no se degrada silenciosamente entre versiones.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Comentarios</h2>
+        <p>Si algo en Vela resulta difícil de usar con tecnología de asistencia, es un bug. Escríbenos a <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a> — los reportes de accesibilidad se priorizan para la siguiente versión.</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Vela HRV · Todos los derechos reservados</p>
+    </footer>
+  </div>
+</body>
+</html>
