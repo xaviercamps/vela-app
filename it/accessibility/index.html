@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vela HRV — Política de Privacidad</title>
+  <title>Vela HRV — Accessibilità</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
   <style>
@@ -97,6 +97,25 @@
       color: var(--text-secondary);
     }
     p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
     .highlight-card {
       background: var(--surface);
       border: 1px solid rgba(74,158,255,0.15);
@@ -142,68 +161,65 @@
     .fade-in:nth-child(4) { animation-delay: 0.35s; }
     .fade-in:nth-child(5) { animation-delay: 0.45s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <a class="back-link" href="/vela-app/es/">← Volver al soporte</a>
-      <h1 class="page-title">Política de Privacidad</h1>
-      <p class="page-meta">Última actualización: abril 2026</p>
+      <a class="back-link" href="/vela-app/it/">← Torna al supporto</a>
+      <h1 class="page-title">Accessibilità</h1>
+      <p class="page-meta">Ultimo aggiornamento: luglio 2026</p>
     </header>
 
     <div class="highlight-card fade-in">
-      <p>Vela no recopila, transmite ni almacena ningún dato personal en servidores externos. Todo permanece en tu dispositivo y en tu iCloud privado.</p>
+      <p>Vela è progettata per essere completamente utilizzabile senza guardare lo schermo: ogni schermata funziona con VoiceOver e nessuna informazione dipende mai soltanto dal colore.</p>
     </div>
 
     <div class="divider"></div>
 
     <div class="fade-in">
       <section>
-        <h2>Qué datos utiliza Vela</h2>
-        <p>Vela lee datos de variabilidad de frecuencia cardíaca (HRV) de Apple HealthKit para calcular tu score de estrés personal. Estos datos ya los recoge automáticamente tu Apple Watch.</p>
-        <p>Vela también almacena las lecturas que calcula: tu historial de score de estrés, tu baseline personal de HRV y las muestras de HRV usadas para el cálculo del baseline.</p>
+        <h2>Il nostro approccio</h2>
+        <p>Vela misura lo stress attraverso la variabilità della frequenza cardiaca su Apple Watch. Capire il proprio corpo non dovrebbe dipendere da come si vede: per questo l'accessibilità è trattata come una funzionalità centrale. Il principio guida è che una persona cieca possa controllare il proprio livello di stress, esplorare lo storico, leggere le analisi settimanali e configurare l'app in totale autonomia.</p>
       </section>
     </div>
 
     <div class="fade-in">
       <section>
-        <h2>Dónde viven tus datos</h2>
-        <p>Todos los datos se almacenan localmente en tu Apple Watch y se sincronizan de forma privada a través de tu propia cuenta de iCloud usando el framework CloudKit de Apple. Vela no tiene servidores. Ningún dato pasa nunca por sistemas propiedad de Vela.</p>
-        <p>Solo tú puedes acceder a tus datos. Ni nosotros ni terceros.</p>
+        <h2>Supporto su Apple Watch</h2>
+        <ul>
+          <li><strong>VoiceOver.</strong> Ogni elemento ha etichetta, valore e descrizione significativi. I grafici sono esposti come Audio Graph: lo storico dello stress può essere esplorato con il suono tramite la corona digitale.</li>
+          <li><strong>Testo più grande.</strong> L'interfaccia usa Dynamic Type ovunque. Gli indicatori compatti, come l'anello del punteggio, offrono il visualizzatore di contenuti ingranditi.</li>
+          <li><strong>Interfaccia scura.</strong> L'interfaccia di Vela è scura per design in ogni schermata, senza lampi luminosi.</li>
+          <li><strong>Differenziare senza colore.</strong> I livelli di stress sono sempre rinforzati da un numero e una parola — mai solo dal colore. I grafici aggiungono linee di zona quando « Differenzia senza colore » è attivo.</li>
+          <li><strong>Contrasto sufficiente.</strong> Tutto il testo rispetta il rapporto di contrasto WCAG AA (4,5:1 o superiore) sullo sfondo scuro.</li>
+          <li><strong>Riduci movimento.</strong> Le animazioni vengono disattivate o sostituite con alternative statiche quando « Riduci movimento » è attivo. Vela rispetta anche Riduci trasparenza e Testo in grassetto.</li>
+        </ul>
+        <p>Vela non contiene audio né video, quindi sottotitoli e audiodescrizioni non si applicano.</p>
       </section>
     </div>
 
     <div class="fade-in">
       <section>
-        <h2>Terceros</h2>
-        <p>Vela no comparte ningún dato con terceros. No utilizamos servicios de analítica, SDKs publicitarios ni herramientas de seguimiento externas.</p>
+        <h2>Come lo verifichiamo</h2>
+        <p>Ogni schermata passa attraverso gli audit di accessibilità automatici di Apple — etichette, contrasto, dimensione delle aree tattili e ridimensionamento del testo — come parte della suite di test dell'app, insieme alla revisione manuale con VoiceOver. Questi controlli vengono ripetuti a ogni modifica dell'interfaccia, così l'accessibilità non regredisce silenziosamente tra le versioni.</p>
       </section>
+    </div>
 
+    <div class="fade-in">
       <section>
-        <h2>Datos de salud</h2>
-        <p>Vela accede a datos de salud únicamente para proporcionar su funcionalidad principal: medir y hacer seguimiento de tu nivel de estrés. Los datos de salud nunca se usan con fines publicitarios ni se venden a ninguna parte.</p>
-      </section>
-
-      <section>
-        <h2>Menores</h2>
-        <p>Vela no está dirigida a menores de 13 años y no recopila datos de ellos de forma consciente.</p>
-      </section>
-
-      <section>
-        <h2>Cambios en esta política</h2>
-        <p>Si esta política de privacidad cambia, la versión actualizada se publicará en esta URL con una nueva fecha. El uso continuado de la app tras los cambios implica la aceptación de la política actualizada.</p>
-      </section>
-
-      <section>
-        <h2>Contacto</h2>
-        <p>¿Preguntas sobre esta política de privacidad? Escríbenos a <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a>.</p>
+        <h2>Feedback</h2>
+        <p>Se qualcosa in Vela è difficile da usare con le tecnologie assistive, è un bug. Scrivi a <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a> — le segnalazioni di accessibilità hanno priorità per la versione successiva.</p>
       </section>
     </div>
 
     <footer>
-      <p>© 2026 Vela HRV · Todos los derechos reservados</p>
-      <nav class="lang-row" aria-label="Idioma"><span aria-current="true">ES</span> · <a href="/vela-app/privacy/" hreflang="en">EN</a> · <a href="/vela-app/ca/privacy/" hreflang="ca">CA</a> · <a href="/vela-app/eu/privacy/" hreflang="eu">EU</a> · <a href="/vela-app/gl/privacy/" hreflang="gl">GL</a> · <a href="/vela-app/fr/privacy/" hreflang="fr">FR</a> · <a href="/vela-app/de/privacy/" hreflang="de">DE</a> · <a href="/vela-app/it/privacy/" hreflang="it">IT</a> · <a href="/vela-app/pt/privacy/" hreflang="pt">PT</a></nav>
+      <p>© 2026 Vela HRV · Tutti i diritti riservati</p>
+      <nav class="lang-row" aria-label="Lingua"><a href="/vela-app/es/accessibility/" hreflang="es">ES</a> · <a href="/vela-app/accessibility/" hreflang="en">EN</a> · <a href="/vela-app/ca/accessibility/" hreflang="ca">CA</a> · <a href="/vela-app/eu/accessibility/" hreflang="eu">EU</a> · <a href="/vela-app/gl/accessibility/" hreflang="gl">GL</a> · <a href="/vela-app/fr/accessibility/" hreflang="fr">FR</a> · <a href="/vela-app/de/accessibility/" hreflang="de">DE</a> · <span aria-current="true">IT</span> · <a href="/vela-app/pt/accessibility/" hreflang="pt">PT</a></nav>
     </footer>
   </div>
 </body>

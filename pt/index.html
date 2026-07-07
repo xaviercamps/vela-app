@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vela HRV — Support</title>
+  <title>Vela HRV — Suporte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
   <style>
@@ -158,12 +158,16 @@
     .fade-in:nth-child(3) { animation-delay: 0.3s; }
     .fade-in:nth-child(4) { animation-delay: 0.4s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <svg class="hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="40" cy="40" r="30" stroke="#4A9EFF" stroke-width="1.2" opacity="0.5" filter="url(#glow)"/>
         <circle cx="40" cy="40" r="30" stroke="#8ECFFF" stroke-width="0.6" opacity="0.3"/>
         <path d="M8 40 C14 40 16 32 22 32 C28 32 30 48 36 48 C42 48 44 28 50 28 C56 28 58 44 64 44 C68 44 70 40 72 40"
@@ -182,9 +186,9 @@
 
     <div class="fade-in">
       <section>
-        <h2>About the app</h2>
-        <p>Vela measures your stress level using heart rate variability (HRV) directly from your Apple Watch. All processing happens on your device — your data never leaves your Apple Watch or your private iCloud.</p>
-        <p>During the first few days, Vela builds your personal baseline so every reading makes sense for your body, not for a statistical average.</p>
+        <h2>Sobre a app</h2>
+        <p>A Vela mede o seu nível de stress usando a variabilidade da frequência cardíaca (HRV) diretamente a partir do seu Apple Watch. Todo o processamento acontece no seu dispositivo — os seus dados nunca saem do seu Apple Watch nem do seu iCloud privado.</p>
+        <p>Durante os primeiros dias, a Vela constrói a sua linha de base pessoal para que cada leitura faça sentido para o seu corpo, e não para uma média estatística.</p>
       </section>
     </div>
 
@@ -192,26 +196,26 @@
 
     <div class="fade-in">
       <section>
-        <h2>Frequently asked questions</h2>
+        <h2>Perguntas frequentes</h2>
 
         <div class="faq-item">
-          <h3>Which Apple Watch do I need?</h3>
-          <p>Vela requires Apple Watch with watchOS 26 or later. It works as a standalone app — your iPhone doesn't need to be nearby to take a measurement.</p>
+          <h3>De que Apple Watch preciso?</h3>
+          <p>A Vela requer um Apple Watch com watchOS 26 ou posterior. Funciona como app independente — o iPhone não precisa de estar por perto para fazer uma medição.</p>
         </div>
 
         <div class="faq-item">
-          <h3>Why does it take a few days to show my score?</h3>
-          <p>Vela needs to learn your personal HRV before it can calculate a meaningful score. During the first 7–14 days it builds your baseline — from then on, every reading reflects your actual state.</p>
+          <h3>Porque demora alguns dias a mostrar a minha pontuação?</h3>
+          <p>A Vela precisa de conhecer a sua HRV pessoal antes de calcular uma pontuação com significado. Durante os primeiros 7–14 dias constrói a sua linha de base — a partir daí, cada leitura reflete o seu estado real.</p>
         </div>
 
         <div class="faq-item">
-          <h3>Where is my data stored?</h3>
-          <p>Your data syncs privately through your own iCloud. Vela has no servers of its own — we never send or store your data outside your account.</p>
+          <h3>Onde são guardados os meus dados?</h3>
+          <p>Os seus dados sincronizam-se de forma privada através do seu próprio iCloud. A Vela não tem servidores próprios — nunca enviamos nem guardamos os seus dados fora da sua conta.</p>
         </div>
 
         <div class="faq-item">
-          <h3>What permissions does Vela need?</h3>
-          <p>Vela requests access to HealthKit to read the heart rate variability data that your Apple Watch already collects automatically.</p>
+          <h3>Que permissões precisa a Vela?</h3>
+          <p>A Vela pede acesso ao HealthKit para ler os dados de variabilidade da frequência cardíaca que o seu Apple Watch já recolhe automaticamente.</p>
         </div>
       </section>
     </div>
@@ -220,17 +224,17 @@
 
     <div class="fade-in">
       <section>
-        <h2>Contact & support</h2>
+        <h2>Contacto e suporte</h2>
         <div class="contact-card">
-          <p>Have a question, found a bug, or want to share feedback? Reach out directly.</p>
+          <p>Tem alguma pergunta, encontrou um erro ou quer partilhar feedback? Escreva-nos diretamente.</p>
           <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a>
         </div>
       </section>
     </div>
 
     <footer>
-      <p>© 2026 Vela HRV · All rights reserved</p>
-      <nav class="lang-row" aria-label="Language"><a href="/vela-app/es/" hreflang="es">ES</a> · <span aria-current="true">EN</span> · <a href="/vela-app/ca/" hreflang="ca">CA</a> · <a href="/vela-app/eu/" hreflang="eu">EU</a> · <a href="/vela-app/gl/" hreflang="gl">GL</a> · <a href="/vela-app/fr/" hreflang="fr">FR</a> · <a href="/vela-app/de/" hreflang="de">DE</a> · <a href="/vela-app/it/" hreflang="it">IT</a> · <a href="/vela-app/pt/" hreflang="pt">PT</a></nav>
+      <p>© 2026 Vela HRV · Todos os direitos reservados</p>
+      <nav class="lang-row" aria-label="Idioma"><a href="/vela-app/es/" hreflang="es">ES</a> · <a href="/vela-app/" hreflang="en">EN</a> · <a href="/vela-app/ca/" hreflang="ca">CA</a> · <a href="/vela-app/eu/" hreflang="eu">EU</a> · <a href="/vela-app/gl/" hreflang="gl">GL</a> · <a href="/vela-app/fr/" hreflang="fr">FR</a> · <a href="/vela-app/de/" hreflang="de">DE</a> · <a href="/vela-app/it/" hreflang="it">IT</a> · <span aria-current="true">PT</span></nav>
     </footer>
   </div>
 </body>

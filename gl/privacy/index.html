@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="gl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vela HRV — Política de Privacidad</title>
+  <title>Vela HRV — Política de privacidade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
   <style>
@@ -97,6 +97,25 @@
       color: var(--text-secondary);
     }
     p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
     .highlight-card {
       background: var(--surface);
       border: 1px solid rgba(74,158,255,0.15);
@@ -142,68 +161,72 @@
     .fade-in:nth-child(4) { animation-delay: 0.35s; }
     .fade-in:nth-child(5) { animation-delay: 0.45s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <a class="back-link" href="/vela-app/es/">← Volver al soporte</a>
-      <h1 class="page-title">Política de Privacidad</h1>
+      <a class="back-link" href="/vela-app/gl/">← Volver ao soporte</a>
+      <h1 class="page-title">Política de privacidade</h1>
       <p class="page-meta">Última actualización: abril 2026</p>
     </header>
 
     <div class="highlight-card fade-in">
-      <p>Vela no recopila, transmite ni almacena ningún dato personal en servidores externos. Todo permanece en tu dispositivo y en tu iCloud privado.</p>
+      <p>Vela non recolle, transmite nin almacena ningún dato persoal en servidores externos. Todo queda no teu dispositivo e no teu iCloud privado.</p>
     </div>
 
     <div class="divider"></div>
 
     <div class="fade-in">
       <section>
-        <h2>Qué datos utiliza Vela</h2>
-        <p>Vela lee datos de variabilidad de frecuencia cardíaca (HRV) de Apple HealthKit para calcular tu score de estrés personal. Estos datos ya los recoge automáticamente tu Apple Watch.</p>
-        <p>Vela también almacena las lecturas que calcula: tu historial de score de estrés, tu baseline personal de HRV y las muestras de HRV usadas para el cálculo del baseline.</p>
+        <h2>Que datos usa Vela</h2>
+        <p>Vela le datos de variabilidade da frecuencia cardíaca (HRV) de Apple HealthKit para calcular a túa puntuación de estrés persoal. Estes datos xa os recolle automaticamente o teu Apple Watch.</p><p>Vela tamén almacena as lecturas que calcula — o historial da túa puntuación de estrés, a túa liña base de HRV persoal e as mostras de HRV en bruto usadas para calculala.</p>
       </section>
     </div>
-
     <div class="fade-in">
       <section>
-        <h2>Dónde viven tus datos</h2>
-        <p>Todos los datos se almacenan localmente en tu Apple Watch y se sincronizan de forma privada a través de tu propia cuenta de iCloud usando el framework CloudKit de Apple. Vela no tiene servidores. Ningún dato pasa nunca por sistemas propiedad de Vela.</p>
-        <p>Solo tú puedes acceder a tus datos. Ni nosotros ni terceros.</p>
+        <h2>Onde viven os teus datos</h2>
+        <p>Todos os datos almacénanse localmente no teu Apple Watch e sincronízanse de forma privada a través da túa propia conta de iCloud mediante o framework CloudKit de Apple. Vela non ten servidores. Ningún dato pasa nunca por sistemas propiedade de Vela.</p><p>Só ti podes acceder aos teus datos. Nin nós, nin terceiros.</p>
       </section>
     </div>
-
     <div class="fade-in">
       <section>
-        <h2>Terceros</h2>
-        <p>Vela no comparte ningún dato con terceros. No utilizamos servicios de analítica, SDKs publicitarios ni herramientas de seguimiento externas.</p>
+        <h2>Terceiros</h2>
+        <p>Vela non comparte ningún dato con terceiros. Non usamos servizos de analítica, SDK publicitarios nin ningunha ferramenta de seguimento externa.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
-        <h2>Datos de salud</h2>
-        <p>Vela accede a datos de salud únicamente para proporcionar su funcionalidad principal: medir y hacer seguimiento de tu nivel de estrés. Los datos de salud nunca se usan con fines publicitarios ni se venden a ninguna parte.</p>
+        <h2>Datos de saúde</h2>
+        <p>Vela accede aos datos de saúde unicamente para ofrecer a súa funcionalidade principal — medir e seguir o teu nivel de estrés. Os datos de saúde nunca se usan para publicidade nin se venden a ninguén.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
         <h2>Menores</h2>
-        <p>Vela no está dirigida a menores de 13 años y no recopila datos de ellos de forma consciente.</p>
+        <p>Vela non está dirixida a menores de 13 anos e non recolle deliberadamente datos deles.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
-        <h2>Cambios en esta política</h2>
-        <p>Si esta política de privacidad cambia, la versión actualizada se publicará en esta URL con una nueva fecha. El uso continuado de la app tras los cambios implica la aceptación de la política actualizada.</p>
+        <h2>Cambios nesta política</h2>
+        <p>Se esta política de privacidade cambia, a versión actualizada publicarase nesta URL cunha data nova. O uso continuado da app despois dos cambios constitúe a aceptación da política actualizada.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
         <h2>Contacto</h2>
-        <p>¿Preguntas sobre esta política de privacidad? Escríbenos a <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a>.</p>
+        <p>Tes preguntas sobre esta política de privacidade? Escribe a <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a>.</p>
       </section>
     </div>
 
     <footer>
-      <p>© 2026 Vela HRV · Todos los derechos reservados</p>
-      <nav class="lang-row" aria-label="Idioma"><span aria-current="true">ES</span> · <a href="/vela-app/privacy/" hreflang="en">EN</a> · <a href="/vela-app/ca/privacy/" hreflang="ca">CA</a> · <a href="/vela-app/eu/privacy/" hreflang="eu">EU</a> · <a href="/vela-app/gl/privacy/" hreflang="gl">GL</a> · <a href="/vela-app/fr/privacy/" hreflang="fr">FR</a> · <a href="/vela-app/de/privacy/" hreflang="de">DE</a> · <a href="/vela-app/it/privacy/" hreflang="it">IT</a> · <a href="/vela-app/pt/privacy/" hreflang="pt">PT</a></nav>
+      <p>© 2026 Vela HRV · Todos os dereitos reservados</p>
+      <nav class="lang-row" aria-label="Idioma"><a href="/vela-app/es/privacy/" hreflang="es">ES</a> · <a href="/vela-app/privacy/" hreflang="en">EN</a> · <a href="/vela-app/ca/privacy/" hreflang="ca">CA</a> · <a href="/vela-app/eu/privacy/" hreflang="eu">EU</a> · <span aria-current="true">GL</span> · <a href="/vela-app/fr/privacy/" hreflang="fr">FR</a> · <a href="/vela-app/de/privacy/" hreflang="de">DE</a> · <a href="/vela-app/it/privacy/" hreflang="it">IT</a> · <a href="/vela-app/pt/privacy/" hreflang="pt">PT</a></nav>
     </footer>
   </div>
 </body>

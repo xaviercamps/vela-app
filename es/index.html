@@ -139,6 +139,15 @@
       border-top: 1px solid var(--border);
     }
     footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .lang-row { margin-top: 1rem; }
+    .lang-row a, .lang-row span {
+      color: var(--text-tertiary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+    .lang-row a:hover { color: var(--primary-bright); }
+    .lang-row span { color: var(--primary-bright); }
     .fade-in {
       opacity: 0;
       transform: translateY(16px);
@@ -221,6 +230,7 @@
 
     <footer>
       <p>© 2026 Vela HRV · Todos los derechos reservados</p>
+      <nav class="lang-row" aria-label="Idioma"><span aria-current="true">ES</span> · <a href="/vela-app/" hreflang="en">EN</a> · <a href="/vela-app/ca/" hreflang="ca">CA</a> · <a href="/vela-app/eu/" hreflang="eu">EU</a> · <a href="/vela-app/gl/" hreflang="gl">GL</a> · <a href="/vela-app/fr/" hreflang="fr">FR</a> · <a href="/vela-app/de/" hreflang="de">DE</a> · <a href="/vela-app/it/" hreflang="it">IT</a> · <a href="/vela-app/pt/" hreflang="pt">PT</a></nav>
     </footer>
   </div>
 </body>
