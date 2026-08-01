@@ -97,6 +97,25 @@
       color: var(--text-secondary);
     }
     p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
     .highlight-card {
       background: var(--surface);
       border: 1px solid rgba(74,158,255,0.15);
@@ -142,12 +161,16 @@
     .fade-in:nth-child(4) { animation-delay: 0.35s; }
     .fade-in:nth-child(5) { animation-delay: 0.45s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <a class="back-link" href="/vela-app/">← Back to support</a>
+      <a class="back-link" href="/support/">← Back to support</a>
       <h1 class="page-title">Privacy Policy</h1>
       <p class="page-meta">Last updated: April 2026</p>
     </header>
@@ -161,40 +184,40 @@
     <div class="fade-in">
       <section>
         <h2>What data Vela uses</h2>
-        <p>Vela reads heart rate variability (HRV) data from Apple HealthKit to calculate your personal stress score. This data is already collected automatically by your Apple Watch.</p>
-        <p>Vela also stores the readings it calculates — your stress score history, your personal HRV baseline, and raw HRV samples used for baseline calculation.</p>
+        <p>Vela reads heart rate variability (HRV) data from Apple HealthKit to calculate your personal stress score. This data is already collected automatically by your Apple Watch.</p><p>Vela also stores the readings it calculates — your stress score history, your personal HRV baseline, and raw HRV samples used for baseline calculation.</p>
       </section>
     </div>
-
     <div class="fade-in">
       <section>
         <h2>Where your data lives</h2>
-        <p>All data is stored locally on your Apple Watch and synced privately through your own iCloud account using Apple's CloudKit framework. Vela has no servers. No data ever passes through systems owned or operated by Vela.</p>
-        <p>Only you can access your data. Not us, not third parties.</p>
+        <p>All data is stored locally on your Apple Watch and synced privately through your own iCloud account using Apple's CloudKit framework. Vela has no servers. No data ever passes through systems owned or operated by Vela.</p><p>Only you can access your data. Not us, not third parties.</p>
       </section>
     </div>
-
     <div class="fade-in">
       <section>
         <h2>Third parties</h2>
         <p>Vela does not share any data with third parties. We do not use analytics services, advertising SDKs, or any external tracking tools.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
         <h2>Health data</h2>
         <p>Vela accesses health data solely to provide its core functionality — measuring and tracking your stress level. Health data is never used for advertising or sold to any party.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
         <h2>Children</h2>
         <p>Vela is not directed at children under the age of 13 and does not knowingly collect data from them.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
         <h2>Changes to this policy</h2>
         <p>If this privacy policy changes, the updated version will be published at this URL with a new date. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
       </section>
-
+    </div>
+    <div class="fade-in">
       <section>
         <h2>Contact</h2>
         <p>Questions about this privacy policy? Reach out at <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a>.</p>
@@ -203,7 +226,7 @@
 
     <footer>
       <p>© 2026 Vela HRV · All rights reserved</p>
-      <nav class="lang-row" aria-label="Language"><a href="/vela-app/es/privacy/" hreflang="es">ES</a> · <span aria-current="true">EN</span> · <a href="/vela-app/ca/privacy/" hreflang="ca">CA</a> · <a href="/vela-app/eu/privacy/" hreflang="eu">EU</a> · <a href="/vela-app/gl/privacy/" hreflang="gl">GL</a> · <a href="/vela-app/fr/privacy/" hreflang="fr">FR</a> · <a href="/vela-app/de/privacy/" hreflang="de">DE</a> · <a href="/vela-app/it/privacy/" hreflang="it">IT</a> · <a href="/vela-app/pt/privacy/" hreflang="pt">PT</a></nav>
+      <nav class="lang-row" aria-label="Language"><a href="/es/privacy/" hreflang="es">ES</a> · <span aria-current="true">EN</span> · <a href="/ca/privacy/" hreflang="ca">CA</a> · <a href="/eu/privacy/" hreflang="eu">EU</a> · <a href="/gl/privacy/" hreflang="gl">GL</a> · <a href="/fr/privacy/" hreflang="fr">FR</a> · <a href="/de/privacy/" hreflang="de">DE</a> · <a href="/it/privacy/" hreflang="it">IT</a> · <a href="/pt/privacy/" hreflang="pt">PT</a></nav>
     </footer>
   </div>
 </body>
