@@ -5,6 +5,8 @@ a single content dictionary. Run from anywhere; SITE is the repo root
 (tools/..). The site is served from the domain root (see CNAME), so URLs have
 no path prefix: EN lives at the root, other locales under /<code>/."""
 
+import json
+from datetime import date
 from pathlib import Path
 
 SITE = Path(__file__).parent.parent
@@ -12,11 +14,27 @@ MAIL = "xaviercampsnovi@gmail.com"
 ORDER = ["es", "en", "ca", "eu", "gl", "fr", "de", "it", "pt"]
 APPSTORE_URL = "https://apps.apple.com/app/vela-hrv/id6762096428"
 TOUR_IMAGES = ["watch-shot-score.png", "watch-shot-trend.png", "watch-shot-explain.png"]
+SITE_URL = "https://velahrv.com"
+DEFAULT_LOCALE = "en"  # served at the domain root; used as the x-default hreflang target
+BUILD_DATE = date.today().isoformat()
+
+# BCP47 tag Google/Bing expect for each site locale in hreflang and og:locale
+HREFLANG_TAG = {
+    "es": "es", "en": "en", "ca": "ca", "eu": "eu", "gl": "gl",
+    "fr": "fr", "de": "de", "it": "it", "pt": "pt-PT",
+}
+OG_LOCALE = {
+    "es": "es_ES", "en": "en_US", "ca": "ca_ES", "eu": "eu_ES", "gl": "gl_ES",
+    "fr": "fr_FR", "de": "de_DE", "it": "it_IT", "pt": "pt_PT",
+}
 
 def path_for(code: str, page: str) -> str:
     """page is one of: landing, support, privacy, accessibility."""
     base = "/" if code == "en" else f"/{code}/"
     return base if page == "landing" else f"{base}{page}/"
+
+def abs_url(code: str, page: str) -> str:
+    return SITE_URL + path_for(code, page)
 
 def out_path(code: str, page: str) -> Path:
     rel = path_for(code, page).strip("/")
@@ -31,6 +49,60 @@ def lang_row(page: str, current: str, aria: str) -> str:
         else:
             parts.append(f'<a href="{path_for(c, page)}" hreflang="{c}">{label}</a>')
     return f'<nav class="lang-row" aria-label="{aria}">{" · ".join(parts)}</nav>'
+
+def esc_attr(s: str) -> str:
+    return s.replace("&", "&amp;").replace('"', "&quot;")
+
+def seo_head(code: str, page: str, title: str, desc: str, image: str = "og-image.png") -> str:
+    """Canonical link, full hreflang cluster (+ x-default), and Open Graph /
+    Twitter Card tags for a single page. Shared by every page type so the
+    9 locales x 4 pages all carry the same SEO scaffolding."""
+    canonical = abs_url(code, page)
+    title_a, desc_a = esc_attr(title), esc_attr(desc)
+    alternates = "\n".join(
+        f'<link rel="alternate" hreflang="{HREFLANG_TAG[c]}" href="{abs_url(c, page)}">'
+        for c in ORDER)
+    alternates += f'\n<link rel="alternate" hreflang="x-default" href="{abs_url(DEFAULT_LOCALE, page)}">'
+    image_url = f"{SITE_URL}/assets/{image}"
+    return f"""<link rel="canonical" href="{canonical}">
+{alternates}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vela HRV">
+<meta property="og:url" content="{canonical}">
+<meta property="og:title" content="{title_a}">
+<meta property="og:description" content="{desc_a}">
+<meta property="og:image" content="{image_url}">
+<meta property="og:locale" content="{OG_LOCALE[code]}">
+{"".join(f'<meta property="og:locale:alternate" content="{OG_LOCALE[c]}">' + chr(10) for c in ORDER if c != code)}<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title_a}">
+<meta name="twitter:description" content="{desc_a}">
+<meta name="twitter:image" content="{image_url}">"""
+
+def app_json_ld(code: str, t: dict) -> str:
+    """SoftwareApplication structured data for the landing page, one per
+    locale. No aggregateRating is emitted: fabricating one would violate
+    Google's structured-data guidelines. Add it once real App Store
+    review data exists (see README)."""
+    L = t["landing"]
+    data = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Vela HRV",
+        "description": L["meta_desc"],
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "watchOS",
+        "url": abs_url(code, "landing"),
+        "image": f"{SITE_URL}/assets/icon-1024.png",
+        "downloadUrl": APPSTORE_URL,
+        "inLanguage": HREFLANG_TAG[code],
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "url": APPSTORE_URL,
+        },
+    }
+    return f'<script type="application/ld+json">{json.dumps(data, ensure_ascii=False)}</script>'
 
 LANG_ROW_CSS = """    .lang-row { margin-top: 1rem; }
     .lang-row a, .lang-row span {
@@ -718,6 +790,8 @@ HEAD = """<!DOCTYPE html>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
+  <meta name="description" content="{desc}" />
+{seo}
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
   <style>
@@ -732,6 +806,8 @@ LANDING_HEAD = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+{seo}
+{jsonld}
 <link rel="icon" href="/assets/icon-1024.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -754,7 +830,10 @@ def render_support(code, t):
           <p>{a}</p>
         </div>'''
         for q, a in t["faq"])
-    return HEAD.format(lang=code, title=t["support_title"], css=SUPPORT_CSS) + f"""<body>
+    desc = t["about_p1"]
+    return HEAD.format(lang=code, title=t["support_title"], desc=esc_attr(desc),
+                        seo=seo_head(code, "support", t["support_title"], desc),
+                        css=SUPPORT_CSS) + f"""<body>
   <div class="container">
     <header>
       <a class="back-link" href="{path_for(code, 'landing')}">{t['back_home']}</a>
@@ -809,7 +888,10 @@ def render_privacy(code, t):
       </section>
     </div>"""
         for h, ps in p["sections"])
-    return HEAD.format(lang=code, title=p["title_tag"], css=SUB_CSS) + f"""<body>
+    desc = p["highlight"]
+    return HEAD.format(lang=code, title=p["title_tag"], desc=esc_attr(desc),
+                        seo=seo_head(code, "privacy", p["title_tag"], desc),
+                        css=SUB_CSS) + f"""<body>
   <div class="container">
     <header>
       <a class="back-link" href="{path_for(code, 'support')}">{t['back']}</a>
@@ -840,7 +922,10 @@ def render_privacy(code, t):
 def render_a11y(code, t):
     a = t["a11y"]
     lis = "\n".join(f"          <li><strong>{s}</strong> {d}</li>" for s, d in a["items"])
-    return HEAD.format(lang=code, title=a["title_tag"], css=SUB_CSS) + f"""<body>
+    desc = a["highlight"]
+    return HEAD.format(lang=code, title=a["title_tag"], desc=esc_attr(desc),
+                        seo=seo_head(code, "accessibility", a["title_tag"], desc),
+                        css=SUB_CSS) + f"""<body>
   <div class="container">
     <header>
       <a class="back-link" href="{path_for(code, 'support')}">{t['back']}</a>
@@ -902,13 +987,16 @@ def render_landing(code, t):
     tour = "\n".join(
         f'''        <div class="tour-item">
           <div class="shot-card">
-            <img src="/assets/{img}" alt="{alt}">
+            <img src="/assets/{img}" alt="{alt}" width="1920" height="1920" loading="lazy" decoding="async">
           </div>
           <span class="tag">{tag}</span>
           <p>{p}</p>
         </div>'''
         for (tag, p, alt), img in zip(L["tour"], TOUR_IMAGES))
-    return LANDING_HEAD.format(lang=code, title=L["title_tag"], desc=L["meta_desc"], css=LANDING_CSS) + f"""<body>
+    return LANDING_HEAD.format(lang=code, title=L["title_tag"], desc=esc_attr(L["meta_desc"]),
+                                seo=seo_head(code, "landing", L["title_tag"], L["meta_desc"]),
+                                jsonld=app_json_ld(code, t),
+                                css=LANDING_CSS) + f"""<body>
 
 <header>
   <nav>
@@ -1003,7 +1091,7 @@ def render_landing(code, t):
       </div>
       <div class="watch-showcase">
         <div class="shot-card">
-          <img src="/assets/watch-mockup-combined.png" alt="{L['showcase_alt']}">
+          <img src="/assets/watch-mockup-combined.png" alt="{L['showcase_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -1030,7 +1118,7 @@ def render_landing(code, t):
       </div>
       <div class="watch-showcase">
         <div class="shot-card">
-          <img src="/assets/watch-onboarding.png" alt="{L['onboarding_alt']}">
+          <img src="/assets/watch-onboarding.png" alt="{L['onboarding_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -2057,6 +2145,39 @@ def write(path: Path, content: str):
     path.write_text(content, encoding="utf-8")
     print(f"  {path.relative_to(SITE)}")
 
+PAGES = ["landing", "support", "privacy", "accessibility"]
+
+def render_sitemap() -> str:
+    """One <url> per locale x page, each carrying the full hreflang alternate
+    cluster (+ x-default) so crawlers can resolve the whole translation set
+    from a single sitemap entry, per Google's hreflang-in-sitemap format."""
+    urls = []
+    for page in PAGES:
+        for code in ORDER:
+            alternates = "\n".join(
+                f'    <xhtml:link rel="alternate" hreflang="{HREFLANG_TAG[c]}" href="{abs_url(c, page)}"/>'
+                for c in ORDER)
+            alternates += f'\n    <xhtml:link rel="alternate" hreflang="x-default" href="{abs_url(DEFAULT_LOCALE, page)}"/>'
+            urls.append(f"""  <url>
+    <loc>{abs_url(code, page)}</loc>
+    <lastmod>{BUILD_DATE}</lastmod>
+{alternates}
+  </url>""")
+    body = "\n".join(urls)
+    return f'''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+{body}
+</urlset>
+'''
+
+def render_robots() -> str:
+    return f"""User-agent: *
+Allow: /
+
+Sitemap: {SITE_URL}/sitemap.xml
+"""
+
 def main():
     print("Generando páginas del sitio (9 idiomas x 4 páginas):")
     for code in ORDER:
@@ -2065,6 +2186,8 @@ def main():
         write(out_path(code, "support"), render_support(code, t))
         write(out_path(code, "privacy"), render_privacy(code, t))
         write(out_path(code, "accessibility"), render_a11y(code, t))
+    write(SITE / "sitemap.xml", render_sitemap())
+    write(SITE / "robots.txt", render_robots())
 
 if __name__ == "__main__":
     main()
