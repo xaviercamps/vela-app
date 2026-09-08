@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela HRV — Πολιτική απορρήτου</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-deep: #060D1A;
+      --primary: #4A9EFF;
+      --primary-bright: #8ECFFF;
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.6);
+      --text-tertiary: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(74,158,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--primary-bright);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 3rem auto;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    p {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid rgba(74,158,255,0.15);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--primary-bright);
+    }
+    .contact-link {
+      color: var(--primary-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(142,207,255,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    footer {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .lang-row { margin-top: 1rem; }
+    .lang-row a, .lang-row span {
+      color: var(--text-tertiary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+    .lang-row a:hover { color: var(--primary-bright); }
+    .lang-row span { color: var(--primary-bright); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="/el/support/">← Επιστροφή στην υποστήριξη</a>
+      <h1 class="page-title">Πολιτική απορρήτου</h1>
+      <p class="page-meta">Τελευταία ενημέρωση: Απρίλιος 2026</p>
+    </header>
+
+    <div class="highlight-card fade-in">
+      <p>Το Vela δεν συλλέγει, δεν μεταδίδει και δεν αποθηκεύει κανένα προσωπικό δεδομένο σε εξωτερικούς διακομιστές. Όλα παραμένουν στη συσκευή σας και στο ιδιωτικό σας iCloud.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Ποια δεδομένα χρησιμοποιεί το Vela</h2>
+        <p>Το Vela διαβάζει δεδομένα μεταβλητότητας καρδιακού ρυθμού (HRV) από το Apple HealthKit για να υπολογίσει το προσωπικό σας σκορ άγχους. Αυτά τα δεδομένα συλλέγονται ήδη αυτόματα από το Apple Watch σας.</p><p>Το Vela αποθηκεύει επίσης τις μετρήσεις που υπολογίζει — το ιστορικό του σκορ άγχους σας, το προσωπικό σας baseline HRV και τα ακατέργαστα δείγματα HRV που χρησιμοποιούνται για τον υπολογισμό του.</p>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section>
+        <h2>Πού βρίσκονται τα δεδομένα σας</h2>
+        <p>Όλα τα δεδομένα αποθηκεύονται τοπικά στο Apple Watch σας και συγχρονίζονται ιδιωτικά μέσω του δικού σας λογαριασμού iCloud με το framework CloudKit της Apple. Το Vela δεν έχει διακομιστές. Κανένα δεδομένο δεν περνά ποτέ από συστήματα που ανήκουν ή λειτουργούν από το Vela.</p><p>Μόνο εσείς έχετε πρόσβαση στα δεδομένα σας. Ούτε εμείς, ούτε τρίτοι.</p>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section>
+        <h2>Τρίτα μέρη</h2>
+        <p>Το Vela δεν μοιράζεται κανένα δεδομένο με τρίτους. Δεν χρησιμοποιούμε υπηρεσίες ανάλυσης, διαφημιστικά SDK ή οποιαδήποτε εξωτερικά εργαλεία παρακολούθησης.</p>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section>
+        <h2>Δεδομένα υγείας</h2>
+        <p>Το Vela αποκτά πρόσβαση σε δεδομένα υγείας αποκλειστικά για να παρέχει τη βασική του λειτουργία — τη μέτρηση και την παρακολούθηση του επιπέδου άγχους σας. Τα δεδομένα υγείας δεν χρησιμοποιούνται ποτέ για διαφήμιση ούτε πωλούνται σε κανέναν.</p>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section>
+        <h2>Παιδιά</h2>
+        <p>Το Vela δεν απευθύνεται σε παιδιά κάτω των 13 ετών και δεν συλλέγει εν γνώσει του δεδομένα από αυτά.</p>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section>
+        <h2>Αλλαγές σε αυτήν την πολιτική</h2>
+        <p>Εάν αυτή η πολιτική απορρήτου αλλάξει, η ενημερωμένη έκδοση θα δημοσιευτεί σε αυτήν τη διεύθυνση URL με νέα ημερομηνία. Η συνεχής χρήση της εφαρμογής μετά τις αλλαγές συνιστά αποδοχή της ενημερωμένης πολιτικής.</p>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section>
+        <h2>Επικοινωνία</h2>
+        <p>Ερωτήσεις σχετικά με αυτήν την πολιτική απορρήτου; Γράψτε στο <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a>.</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Vela HRV · Με την επιφύλαξη παντός δικαιώματος</p>
+      <nav class="lang-row" aria-label="Γλώσσα"><a href="/es/privacy/" hreflang="es">ES</a> · <a href="/privacy/" hreflang="en">EN</a> · <a href="/ca/privacy/" hreflang="ca">CA</a> · <a href="/eu/privacy/" hreflang="eu">EU</a> · <a href="/gl/privacy/" hreflang="gl">GL</a> · <a href="/fr/privacy/" hreflang="fr">FR</a> · <a href="/de/privacy/" hreflang="de">DE</a> · <a href="/it/privacy/" hreflang="it">IT</a> · <a href="/pt/privacy/" hreflang="pt">PT</a> · <a href="/cs/privacy/" hreflang="cs">CS</a> · <span aria-current="true">EL</span> · <a href="/ja/privacy/" hreflang="ja">JA</a></nav>
+    </footer>
+  </div>
+</body>
+</html>

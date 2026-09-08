@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela HRV — 変更履歴</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-deep: #060D1A;
+      --primary: #4A9EFF;
+      --primary-bright: #8ECFFF;
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.6);
+      --text-tertiary: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(74,158,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--primary-bright);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 3rem auto;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    p {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid rgba(74,158,255,0.15);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--primary-bright);
+    }
+    .contact-link {
+      color: var(--primary-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(142,207,255,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    footer {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .lang-row { margin-top: 1rem; }
+    .lang-row a, .lang-row span {
+      color: var(--text-tertiary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+    .lang-row a:hover { color: var(--primary-bright); }
+    .lang-row span { color: var(--primary-bright); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
+    .release { margin-bottom: 2.75rem; }
+    .release + .release { border-top: 1px solid var(--border); padding-top: 2.75rem; }
+    .release-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+    .release-head h2 { margin-bottom: 0; }
+    .release-date { font-size: 0.82rem; color: var(--text-tertiary); letter-spacing: 0.02em; }
+    .badge {
+      display: inline-block; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.28rem 0.62rem; border-radius: 999px; margin-bottom: 1rem;
+      border: 1px solid rgba(74,158,255,0.35); color: var(--primary-bright);
+    }
+    .badge.review { border-color: rgba(255,190,90,0.5); color: #FFCF8E; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="/ja/">← Vela に戻る</a>
+      <h1 class="page-title">変更履歴</h1>
+      <p class="page-meta">Vela のすべてのバージョンと、それぞれの変更点。</p>
+    </header>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.3.0</h2>
+          <span class="release-date">公開予定：2026年9月14日</span>
+        </div>
+        <span class="badge review">審査中 · App Store</span>
+        <p>このバージョンは現在 Apple の審査中で、まだダウンロードできません。</p>
+        <ul>
+          <li>3つの新しい言語（チェコ語、ギリシャ語、日本語）を追加。Vela は12言語に対応しました。</li>
+          <li>過去の測定値を取り込む際に通知が繰り返される問題を修正。</li>
+          <li>システムの許可がオンでも、アプリ内で通知をオフにできるようになりました。</li>
+          <li>履歴の月表示が、アプリを開き直したときに更新されるようになりました。</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.3</h2>
+          <span class="release-date">2026年9月6日</span>
+        </div>
+        <ul>
+          <li>システムの許可がすでに与えられている場合に、アプリ内で通知のオン・オフを切り替えられます。</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.2</h2>
+          <span class="release-date">2026年8月23日</span>
+        </div>
+        <ul>
+          <li>日付が使用言語に合わせて表示されるようになりました。</li>
+          <li>非対応の言語に設定されたデバイスでは、Vela は英語で表示されます。</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.1</h2>
+          <span class="release-date">2026年8月8日</span>
+        </div>
+        <ul>
+          <li>アプリを開いた直後に表示される週間分析の通知を削除。</li>
+          <li>新規インストール時にベースライン構築リングが再び表示されるようになりました。</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.0</h2>
+          <span class="release-date">2026年7月8日</span>
+        </div>
+        <ul>
+          <li>さらに7言語を追加：カタルーニャ語、バスク語、ガリシア語、フランス語、ドイツ語、イタリア語、ポルトガル語。</li>
+          <li>すべての画面で VoiceOver に完全対応。</li>
+          <li>Dynamic Type、透明度を下げる、色を使わずに区別、拡大コンテンツビューアに対応。</li>
+          <li>WCAG AA を満たすようテキストのコントラストを向上。</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.1.1</h2>
+          <span class="release-date">2026年6月16日</span>
+        </div>
+        <ul>
+          <li>週間分析の通知が常には届かない問題を修正。</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.1.0</h2>
+          <span class="release-date">2026年5月26日</span>
+        </div>
+        <ul>
+          <li>週間分析：Vela があなたのストレスのパターンを見つけ、分かりやすい言葉で説明します。</li>
+          <li>履歴を刷新し、日・週・月で掘り下げられるように。</li>
+          <li>文字盤用の棒グラフ付き HRV コンプリケーションを追加。</li>
+          <li>夜間の測定値を補完し、履歴の欠けが少なくなりました。</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.0.0</h2>
+          <span class="release-date">2026年4月26日</span>
+        </div>
+        <ul>
+          <li>最初のリリース。Apple Watch 上で HRV からストレススコアを算出し、あなた自身のベースライン、トレンド、範囲の分かりやすい説明を提供します。アカウント不要、サーバーなし、サブスクなし。</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Vela HRV · 無断複写・転載を禁じます</p>
+      <nav class="lang-row" aria-label="言語"><a href="/es/changelog/" hreflang="es">ES</a> · <a href="/changelog/" hreflang="en">EN</a> · <a href="/ca/changelog/" hreflang="ca">CA</a> · <a href="/eu/changelog/" hreflang="eu">EU</a> · <a href="/gl/changelog/" hreflang="gl">GL</a> · <a href="/fr/changelog/" hreflang="fr">FR</a> · <a href="/de/changelog/" hreflang="de">DE</a> · <a href="/it/changelog/" hreflang="it">IT</a> · <a href="/pt/changelog/" hreflang="pt">PT</a> · <a href="/cs/changelog/" hreflang="cs">CS</a> · <a href="/el/changelog/" hreflang="el">EL</a> · <span aria-current="true">JA</span></nav>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="eu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela HRV — Aldaketen erregistroa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-deep: #060D1A;
+      --primary: #4A9EFF;
+      --primary-bright: #8ECFFF;
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.6);
+      --text-tertiary: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(74,158,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--primary-bright);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 3rem auto;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    p {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid rgba(74,158,255,0.15);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--primary-bright);
+    }
+    .contact-link {
+      color: var(--primary-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(142,207,255,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    footer {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .lang-row { margin-top: 1rem; }
+    .lang-row a, .lang-row span {
+      color: var(--text-tertiary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+    .lang-row a:hover { color: var(--primary-bright); }
+    .lang-row span { color: var(--primary-bright); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
+    .release { margin-bottom: 2.75rem; }
+    .release + .release { border-top: 1px solid var(--border); padding-top: 2.75rem; }
+    .release-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+    .release-head h2 { margin-bottom: 0; }
+    .release-date { font-size: 0.82rem; color: var(--text-tertiary); letter-spacing: 0.02em; }
+    .badge {
+      display: inline-block; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.28rem 0.62rem; border-radius: 999px; margin-bottom: 1rem;
+      border: 1px solid rgba(74,158,255,0.35); color: var(--primary-bright);
+    }
+    .badge.review { border-color: rgba(255,190,90,0.5); color: #FFCF8E; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="/eu/">← Itzuli Velara</a>
+      <h1 class="page-title">Aldaketen erregistroa</h1>
+      <p class="page-meta">Velaren bertsio guztiak eta bakoitzean zer aldatu zen.</p>
+    </header>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.3.0</h2>
+          <span class="release-date">Aurreikusia: 2026ko irailaren 14a</span>
+        </div>
+        <span class="badge review">Berrikuspenean · App Store</span>
+        <p>Bertsio hau Apple-k berrikusten ari da eta oraindik ezin da deskargatu.</p>
+        <ul>
+          <li>Hiru hizkuntza berri: txekiera, greziera eta japoniera. Vela 12 hizkuntzatan dago orain.</li>
+          <li>Konpondu dira jakinarazpen errepikatuak Velak irakurketa zaharrak berreskuratzean.</li>
+          <li>Jakinarazpenak aplikaziotik desaktiba daitezke sistemaren baimena aktibatuta egon arren.</li>
+          <li>Historialeko hilabete-ikuspegia orain eguneratu egiten da aplikazioa berriz irekitzean.</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.3</h2>
+          <span class="release-date">2026ko irailaren 6a</span>
+        </div>
+        <ul>
+          <li>Aktibatu edo desaktibatu jakinarazpenak aplikaziotik sistemaren baimena jada emanda dagoenean.</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.2</h2>
+          <span class="release-date">2026ko abuztuaren 23a</span>
+        </div>
+        <ul>
+          <li>Datek orain zure hizkuntza jarraitzen dute.</li>
+          <li>Velak ingelesa erabiltzen du bateragarria ez den hizkuntza duten gailuetan.</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.1</h2>
+          <span class="release-date">2026ko abuztuaren 8a</span>
+        </div>
+        <ul>
+          <li>Kendu da aplikazioa irekitzean berehala agertzen zen asteko analisiaren jakinarazpen bat.</li>
+          <li>Oinarri-lerroa eraikitzeko eraztuna berriz agertzen da instalazio berrietan.</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.2.0</h2>
+          <span class="release-date">2026ko uztailaren 8a</span>
+        </div>
+        <ul>
+          <li>Beste zazpi hizkuntza: katalana, euskara, galiziera, frantsesa, alemana, italiera eta portugesa.</li>
+          <li>VoiceOver-en euskarri osoa pantaila guztietan.</li>
+          <li>Dynamic Type, Gardentasuna murriztu, Bereizi kolorerik gabe eta eduki handituaren ikustailea.</li>
+          <li>Testu-kontraste handiagoa WCAG AA betetzeko.</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.1.1</h2>
+          <span class="release-date">2026ko ekainaren 16a</span>
+        </div>
+        <ul>
+          <li>Konpondu da asteko analisiaren jakinarazpena beti bidaltzen ez zena.</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.1.0</h2>
+          <span class="release-date">2026ko maiatzaren 26a</span>
+        </div>
+        <ul>
+          <li>Asteko analisiak: Velak zure estresaren patroiak antzematen ditu eta hitz argiekin azaltzen dizkizu.</li>
+          <li>Historial birdiseinatua egun, aste eta hilabeteko nabigazioarekin.</li>
+          <li>HRV konplikazio berria barra-grafikoarekin erlojuaren esferarako.</li>
+          <li>Gaueko irakurketak berreskuratzen dira, beraz historialak hutsune gutxiago ditu.</li>
+        </ul>
+      </section>
+    </div>
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>1.0.0</h2>
+          <span class="release-date">2026ko apirilaren 26a</span>
+        </div>
+        <ul>
+          <li>Lehen bertsioa. Estres-puntuazioa HRVtik Apple Watch-en, zure oinarri-lerroa, joerak eta tarteen azalpen argia — konturik gabe, zerbitzaririk gabe, harpidetzarik gabe.</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Vela HRV · Eskubide guztiak erreserbatuta</p>
+      <nav class="lang-row" aria-label="Hizkuntza"><a href="/es/changelog/" hreflang="es">ES</a> · <a href="/changelog/" hreflang="en">EN</a> · <a href="/ca/changelog/" hreflang="ca">CA</a> · <span aria-current="true">EU</span> · <a href="/gl/changelog/" hreflang="gl">GL</a> · <a href="/fr/changelog/" hreflang="fr">FR</a> · <a href="/de/changelog/" hreflang="de">DE</a> · <a href="/it/changelog/" hreflang="it">IT</a> · <a href="/pt/changelog/" hreflang="pt">PT</a> · <a href="/cs/changelog/" hreflang="cs">CS</a> · <a href="/el/changelog/" hreflang="el">EL</a> · <a href="/ja/changelog/" hreflang="ja">JA</a></nav>
+    </footer>
+  </div>
+</body>
+</html>

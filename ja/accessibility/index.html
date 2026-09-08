@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela HRV — アクセシビリティ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-deep: #060D1A;
+      --primary: #4A9EFF;
+      --primary-bright: #8ECFFF;
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.6);
+      --text-tertiary: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(74,158,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--primary-bright);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 3rem auto;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    p {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid rgba(74,158,255,0.15);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--primary-bright);
+    }
+    .contact-link {
+      color: var(--primary-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(142,207,255,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    footer {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .lang-row { margin-top: 1rem; }
+    .lang-row a, .lang-row span {
+      color: var(--text-tertiary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+    .lang-row a:hover { color: var(--primary-bright); }
+    .lang-row span { color: var(--primary-bright); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="/ja/support/">← サポートに戻る</a>
+      <h1 class="page-title">アクセシビリティ</h1>
+      <p class="page-meta">最終更新：2026年7月</p>
+    </header>
+
+    <div class="highlight-card fade-in">
+      <p>Vela は画面を見なくても完全に使えるように設計されています。すべての画面が VoiceOver に対応し、色だけで情報を伝えることは一切ありません。</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section>
+        <h2>私たちの考え方</h2>
+        <p>Vela は Apple Watch 上で心拍変動を通じてストレスを測定します。自分の身体を理解できるかどうかが、見え方によって左右されるべきではありません。だからこそアクセシビリティを中核機能として扱っています。指針となるのは、目の見えない利用者がストレスレベルを確認し、履歴を調べ、週ごとの分析を読み、アプリを完全に自力で設定できることです。</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Apple Watch での対応</h2>
+        <ul>
+          <li><strong>VoiceOver。</strong> すべての要素に意味のあるラベル、値、ヒントが付いています。グラフは Audio Graph として提供され、Digital Crown を使って音でストレス履歴を探索できます。</li>
+          <li><strong>大きな文字。</strong> インターフェースは全体で Dynamic Type に対応しています。スコアリングのようなコンパクトな表示では、拡大コンテンツビューアを利用できます。</li>
+          <li><strong>ダークなインターフェース。</strong> Vela のインターフェースはすべての画面で意図的にダークに設計されており、まぶしい点滅はありません。</li>
+          <li><strong>色以外での区別。</strong> ストレスレベルは常に数値と語で補強され、色だけで示されることはありません。「色を使わずに区別」をオンにすると、グラフにゾーンの線が追加されます。</li>
+          <li><strong>十分なコントラスト。</strong> すべてのテキストが、ダークな背景に対して WCAG AA のコントラスト比（4.5:1 以上）を満たしています。</li>
+          <li><strong>視差効果を減らす。</strong> 「視差効果を減らす」がオンのとき、アニメーションは無効化されるか、静的な代替に置き換えられます。Vela は「透明度を下げる」と「文字を太くする」にも対応します。</li>
+        </ul>
+        <p>Vela には音声や動画が含まれないため、字幕や音声解説は該当しません。</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>検証方法</h2>
+        <p>すべての画面は、アプリのテストスイートの一部として Apple の自動アクセシビリティ監査（ラベル、コントラスト、タップ領域のサイズ、テキストの拡大縮小のチェック）を通過し、あわせて VoiceOver による手動レビューも行っています。これらのチェックはインターフェースが変わるたびに再実行され、バージョン間でアクセシビリティが静かに後退しないようにしています。</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>フィードバック</h2>
+        <p>Vela の中に支援技術で使いにくい箇所があれば、それはバグです。<a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a> までご連絡ください。アクセシビリティに関する報告は次のリリースで優先的に対応します。</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Vela HRV · 無断複写・転載を禁じます</p>
+      <nav class="lang-row" aria-label="言語"><a href="/es/accessibility/" hreflang="es">ES</a> · <a href="/accessibility/" hreflang="en">EN</a> · <a href="/ca/accessibility/" hreflang="ca">CA</a> · <a href="/eu/accessibility/" hreflang="eu">EU</a> · <a href="/gl/accessibility/" hreflang="gl">GL</a> · <a href="/fr/accessibility/" hreflang="fr">FR</a> · <a href="/de/accessibility/" hreflang="de">DE</a> · <a href="/it/accessibility/" hreflang="it">IT</a> · <a href="/pt/accessibility/" hreflang="pt">PT</a> · <a href="/cs/accessibility/" hreflang="cs">CS</a> · <a href="/el/accessibility/" hreflang="el">EL</a> · <span aria-current="true">JA</span></nav>
+    </footer>
+  </div>
+</body>
+</html>
