@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vela — Apple Watch 用 HRV。サブスクなし。ずっと。</title>
+<meta name="description" content="Vela は Apple Watch で心拍変動（HRV/SDNN）を測定し、あなた自身の個人ベースラインを構築します。すべては時計上で処理されます。iCloud と同期します。サブスクリプションは、ずっとありません。">
+<link rel="icon" href="/assets/icon-1024.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A1628;
+    --bg-deep: #060D14;
+    --surface: rgba(245,248,252,0.045);
+    --hairline: rgba(245,248,252,0.09);
+    --teal: #3DCFCF;
+    --teal-dim: rgba(61,207,207,0.18);
+    --score-low: #4A9EFF;
+    --score-mid: #A78BFA;
+    --score-high: #FF5E5E;
+    --text-1: #F5F8FC;
+    --text-2: rgba(245,248,252,0.64);
+    --text-3: rgba(245,248,252,0.38);
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text-1);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; }
+
+  img{ max-width:100%; display:block; }
+
+  :focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--teal);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 8px var(--teal);
+  }
+
+  h1,h2,h3{
+    font-family:var(--display);
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,22,40,0.72);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--hairline);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 24px;
+    max-width:1080px; margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--display); font-weight:600; font-size:19px;
+    text-decoration:none;
+  }
+  .brand img{ width:26px; height:26px; border-radius:7px; }
+  .pulse-dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 8px var(--teal);
+    animation:pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.35; }
+  }
+  .nav-cta{
+    font-family:var(--mono);
+    font-size:13px;
+    padding:9px 18px;
+    border:1px solid var(--teal);
+    border-radius:100px;
+    text-decoration:none;
+    color:var(--teal);
+    transition:background .18s ease, color .18s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background:var(--teal); color:var(--bg-deep); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 64px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:56px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(34px, 5vw, 58px);
+    line-height:1.06;
+    margin:18px 0 22px;
+    color:var(--text-1);
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--teal);
+  }
+  .hero p{
+    font-size:17px;
+    color:var(--text-2);
+    max-width:46ch;
+    margin-bottom:34px;
+  }
+  .cta-row{
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:14px;
+    padding:13px 22px;
+    border-radius:10px;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+  }
+  .btn-primary{
+    background:var(--teal);
+    color:var(--bg-deep);
+    font-weight:500;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 8px 24px rgba(61,207,207,0.28); }
+  .btn-ghost{
+    border:1px solid var(--hairline);
+    color:var(--text-2);
+  }
+  .btn-ghost:hover{ border-color:var(--teal); color:var(--teal); }
+
+  .badge-link{ display:inline-block; }
+  .badge-appstore{
+    height:52px;
+    width:auto;
+    border-radius:10px;
+    transition:transform .16s ease, box-shadow .16s ease;
+  }
+  .badge-appstore:hover{
+    transform:translateY(-1px);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .wave-panel{
+    background:var(--bg-deep);
+    border:1px solid var(--hairline);
+    border-radius:20px;
+    padding:22px 20px 18px;
+  }
+  .wave-panel-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:var(--mono); font-size:11px; color:var(--text-3);
+    letter-spacing:0.06em; margin-bottom:10px;
+  }
+  .wave-panel-head span:last-child{ color:var(--teal); }
+  canvas#hero-wave{
+    width:100%; height:180px; display:block;
+  }
+  .wave-readout{
+    display:flex; justify-content:space-between;
+    margin-top:14px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-3);
+  }
+  .wave-readout b{ color:var(--text-1); font-weight:500; }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding:96px 0; }
+  .section-head{ max-width:640px; margin-bottom:52px; }
+  .section-head h2{
+    font-size:clamp(26px, 3.4vw, 38px);
+    line-height:1.14;
+    margin-top:16px;
+    color:var(--text-1);
+  }
+  .section-head p{
+    color:var(--text-2);
+    margin-top:16px;
+    font-size:16px;
+    max-width:56ch;
+  }
+
+  /* ---------- BASELINE / PROBLEM ---------- */
+  .baseline{ background:var(--bg-deep); border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline); }
+  .baseline-figure{
+    border:1px solid var(--hairline);
+    border-radius:20px;
+    padding:32px 28px;
+    background:rgba(245,248,252,0.02);
+  }
+  .baseline-figure svg{ width:100%; height:auto; display:block; }
+  .baseline-legend{
+    display:flex; gap:28px; margin-top:22px; flex-wrap:wrap;
+    font-family:var(--mono); font-size:12.5px; color:var(--text-2);
+  }
+  .legend-item{ display:flex; align-items:center; gap:8px; }
+  .legend-swatch{ width:22px; height:2px; }
+  .legend-swatch.dashed{ background:repeating-linear-gradient(90deg, var(--text-3) 0 6px, transparent 6px 11px); }
+  .legend-swatch.solid{ background:var(--teal); box-shadow:0 0 6px var(--teal); }
+
+  /* ---------- PRINCIPLES ---------- */
+  .principles-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--hairline);
+    border:1px solid var(--hairline);
+    border-radius:20px;
+    overflow:hidden;
+  }
+  .principle{
+    background:var(--bg);
+    padding:32px 28px;
+  }
+  .principle .tag{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:14px;
+    display:block;
+  }
+  .principle p{
+    color:var(--text-2);
+    font-size:15px;
+  }
+  .principle strong{ color:var(--text-1); font-weight:500; }
+
+  /* ---------- WATCH SHOWCASE ---------- */
+  .shot-card{
+    display:block;
+  }
+  .shot-card img{ width:100%; height:auto; display:block; }
+
+  .watch-showcase{ max-width:720px; margin:0 auto; }
+
+  .tour-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+  .tour-item .shot-card{ margin-bottom:20px; }
+  .tour-item .tag{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--teal);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:8px;
+  }
+  .tour-item p{
+    color:var(--text-2);
+    font-size:14.5px;
+  }
+
+  /* ---------- CLOSING ---------- */
+  .closing{
+    text-align:center;
+    padding:110px 0 100px;
+    background:radial-gradient(ellipse at 50% 0%, rgba(61,207,207,0.08), transparent 60%);
+  }
+  .closing h2{
+    font-size:clamp(30px, 5vw, 48px);
+    margin-bottom:16px;
+  }
+  .closing h2 em{ font-style:italic; color:var(--teal); }
+  .closing p{
+    color:var(--text-2);
+    max-width:50ch;
+    margin:0 auto 36px;
+    font-size:16px;
+  }
+  .closing .cta-row{ justify-content:center; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--hairline);
+    padding:36px 0;
+  }
+  .footer-row{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:16px;
+    font-family:var(--mono); font-size:12px; color:var(--text-3);
+  }
+  .footer-links{ display:flex; gap:22px; flex-wrap:wrap; }
+  .footer-links a{ text-decoration:none; color:var(--text-3); transition:color .16s ease; }
+  .footer-links a:hover{ color:var(--teal); }
+  .lang-row{ margin-top:14px; font-family:var(--mono); font-size:11px; letter-spacing:0.04em; color:var(--text-3); }
+  .lang-row a, .lang-row span{ color:var(--text-3); text-decoration:none; }
+  .lang-row a:hover{ color:var(--teal); }
+  .lang-row span{ color:var(--teal); }
+
+  @media (max-width:820px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .principles-grid{ grid-template-columns:1fr; }
+    .tour-grid{ grid-template-columns:1fr; gap:40px; }
+    .hero{ padding-top:56px; }
+    section{ padding:72px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .pulse-dot{ animation:none; }
+    *{ scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a class="brand" href="#top">
+      <img src="/assets/icon-1024.png" alt="">
+      vela
+    </a>
+    <a class="nav-cta" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">ダウンロード</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Apple Watch 用 HRV</p>
+        <h1>あなたの穏やかさは、<em>誰かの平均</em>ではない。</h1>
+        <p>Vela は Apple Watch 上で直接あなたの心拍変動（SDNN）を測定し、一般的な集団のしきい値ではなく、あなただけのベースラインを構築します。すべての計算は時計上で行われます。私たちのサーバーを経由するものは何もありません。サーバーがないからです。</p>
+        <div class="cta-row">
+          <a class="badge-link" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">
+            <img class="badge-appstore" src="/assets/app-store-badge-white.svg" alt="App Store でダウンロード">
+          </a>
+        </div>
+      </div>
+      <div class="wave-panel">
+        <div class="wave-panel-head">
+          <span>SDNN · ライブ</span>
+          <span>安静時</span>
+        </div>
+        <canvas id="hero-wave" width="480" height="180"></canvas>
+        <div class="wave-readout">
+          <span>集団のノイズ</span>
+          <span><b>あなたのベースライン</b>が定まる</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="baseline">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">なぜ平均では不十分なのか</p>
+        <h2>同じ 25&nbsp;ms の HRV でも、ある人には高く、別の人には低いことがあります。</h2>
+        <p>HRV は人によって大きく異なります。集団のしきい値は誰もを同じように扱うため、ほとんどの場合それが外れる原因になります。Vela はあなたの実際の履歴からあなた自身のベースラインを構築します。Apple Watch にすでに HRV データがあれば初日から始められ、初めての場合は定まるまで 7〜14 日かかります。</p>
+      </div>
+      <div class="baseline-figure">
+        <svg viewBox="0 0 800 180" preserveAspectRatio="none">
+          <line x1="0" y1="70" x2="800" y2="70" stroke="rgba(245,248,252,0.28)" stroke-width="1.5" stroke-dasharray="6 7"/>
+          <path d="M0,120 C40,60 80,150 120,90 C160,40 200,140 240,100 C280,50 320,130 360,80 C400,110 440,55 480,120 C520,70 560,150 600,90 C640,50 680,130 720,95 C750,75 780,110 800,90"
+                fill="none" stroke="var(--score-mid)" stroke-width="2" opacity="0.75"/>
+          <path d="M0,95 C60,88 120,100 180,92 C240,85 300,96 360,90 C420,86 480,93 540,88 C600,85 660,90 720,87 C750,86 780,88 800,87"
+                fill="none" stroke="#3DCFCF" stroke-width="2.5" style="filter:drop-shadow(0 0 6px rgba(61,207,207,0.55))"/>
+        </svg>
+        <div class="baseline-legend">
+          <div class="legend-item"><span class="legend-swatch dashed"></span> 一般的な集団のしきい値</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:var(--score-mid)"></span> 個々のサンプル</div>
+          <div class="legend-item"><span class="legend-swatch solid"></span> あなたの個人ベースライン</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">しくみ</p>
+        <h2>考えを変えないために下した、4つの決定。</h2>
+      </div>
+      <div class="principles-grid">
+        <div class="principle">
+          <span class="tag">On-device</span>
+          <p><strong>すべての計算は Watch 上で行われます。</strong> HealthKit がデータを提供し、残りは時計が処理します。HRV データが Vela のサーバーへ向けてデバイスの外に出ることはありません。</p>
+        </div>
+        <div class="principle">
+          <span class="tag">私たちのではなく、あなたの iCloud</span>
+          <p><strong>同期にはあなた自身の iCloud アカウントを使います。</strong> CloudKit 経由です。Vela はあなたのデータをどこにも保管しません。保管する場所がないため、できないのです。</p>
+        </div>
+        <div class="principle">
+          <span class="tag">サブスクなし。ずっと。</span>
+          <p><strong>月額も年額もありません。</strong> Vela は今は無料です。将来的には買い切りの Pro 版が登場します。サブスクリプションにはしません。</p>
+        </div>
+        <div class="principle">
+          <span class="tag">はじめからアクセシブル</span>
+          <p><strong>VoiceOver、Dynamic Type、視差効果を減らす。</strong> 対応言語は12：スペイン語、カタルーニャ語、バスク語、ガリシア語、英語、フランス語、ドイツ語、イタリア語、ポルトガル語、チェコ語、ギリシャ語、日本語。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">手首の上で</p>
+        <h2>1つのスコア、1つの状態、1つのトレンド。</h2>
+        <p>色とテキストのラベルは常にセットで表示されます。色覚特性にも配慮した設計です。どのスコアにも説明があります。どの範囲が「正常」なのか、いつ「高い」になるのか、そしてその理由まで。</p>
+      </div>
+      <div class="watch-showcase">
+        <div class="shot-card">
+          <img src="/assets/watch-mockup-combined.png" alt="Apple Watch Ultra に表示された Vela の3画面：正常ステータスの現在のストレススコア、その日の平均を示す週間トレンド、正常と高いの範囲を説明する画面。">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">クイックツアー</p>
+        <h2>3つの画面、それぞれに役割は1つ。</h2>
+      </div>
+      <div class="tour-grid">
+        <div class="tour-item">
+          <div class="shot-card">
+            <img src="/assets/watch-shot-score.png" alt="ストレススコア68、正常ステータスを表示する Vela のメイン画面。その場で計算されたもの。">
+          </div>
+          <span class="tag">現在のスコア</span>
+          <p>1つの数字、1つの状態。すべて時計上で計算され、同期を待つ必要はありません。</p>
+        </div>
+        <div class="tour-item">
+          <div class="shot-card">
+            <img src="/assets/watch-shot-trend.png" alt="その日の平均ストレスと1時間ごとの測定値を、個人ベースラインと比較したトレンドチャート。">
+          </div>
+          <span class="tag">トレンド</span>
+          <p>その日のすべての測定値を、他の誰でもない、あなた自身の破線と比較します。</p>
+        </div>
+        <div class="tour-item">
+          <div class="shot-card">
+            <img src="/assets/watch-shot-explain.png" alt="ストレスの範囲を説明する画面：正常は40〜69、高いは70〜100。">
+          </div>
+          <span class="tag">範囲の説明</span>
+          <p>分かりにくい数字はなし。どの範囲にも、意味と何を予期すべきかが書かれています。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">使い始める</p>
+        <h2>何かを測定する前に、許可を求めます。</h2>
+        <p>Vela は細かい文字の中ではなく、はっきりと HRV へのアクセスを求めます。そして HRV の測定が初めてなら、信頼できるベースラインができるまでの日数を伝えます。初日からあなたを知っているふりはしません。</p>
+      </div>
+      <div class="watch-showcase">
+        <div class="shot-card">
+          <img src="/assets/watch-onboarding.png" alt="Apple Watch での Vela のオンボーディングの流れ：ようこそ画面、心拍変動データへのアクセスを求める明示的なリクエスト、残り7日と表示されたベースライン構築中の画面。">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <p class="eyebrow" style="justify-content:center">今すぐダウンロード</p>
+      <h2>サブスクなし。<em>ずっと。</em></h2>
+      <p>Vela は Apple Watch 向けに App Store で無料で入手できます。</p>
+      <div class="cta-row">
+        <a class="badge-link" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">
+          <img class="badge-appstore" src="/assets/app-store-badge-white.svg" alt="App Store でダウンロード">
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>© 2026 Vela</span>
+    <div class="footer-links">
+      <a href="/ja/support/">サポート</a>
+      <a href="/ja/changelog/">変更履歴</a>
+      <a href="/ja/privacy/">プライバシー</a>
+      <a href="mailto:xaviercampsnovi@gmail.com">お問い合わせ</a>
+    </div>
+  </div>
+  <div class="wrap">
+    <nav class="lang-row" aria-label="言語"><a href="/es/" hreflang="es">ES</a> · <a href="/" hreflang="en">EN</a> · <a href="/ca/" hreflang="ca">CA</a> · <a href="/eu/" hreflang="eu">EU</a> · <a href="/gl/" hreflang="gl">GL</a> · <a href="/fr/" hreflang="fr">FR</a> · <a href="/de/" hreflang="de">DE</a> · <a href="/it/" hreflang="it">IT</a> · <a href="/pt/" hreflang="pt">PT</a> · <a href="/cs/" hreflang="cs">CS</a> · <a href="/el/" hreflang="el">EL</a> · <span aria-current="true">JA</span></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var canvas = document.getElementById('hero-wave');
+  var ctx = canvas.getContext('2d');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W, H, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  function resize(){
+    var rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  var t = 0;
+  var noise = 1;
+
+  function drawWave(offsetY, amp, freq, phase, color, glow, lineWidth){
+    ctx.beginPath();
+    for(var x=0; x<=W; x+=4){
+      var n = reduceMotion ? 0 : (Math.random()-0.5) * noise * 6;
+      var y = offsetY + Math.sin((x*freq) + phase) * amp + n;
+      if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    if(glow){
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 8;
+    } else {
+      ctx.shadowBlur = 0;
+    }
+    ctx.stroke();
+  }
+
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    t += 0.02;
+    if(!reduceMotion && noise > 0){ noise = Math.max(0, noise - 0.0018); }
+
+    ctx.beginPath();
+    ctx.setLineDash([6,7]);
+    ctx.moveTo(0, H*0.5);
+    ctx.lineTo(W, H*0.5);
+    ctx.strokeStyle = 'rgba(245,248,252,0.18)';
+    ctx.lineWidth = 1;
+    ctx.shadowBlur = 0;
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    drawWave(H*0.5, H*0.22, 0.045, t, '#3DCFCF', true, 2.4);
+
+    if(!reduceMotion){
+      requestAnimationFrame(frame);
+    }
+  }
+
+  if(reduceMotion){
+    noise = 0;
+    frame();
+  } else {
+    requestAnimationFrame(frame);
+  }
+})();
+</script>
+
+</body>
+</html>

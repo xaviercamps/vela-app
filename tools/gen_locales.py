@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Generates every page of the vela-app site — landing (home), support, privacy
-and accessibility — for all 9 locales (en, es, ca, eu, gl, fr, de, it, pt) from
-a single content dictionary. Run from anywhere; SITE is the repo root
-(tools/..). The site is served from the domain root (see CNAME), so URLs have
-no path prefix: EN lives at the root, other locales under /<code>/."""
+"""Generates every page of the vela-app site — landing (home), support, privacy,
+accessibility and changelog — for all 12 locales (en, es, ca, eu, gl, fr, de,
+it, pt, cs, el, ja) from a single content dictionary. Run from anywhere; SITE is
+the repo root (tools/..). The site is served from the domain root (see CNAME),
+so URLs have no path prefix: EN lives at the root, other locales under
+/<code>/."""
 
 from pathlib import Path
 
 SITE = Path(__file__).parent.parent
 MAIL = "xaviercampsnovi@gmail.com"
-ORDER = ["es", "en", "ca", "eu", "gl", "fr", "de", "it", "pt"]
+ORDER = ["es", "en", "ca", "eu", "gl", "fr", "de", "it", "pt", "cs", "el", "ja"]
 APPSTORE_URL = "https://apps.apple.com/app/vela-hrv/id6762096428"
 TOUR_IMAGES = ["watch-shot-score.png", "watch-shot-trend.png", "watch-shot-explain.png"]
 
@@ -367,6 +368,20 @@ SUB_CSS = """    :root {
     .fade-in:nth-child(5) { animation-delay: 0.45s; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 """ + REDUCED_MOTION_CSS
+
+CHANGELOG_CSS = SUB_CSS + """    .release { margin-bottom: 2.75rem; }
+    .release + .release { border-top: 1px solid var(--border); padding-top: 2.75rem; }
+    .release-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+    .release-head h2 { margin-bottom: 0; }
+    .release-date { font-size: 0.82rem; color: var(--text-tertiary); letter-spacing: 0.02em; }
+    .badge {
+      display: inline-block; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.28rem 0.62rem; border-radius: 999px; margin-bottom: 1rem;
+      border: 1px solid rgba(74,158,255,0.35); color: var(--primary-bright);
+    }
+    .badge.review { border-color: rgba(255,190,90,0.5); color: #FFCF8E; }
+"""
 
 LANDING_CSS = """  :root{
     --bg: #0A1628;
@@ -891,6 +906,43 @@ def render_a11y(code, t):
 </html>
 """
 
+def render_changelog(code, t):
+    c = t["changelog"]
+    blocks = []
+    for e in c["entries"]:
+        badge = f'\n        <span class="badge review">{c["status_review"]}</span>' if e.get("status") == "review" else ""
+        note = f'\n        <p>{c["unreleased_note"]}</p>' if e.get("status") == "review" else ""
+        changes = "\n".join(f"          <li>{x}</li>" for x in e["changes"])
+        blocks.append(f"""    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>{e['version']}</h2>
+          <span class="release-date">{e['date']}</span>
+        </div>{badge}{note}
+        <ul>
+{changes}
+        </ul>
+      </section>
+    </div>""")
+    body = "\n".join(blocks)
+    return HEAD.format(lang=code, title=c["title_tag"], css=CHANGELOG_CSS) + f"""<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="{path_for(code, 'landing')}">{t['back_home']}</a>
+      <h1 class="page-title">{c['title']}</h1>
+      <p class="page-meta">{c['intro']}</p>
+    </header>
+
+    <div class="divider"></div>
+
+{body}
+
+{footer(t, 'changelog', code)}
+  </div>
+</body>
+</html>
+"""
+
 def render_landing(code, t):
     L = t["landing"]
     principles = "\n".join(
@@ -1046,6 +1098,7 @@ def render_landing(code, t):
     <span>© 2026 Vela</span>
     <div class="footer-links">
       <a href="{path_for(code, 'support')}">{L['footer_support']}</a>
+      <a href="{path_for(code, 'changelog')}">{L['footer_changelog']}</a>
       <a href="{path_for(code, 'privacy')}">{L['footer_privacy']}</a>
       <a href="mailto:{MAIL}">{L['footer_contact']}</a>
     </div>
@@ -1210,7 +1263,7 @@ L["es"] = {
       ("On-device", "Todo el cálculo ocurre en tu Watch.", "HealthKit entrega los datos, el reloj hace el resto. Ningún dato de HRV sale de tu dispositivo hacia un servidor de Vela."),
       ("Tu iCloud, no el nuestro", "La sincronización usa tu propia cuenta de iCloud", "vía CloudKit. Vela no aloja tus datos en ningún sitio — no puede, porque no tiene dónde."),
       ("Sin suscripción. Nunca.", "Sin cuotas mensuales ni anuales.", "Vela es gratis hoy. En el futuro habrá una versión Pro de pago único — nunca una suscripción."),
-      ("Accesible de serie", "VoiceOver, Dynamic Type, Reduce Motion", "y 9 idiomas: castellano, català, euskara, galego, English, français, Deutsch, italiano y português."),
+      ("Accesible de serie", "VoiceOver, Dynamic Type, Reduce Motion", "y 12 idiomas: castellano, català, euskara, galego, English, français, Deutsch, italiano, português, čeština, ελληνικά y 日本語."),
     ],
     "showcase_eyebrow": "En tu muñeca", "showcase_h2": "Un score, un estado, una tendencia.",
     "showcase_p": "El color y la etiqueta de texto siempre van juntos — también pensado para quienes no distinguen bien los colores. Cada score se explica: qué rango es “Normal”, cuándo pasa a “Alto” y por qué.",
@@ -1309,7 +1362,7 @@ L["en"] = {
       ("On-device", "All the computation happens on your Watch.", "HealthKit provides the data, the watch does the rest. No HRV data ever leaves your device toward a Vela server."),
       ("Your iCloud, not ours", "Syncing uses your own iCloud account", "via CloudKit. Vela doesn't host your data anywhere — it can't, because it has nowhere to."),
       ("No subscription. Ever.", "No monthly or yearly fees.", "Vela is free today. In the future there will be a paid Pro version — never a subscription."),
-      ("Accessible by default", "VoiceOver, Dynamic Type, Reduce Motion", "and 9 languages: Spanish, Catalan, Basque, Galician, English, French, German, Italian, and Portuguese."),
+      ("Accessible by default", "VoiceOver, Dynamic Type, Reduce Motion", "and 12 languages: Spanish, Catalan, Basque, Galician, English, French, German, Italian, Portuguese, Czech, Greek, and Japanese."),
     ],
     "showcase_eyebrow": "On your wrist", "showcase_h2": "One score, one state, one trend.",
     "showcase_p": "Color and text label always go together — designed with color blindness in mind too. Every score is explained: which range counts as “Normal”, when it becomes “High”, and why.",
@@ -1408,7 +1461,7 @@ L["ca"] = {
       ("On-device", "Tot el càlcul passa al teu Watch.", "HealthKit lliura les dades, el rellotge fa la resta. Cap dada d'HRV surt del teu dispositiu cap a un servidor de Vela."),
       ("El teu iCloud, no el nostre", "La sincronització fa servir el teu propi compte d'iCloud", "via CloudKit. Vela no allotja les teves dades enlloc — no pot, perquè no té on."),
       ("Sense subscripció. Mai.", "Sense quotes mensuals ni anuals.", "Vela és gratuïta avui. En el futur hi haurà una versió Pro de pagament únic — mai una subscripció."),
-      ("Accessible de sèrie", "VoiceOver, Dynamic Type, Reduce Motion", "i 9 idiomes: castellà, català, èuscar, gallec, English, français, Deutsch, italiano i português."),
+      ("Accessible de sèrie", "VoiceOver, Dynamic Type, Reduce Motion", "i 12 idiomes: castellà, català, èuscar, gallec, English, français, Deutsch, italiano, português, čeština, ελληνικά i 日本語."),
     ],
     "showcase_eyebrow": "Al teu canell", "showcase_h2": "Un score, un estat, una tendència.",
     "showcase_p": "El color i l'etiqueta de text sempre van junts — pensat també per a qui no distingeix bé els colors. Cada score s'explica: quin rang és «Normal», quan passa a «Alt» i per què.",
@@ -1507,7 +1560,7 @@ L["eu"] = {
       ("On-device", "Kalkulu guztia zure Watch-ean gertatzen da.", "HealthKitek datuak ematen ditu, erlojuak gainerakoa egiten du. HRV daturik ez da inoiz zure gailutik ateratzen Velaren zerbitzari batera."),
       ("Zure iCloud, ez gurea", "Sinkronizazioak zure iCloud kontu propioa erabiltzen du", "CloudKit bidez. Velak ez ditu zure datuak inon gordetzen — ezin du, ez baitu non."),
       ("Harpidetzarik gabe. Inoiz ez.", "Hileroko edo urteroko kuotarik gabe.", "Vela gaur doakoa da. Etorkizunean ordainpeko Pro bertsio bat egongo da — inoiz ez harpidetza bat."),
-      ("Berez irisgarria", "VoiceOver, Dynamic Type, Reduce Motion", "eta 9 hizkuntza: gaztelania, katalana, euskara, galiziera, English, français, Deutsch, italiano eta português."),
+      ("Berez irisgarria", "VoiceOver, Dynamic Type, Reduce Motion", "eta 12 hizkuntza: gaztelania, katalana, euskara, galiziera, English, français, Deutsch, italiano, português, čeština, ελληνικά eta 日本語."),
     ],
     "showcase_eyebrow": "Zure eskumuturrean", "showcase_h2": "Puntuazio bat, egoera bat, joera bat.",
     "showcase_p": "Kolorea eta testu-etiketa beti batera doaz — kolore-itsutasuna kontuan hartuta ere. Puntuazio bakoitza azaltzen da: zein tarte den «Normal», noiz bihurtzen den «Altu» eta zergatik.",
@@ -1606,7 +1659,7 @@ L["gl"] = {
       ("On-device", "Todo o cálculo ocorre no teu Watch.", "HealthKit entrega os datos, o reloxo fai o resto. Ningún dato de HRV sae do teu dispositivo cara a un servidor de Vela."),
       ("O teu iCloud, non o noso", "A sincronización usa a túa propia conta de iCloud", "vía CloudKit. Vela non aloxa os teus datos en ningures — non pode, porque non ten onde."),
       ("Sen subscrición. Nunca.", "Sen cotas mensuais nin anuais.", "Vela é gratis hoxe. No futuro haberá unha versión Pro de pago único — nunca unha subscrición."),
-      ("Accesible de serie", "VoiceOver, Dynamic Type, Reduce Motion", "e 9 idiomas: castelán, catalán, éuscaro, galego, English, français, Deutsch, italiano e português."),
+      ("Accesible de serie", "VoiceOver, Dynamic Type, Reduce Motion", "e 12 idiomas: castelán, catalán, éuscaro, galego, English, français, Deutsch, italiano, português, čeština, ελληνικά e 日本語."),
     ],
     "showcase_eyebrow": "No teu pulso", "showcase_h2": "Unha puntuación, un estado, unha tendencia.",
     "showcase_p": "A cor e a etiqueta de texto van sempre xuntas — pensado tamén para quen non distingue ben as cores. Cada puntuación explícase: que rango é «Normal», cando pasa a «Alto» e por que.",
@@ -1705,7 +1758,7 @@ L["fr"] = {
       ("On-device", "Tout le calcul se fait sur votre Watch.", "HealthKit fournit les données, la montre fait le reste. Aucune donnée VFC ne quitte jamais votre appareil vers un serveur Vela."),
       ("Votre iCloud, pas le nôtre", "La synchronisation utilise votre propre compte iCloud", "via CloudKit. Vela n'héberge vos données nulle part — elle ne peut pas, faute d'endroit où les mettre."),
       ("Sans abonnement. Jamais.", "Aucun frais mensuel ni annuel.", "Vela est gratuite aujourd'hui. Une version Pro à paiement unique arrivera plus tard — jamais un abonnement."),
-      ("Accessible par défaut", "VoiceOver, Dynamic Type, Reduce Motion", "et 9 langues : espagnol, catalan, basque, galicien, anglais, français, allemand, italien et portugais."),
+      ("Accessible par défaut", "VoiceOver, Dynamic Type, Reduce Motion", "et 12 langues : espagnol, catalan, basque, galicien, anglais, français, allemand, italien, portugais, tchèque, grec et japonais."),
     ],
     "showcase_eyebrow": "À votre poignet", "showcase_h2": "Un score, un état, une tendance.",
     "showcase_p": "La couleur et l'étiquette textuelle vont toujours ensemble — pensé aussi pour les personnes daltoniennes. Chaque score est expliqué : quelle plage est « Normale », quand elle devient « Élevée », et pourquoi.",
@@ -1804,7 +1857,7 @@ L["de"] = {
       ("On-device", "Die gesamte Berechnung läuft auf deiner Watch.", "HealthKit liefert die Daten, die Uhr erledigt den Rest. Keine HRV-Daten verlassen jemals dein Gerät in Richtung eines Vela-Servers."),
       ("Deine iCloud, nicht unsere", "Die Synchronisierung nutzt dein eigenes iCloud-Konto", "über CloudKit. Vela speichert deine Daten nirgendwo — das kann es gar nicht, weil es keinen Ort dafür hat."),
       ("Kein Abo. Niemals.", "Keine monatlichen oder jährlichen Gebühren.", "Vela ist heute kostenlos. In Zukunft wird es eine kostenpflichtige Pro-Version mit Einmalzahlung geben — niemals ein Abo."),
-      ("Barrierefrei von Haus aus", "VoiceOver, Dynamic Type, Reduce Motion", "und 9 Sprachen: Spanisch, Katalanisch, Baskisch, Galicisch, Englisch, Französisch, Deutsch, Italienisch und Portugiesisch."),
+      ("Barrierefrei von Haus aus", "VoiceOver, Dynamic Type, Reduce Motion", "und 12 Sprachen: Spanisch, Katalanisch, Baskisch, Galicisch, Englisch, Französisch, Deutsch, Italienisch, Portugiesisch, Tschechisch, Griechisch und Japanisch."),
     ],
     "showcase_eyebrow": "An deinem Handgelenk", "showcase_h2": "Ein Score, ein Zustand, ein Trend.",
     "showcase_p": "Farbe und Textlabel gehören immer zusammen — auch für Menschen mit Farbsehschwäche gedacht. Jeder Score wird erklärt: welcher Bereich „Normal“ ist, wann er zu „Hoch“ wird, und warum.",
@@ -1903,7 +1956,7 @@ L["it"] = {
       ("On-device", "Tutto il calcolo avviene sul tuo Watch.", "HealthKit fornisce i dati, l'orologio fa il resto. Nessun dato HRV lascia mai il tuo dispositivo verso un server Vela."),
       ("Il tuo iCloud, non il nostro", "La sincronizzazione usa il tuo account iCloud", "tramite CloudKit. Vela non ospita i tuoi dati da nessuna parte — non può, perché non ha dove."),
       ("Senza abbonamento. Mai.", "Nessuna quota mensile o annuale.", "Vela è gratis oggi. In futuro ci sarà una versione Pro a pagamento unico — mai un abbonamento."),
-      ("Accessibile di serie", "VoiceOver, Dynamic Type, Reduce Motion", "e 9 lingue: spagnolo, catalano, basco, galiziano, inglese, francese, tedesco, italiano e portoghese."),
+      ("Accessibile di serie", "VoiceOver, Dynamic Type, Reduce Motion", "e 12 lingue: spagnolo, catalano, basco, galiziano, inglese, francese, tedesco, italiano, portoghese, ceco, greco e giapponese."),
     ],
     "showcase_eyebrow": "Al tuo polso", "showcase_h2": "Un punteggio, uno stato, una tendenza.",
     "showcase_p": "Colore ed etichetta testuale vanno sempre insieme — pensato anche per chi non distingue bene i colori. Ogni punteggio è spiegato: quale intervallo è «Normale», quando diventa «Alto» e perché.",
@@ -2002,7 +2055,7 @@ L["pt"] = {
       ("On-device", "Todo o cálculo acontece no seu Watch.", "O HealthKit fornece os dados, o relógio faz o resto. Nenhum dado de HRV sai do seu dispositivo em direção a um servidor da Vela."),
       ("O seu iCloud, não o nosso", "A sincronização usa a sua própria conta iCloud", "via CloudKit. A Vela não aloja os seus dados em lado nenhum — não pode, porque não tem onde."),
       ("Sem subscrição. Nunca.", "Sem quotas mensais nem anuais.", "A Vela é gratuita hoje. No futuro haverá uma versão Pro de pagamento único — nunca uma subscrição."),
-      ("Acessível por predefinição", "VoiceOver, Dynamic Type, Reduce Motion", "e 9 idiomas: castelhano, catalão, basco, galego, inglês, francês, alemão, italiano e português."),
+      ("Acessível por predefinição", "VoiceOver, Dynamic Type, Reduce Motion", "e 12 idiomas: castelhano, catalão, basco, galego, inglês, francês, alemão, italiano, português, checo, grego e japonês."),
     ],
     "showcase_eyebrow": "No seu pulso", "showcase_h2": "Uma pontuação, um estado, uma tendência.",
     "showcase_p": "A cor e a etiqueta de texto andam sempre juntas — pensado também para quem não distingue bem as cores. Cada pontuação é explicada: que intervalo é «Normal», quando passa a «Alto» e porquê.",
@@ -2022,6 +2075,752 @@ L["pt"] = {
   },
 }
 
+L["cs"] = {
+  "lang_label": "Jazyk", "back": "← Zpět na podporu", "back_home": "← Zpět na Vela", "rights": "Všechna práva vyhrazena",
+  "support_title": "Vela HRV — Podpora",
+  "about_h": "O aplikaci",
+  "about_p1": "Vela měří vaši úroveň stresu pomocí variability srdečního tepu (HRV) přímo z vašich Apple Watch. Veškeré zpracování probíhá ve vašem zařízení — vaše data nikdy neopustí vaše Apple Watch ani váš soukromý iCloud.",
+  "about_p2": "Během prvních dní si Vela vytvoří vaši osobní základní linii, aby každé měření dávalo smysl pro vaše tělo, ne pro statistický průměr.",
+  "faq_h": "Časté dotazy",
+  "faq": [
+    ("Jaké Apple Watch potřebuji?", "Vela vyžaduje Apple Watch s watchOS 26 nebo novějším. Funguje jako samostatná aplikace — pro měření nemusíte mít iPhone poblíž."),
+    ("Proč trvá několik dní, než se zobrazí moje skóre?", "Vela se nejdřív musí naučit vaše osobní HRV, než dokáže spočítat smysluplné skóre. Během prvních 7–14 dní si vytváří vaši základní linii — od té chvíle každé měření odráží váš skutečný stav."),
+    ("Kde jsou uložena moje data?", "Vaše data se synchronizují soukromě přes váš vlastní iCloud. Vela nemá žádné vlastní servery — vaše data nikdy neodesíláme ani neukládáme mimo váš účet."),
+    ("Jaká oprávnění Vela potřebuje?", "Vela žádá o přístup k HealthKitu, aby mohla číst data o variabilitě srdečního tepu, která vaše Apple Watch už automaticky shromažďují."),
+  ],
+  "contact_h": "Kontakt a podpora",
+  "contact_p": "Máte dotaz, našli jste chybu nebo se chcete podělit o zpětnou vazbu? Napište nám přímo.",
+  "privacy": {
+    "title_tag": "Vela HRV — Zásady ochrany soukromí", "title": "Zásady ochrany soukromí",
+    "updated": "Poslední aktualizace: duben 2026",
+    "highlight": "Vela neshromažďuje, nepřenáší ani neukládá žádné osobní údaje na externí servery. Vše zůstává ve vašem zařízení a ve vašem soukromém iCloudu.",
+    "sections": [
+      ("Jaká data Vela používá", [
+        "Vela čte data o variabilitě srdečního tepu (HRV) z Apple HealthKitu, aby spočítala vaše osobní skóre stresu. Tato data už vaše Apple Watch shromažďují automaticky.",
+        "Vela také ukládá měření, která spočítá — historii vašeho skóre stresu, vaši osobní základní linii HRV a surové vzorky HRV použité k jejímu výpočtu."]),
+      ("Kde vaše data žijí", [
+        "Všechna data jsou uložena lokálně ve vašich Apple Watch a synchronizována soukromě přes váš vlastní účet iCloud pomocí frameworku CloudKit od Applu. Vela nemá žádné servery. Žádná data nikdy neprocházejí systémy, které vlastní nebo provozuje Vela.",
+        "K vašim datům máte přístup jen vy. Ne my, ne třetí strany."]),
+      ("Třetí strany", [
+        "Vela nesdílí žádná data se třetími stranami. Nepoužíváme analytické služby, reklamní SDK ani žádné externí sledovací nástroje."]),
+      ("Zdravotní data", [
+        "Vela přistupuje ke zdravotním datům výhradně kvůli své hlavní funkci — měření a sledování vaší úrovně stresu. Zdravotní data se nikdy nepoužívají k reklamě ani se nikomu neprodávají."]),
+      ("Děti", [
+        "Vela není určena dětem mladším 13 let a vědomě od nich neshromažďuje žádná data."]),
+      ("Změny těchto zásad", [
+        "Pokud se tyto zásady ochrany soukromí změní, aktualizovaná verze bude zveřejněna na této adrese URL s novým datem. Pokračováním v používání aplikace po změnách vyjadřujete souhlas s aktualizovanými zásadami."]),
+    ],
+    "contact_h": "Kontakt",
+    "contact_pre": "Máte dotazy k těmto zásadám ochrany soukromí? Napište na ", "contact_post": ".",
+  },
+  "a11y": {
+    "title_tag": "Vela HRV — Přístupnost", "title": "Přístupnost",
+    "updated": "Poslední aktualizace: červenec 2026",
+    "highlight": "Vela je navržena tak, aby byla plně použitelná i bez zraku: každá obrazovka funguje s VoiceOverem a žádná informace není nikdy sdělována pouze barvou.",
+    "approach_h": "Náš přístup",
+    "approach_p": "Vela měří stres prostřednictvím variability srdečního tepu na Apple Watch. Porozumění vlastnímu tělu by nemělo záviset na tom, jak vidíte, a proto je přístupnost považována za základní funkci: hlavní zásadou je, aby si nevidomý uživatel mohl zkontrolovat úroveň stresu, procházet svou historii, číst týdenní přehledy a nastavit aplikaci zcela samostatně.",
+    "supported_h": "Podpora na Apple Watch",
+    "items": [
+      ("VoiceOver.", "Každý prvek má smysluplný popisek, hodnotu a nápovědu. Grafy jsou dostupné jako zvukové grafy (Audio Graphs), takže historii stresu lze prozkoumat sluchem pomocí Digital Crown."),
+      ("Větší text.", "Rozhraní všude používá Dynamic Type. Kompaktní prvky, jako je prstenec skóre, nabízejí Prohlížeč velkého obsahu."),
+      ("Tmavé rozhraní.", "Rozhraní Vely je záměrně tmavé na každé obrazovce, bez jasných záblesků."),
+      ("Rozlišení bez barvy.", "Úrovně stresu jsou vždy doplněny číslem a slovem — nikdy jen barvou. Grafy přidávají linie pásem, když je zapnuto „Rozlišovat bez barvy“."),
+      ("Dostatečný kontrast.", "Veškerý text splňuje kontrastní poměr WCAG AA (4,5:1 nebo lepší) na tmavém pozadí."),
+      ("Omezení pohybu.", "Animace se vypnou nebo nahradí statickými alternativami, když je zapnuto „Omezit pohyb“. Vela také respektuje Omezit průhlednost a Tučný text."),
+    ],
+    "no_media": "Vela neobsahuje žádný zvuk ani video, takže titulky a zvukové popisy se neuplatňují.",
+    "verify_h": "Jak to ověřujeme",
+    "verify_p": "Každá obrazovka prochází automatickými audity přístupnosti od Applu — kontrola popisků, kontrastu, velikosti dotykových cílů a škálování textu — jako součást testovací sady aplikace, spolu s ruční kontrolou pomocí VoiceOveru. Tyto kontroly se spouští znovu při každé změně rozhraní, aby se přístupnost mezi verzemi tiše nezhoršila.",
+    "feedback_h": "Zpětná vazba",
+    "feedback_pre": "Pokud se něco ve Vele obtížně používá s asistivními technologiemi, je to chyba. Napište prosím na ",
+    "feedback_post": " — hlášení o přístupnosti mají prioritu pro další vydání.",
+  },
+  "landing": {
+    "nav_cta": "Stáhnout",
+    "title_tag": "Vela — HRV pro Apple Watch. Žádné předplatné. Nikdy.",
+    "meta_desc": "Vela měří vaši variabilitu srdečního tepu (HRV/SDNN) na Apple Watch a vytváří vaši vlastní osobní základní linii. Vše se zpracovává na hodinkách. Synchronizuje se s vaším iCloudem. Žádné předplatné, nikdy.",
+    "eyebrow1": "HRV pro Apple Watch",
+    "h1": "Váš klid není <em>ničí průměr</em>.",
+    "hero_p": "Vela měří vaši variabilitu srdečního tepu (SDNN) přímo na vašich Apple Watch a vytváří základní linii, která patří vám — ne obecný populační práh. Veškerý výpočet probíhá na hodinkách. Nic nikdy neprochází našimi servery, protože žádné nemáme.",
+    "badge_alt": "Stáhnout v App Store",
+    "wave_kicker": "SDNN · ŽIVĚ", "wave_state": "V KLIDU",
+    "wave_left": "populační šum", "wave_right_html": "<b>vaše základní linie</b> se ustálí",
+    "baseline_eyebrow": "Proč průměr nefunguje",
+    "baseline_h2": "25&nbsp;ms HRV může být pro vás vysoká a pro někoho jiného nízká.",
+    "baseline_p": "HRV se mezi lidmi enormně liší. Populační práh zachází se všemi stejně — a přesně proto se skoro vždy mýlí. Vela vytváří vaši vlastní základní linii z vaší skutečné historie: pokud už na Apple Watch data HRV máte, může začít hned první den; pokud jste noví, ustálí se za 7–14 dní.",
+    "legend1": "Obecný populační práh", "legend2": "Jednotlivé vzorky", "legend3": "Vaše osobní základní linie",
+    "principles_eyebrow": "Jak to funguje", "principles_h2": "Čtyři rozhodnutí, učiněná tak, abychom je neměnili.",
+    "principles": [
+      ("On-device", "Veškerý výpočet probíhá na vašich Watch.", "HealthKit poskytuje data, hodinky udělají zbytek. Žádná data HRV nikdy neopustí vaše zařízení směrem k serveru Vely."),
+      ("Váš iCloud, ne náš", "Synchronizace používá váš vlastní účet iCloud", "přes CloudKit. Vela vaše data nikde nehostuje — nemůže, protože nemá kde."),
+      ("Žádné předplatné. Nikdy.", "Žádné měsíční ani roční poplatky.", "Vela je dnes zdarma. V budoucnu bude placená verze Pro s jednorázovou platbou — nikdy ne předplatné."),
+      ("Přístupná ve výchozím stavu", "VoiceOver, Dynamic Type, Reduce Motion", "a 12 jazyků: španělština, katalánština, baskičtina, galicijština, angličtina, francouzština, němčina, italština, portugalština, čeština, řečtina a japonština."),
+    ],
+    "showcase_eyebrow": "Na vašem zápěstí", "showcase_h2": "Jedno skóre, jeden stav, jeden trend.",
+    "showcase_p": "Barva a textový popisek jdou vždy spolu — navrženo i s ohledem na barvoslepost. Každé skóre je vysvětleno: který rozsah se počítá jako „Normální“, kdy se stává „Vysokým“ a proč.",
+    "showcase_alt": "Tři obrazovky Vely na Apple Watch Ultra: aktuální skóre stresu se stavem Normální, týdenní trend s denním průměrem a obrazovka vysvětlující rozsahy Normální a Vysoký.",
+    "tour_eyebrow": "Rychlá prohlídka", "tour_h2": "Tři obrazovky, každá s jediným úkolem.",
+    "tour": [
+      ("Aktuální skóre", "Jedno číslo, jeden stav, spočítané kompletně na hodinkách — bez čekání na jakoukoli synchronizaci.", "Hlavní obrazovka Vely se skóre stresu 68, stav Normální, spočítáno v daném okamžiku."),
+      ("Trend", "Každé měření dne, porovnané s vaší vlastní přerušovanou čárou — ne s ničí jinou.", "Graf trendu s denním průměrem stresu a hodinovými měřeními, porovnanými s osobní základní linií."),
+      ("Vysvětlené rozsahy", "Žádná záhadná čísla: každý rozsah říká, co znamená a co čekat.", "Obrazovka vysvětlující rozsahy stresu: Normální mezi 40 a 69, Vysoký mezi 70 a 100."),
+    ],
+    "onboarding_eyebrow": "Jak začít", "onboarding_h2": "Než začneme cokoli měřit, požádáme o svolení.",
+    "onboarding_p": "Vela žádá o přístup k vaší HRV výslovně, ne v drobném písmu. A pokud s měřením HRV začínáte, řekne vám, jak dlouho potrvá, než budete mít spolehlivou základní linii — aniž by předstírala, že vás zná už první den.",
+    "onboarding_alt": "Úvodní průvodce Vely na Apple Watch: uvítací obrazovka, výslovná žádost o přístup k datům variability srdečního tepu a obrazovka budování základní linie se zbývajícími 7 dny.",
+    "closing_eyebrow": "Stáhněte si ji dnes", "closing_h2": "Žádné předplatné. <em>Nikdy.</em>",
+    "closing_p": "Vela je k dispozici zdarma v App Store pro Apple Watch.",
+    "footer_support": "Podpora", "footer_privacy": "Soukromí", "footer_contact": "Kontakt",
+  },
+}
+
+L["el"] = {
+  "lang_label": "Γλώσσα", "back": "← Επιστροφή στην υποστήριξη", "back_home": "← Επιστροφή στο Vela", "rights": "Με την επιφύλαξη παντός δικαιώματος",
+  "support_title": "Vela HRV — Υποστήριξη",
+  "about_h": "Σχετικά με την εφαρμογή",
+  "about_p1": "Το Vela μετρά το επίπεδο άγχους σας χρησιμοποιώντας τη μεταβλητότητα του καρδιακού ρυθμού (HRV) απευθείας από το Apple Watch σας. Όλη η επεξεργασία γίνεται στη συσκευή σας — τα δεδομένα σας δεν φεύγουν ποτέ από το Apple Watch σας ή το ιδιωτικό σας iCloud.",
+  "about_p2": "Τις πρώτες ημέρες, το Vela χτίζει το προσωπικό σας baseline ώστε κάθε μέτρηση να έχει νόημα για το σώμα σας, όχι για έναν στατιστικό μέσο όρο.",
+  "faq_h": "Συχνές ερωτήσεις",
+  "faq": [
+    ("Ποιο Apple Watch χρειάζομαι;", "Το Vela απαιτεί Apple Watch με watchOS 26 ή νεότερο. Λειτουργεί ως αυτόνομη εφαρμογή — το iPhone σας δεν χρειάζεται να είναι κοντά για να γίνει μια μέτρηση."),
+    ("Γιατί χρειάζονται μερικές ημέρες για να εμφανιστεί το σκορ μου;", "Το Vela πρέπει πρώτα να μάθει το προσωπικό σας HRV για να υπολογίσει ένα ουσιαστικό σκορ. Τις πρώτες 7–14 ημέρες χτίζει το baseline σας — από εκεί και πέρα, κάθε μέτρηση αντικατοπτρίζει την πραγματική σας κατάσταση."),
+    ("Πού αποθηκεύονται τα δεδομένα μου;", "Τα δεδομένα σας συγχρονίζονται ιδιωτικά μέσω του δικού σας iCloud. Το Vela δεν έχει δικούς του διακομιστές — δεν στέλνουμε ούτε αποθηκεύουμε ποτέ τα δεδομένα σας εκτός του λογαριασμού σας."),
+    ("Ποιες άδειες χρειάζεται το Vela;", "Το Vela ζητά πρόσβαση στο HealthKit για να διαβάσει τα δεδομένα μεταβλητότητας καρδιακού ρυθμού που το Apple Watch σας συλλέγει ήδη αυτόματα."),
+  ],
+  "contact_h": "Επικοινωνία & υποστήριξη",
+  "contact_p": "Έχετε μια ερώτηση, βρήκατε ένα σφάλμα ή θέλετε να μοιραστείτε σχόλια; Επικοινωνήστε απευθείας.",
+  "privacy": {
+    "title_tag": "Vela HRV — Πολιτική απορρήτου", "title": "Πολιτική απορρήτου",
+    "updated": "Τελευταία ενημέρωση: Απρίλιος 2026",
+    "highlight": "Το Vela δεν συλλέγει, δεν μεταδίδει και δεν αποθηκεύει κανένα προσωπικό δεδομένο σε εξωτερικούς διακομιστές. Όλα παραμένουν στη συσκευή σας και στο ιδιωτικό σας iCloud.",
+    "sections": [
+      ("Ποια δεδομένα χρησιμοποιεί το Vela", [
+        "Το Vela διαβάζει δεδομένα μεταβλητότητας καρδιακού ρυθμού (HRV) από το Apple HealthKit για να υπολογίσει το προσωπικό σας σκορ άγχους. Αυτά τα δεδομένα συλλέγονται ήδη αυτόματα από το Apple Watch σας.",
+        "Το Vela αποθηκεύει επίσης τις μετρήσεις που υπολογίζει — το ιστορικό του σκορ άγχους σας, το προσωπικό σας baseline HRV και τα ακατέργαστα δείγματα HRV που χρησιμοποιούνται για τον υπολογισμό του."]),
+      ("Πού βρίσκονται τα δεδομένα σας", [
+        "Όλα τα δεδομένα αποθηκεύονται τοπικά στο Apple Watch σας και συγχρονίζονται ιδιωτικά μέσω του δικού σας λογαριασμού iCloud με το framework CloudKit της Apple. Το Vela δεν έχει διακομιστές. Κανένα δεδομένο δεν περνά ποτέ από συστήματα που ανήκουν ή λειτουργούν από το Vela.",
+        "Μόνο εσείς έχετε πρόσβαση στα δεδομένα σας. Ούτε εμείς, ούτε τρίτοι."]),
+      ("Τρίτα μέρη", [
+        "Το Vela δεν μοιράζεται κανένα δεδομένο με τρίτους. Δεν χρησιμοποιούμε υπηρεσίες ανάλυσης, διαφημιστικά SDK ή οποιαδήποτε εξωτερικά εργαλεία παρακολούθησης."]),
+      ("Δεδομένα υγείας", [
+        "Το Vela αποκτά πρόσβαση σε δεδομένα υγείας αποκλειστικά για να παρέχει τη βασική του λειτουργία — τη μέτρηση και την παρακολούθηση του επιπέδου άγχους σας. Τα δεδομένα υγείας δεν χρησιμοποιούνται ποτέ για διαφήμιση ούτε πωλούνται σε κανέναν."]),
+      ("Παιδιά", [
+        "Το Vela δεν απευθύνεται σε παιδιά κάτω των 13 ετών και δεν συλλέγει εν γνώσει του δεδομένα από αυτά."]),
+      ("Αλλαγές σε αυτήν την πολιτική", [
+        "Εάν αυτή η πολιτική απορρήτου αλλάξει, η ενημερωμένη έκδοση θα δημοσιευτεί σε αυτήν τη διεύθυνση URL με νέα ημερομηνία. Η συνεχής χρήση της εφαρμογής μετά τις αλλαγές συνιστά αποδοχή της ενημερωμένης πολιτικής."]),
+    ],
+    "contact_h": "Επικοινωνία",
+    "contact_pre": "Ερωτήσεις σχετικά με αυτήν την πολιτική απορρήτου; Γράψτε στο ", "contact_post": ".",
+  },
+  "a11y": {
+    "title_tag": "Vela HRV — Προσβασιμότητα", "title": "Προσβασιμότητα",
+    "updated": "Τελευταία ενημέρωση: Ιούλιος 2026",
+    "highlight": "Το Vela είναι σχεδιασμένο ώστε να μπορεί να χρησιμοποιηθεί πλήρως χωρίς όραση: κάθε οθόνη λειτουργεί με το VoiceOver και καμία πληροφορία δεν μεταδίδεται ποτέ μόνο με χρώμα.",
+    "approach_h": "Η προσέγγισή μας",
+    "approach_p": "Το Vela μετρά το άγχος μέσω της μεταβλητότητας του καρδιακού ρυθμού στο Apple Watch. Η κατανόηση του σώματός σας δεν θα έπρεπε να εξαρτάται από το πώς βλέπετε, γι’ αυτό η προσβασιμότητα αντιμετωπίζεται ως βασική λειτουργία: η κατευθυντήρια αρχή είναι ότι ένας τυφλός χρήστης μπορεί να ελέγξει το επίπεδο άγχους του, να εξερευνήσει το ιστορικό του, να διαβάσει τις εβδομαδιαίες αναλύσεις του και να ρυθμίσει την εφαρμογή εντελώς μόνος του.",
+    "supported_h": "Υποστήριξη στο Apple Watch",
+    "items": [
+      ("VoiceOver.", "Κάθε στοιχείο έχει ουσιαστική ετικέτα, τιμή και υπόδειξη. Τα γραφήματα παρουσιάζονται ως Audio Graphs: το ιστορικό άγχους μπορεί να εξερευνηθεί με ήχο μέσω του Digital Crown."),
+      ("Μεγαλύτερο κείμενο.", "Η διεπαφή χρησιμοποιεί Dynamic Type παντού. Οι συμπαγείς ενδείξεις, όπως ο δακτύλιος σκορ, προσφέρουν το πρόγραμμα προβολής μεγάλου περιεχομένου."),
+      ("Σκούρα διεπαφή.", "Η διεπαφή του Vela είναι σκούρα εκ σχεδιασμού σε κάθε οθόνη, χωρίς έντονες αναλαμπές."),
+      ("Διαφοροποίηση χωρίς χρώμα.", "Τα επίπεδα άγχους ενισχύονται πάντα με έναν αριθμό και μια λέξη — ποτέ μόνο με χρώμα. Τα γραφήματα προσθέτουν γραμμές ζωνών όταν είναι ενεργή η επιλογή «Διαφοροποίηση χωρίς χρώμα»."),
+      ("Επαρκής αντίθεση.", "Όλο το κείμενο πληροί τον λόγο αντίθεσης WCAG AA (4,5:1 ή καλύτερο) πάνω στο σκούρο φόντο."),
+      ("Μείωση κίνησης.", "Οι κινήσεις απενεργοποιούνται ή αντικαθίστανται από στατικές εναλλακτικές όταν είναι ενεργή η «Μείωση κίνησης». Το Vela σέβεται επίσης τη Μείωση διαφάνειας και το Έντονο κείμενο."),
+    ],
+    "no_media": "Το Vela δεν περιέχει ήχο ή βίντεο, επομένως οι υπότιτλοι και οι ηχητικές περιγραφές δεν ισχύουν.",
+    "verify_h": "Πώς το επαληθεύουμε",
+    "verify_p": "Κάθε οθόνη περνά από τους αυτοματοποιημένους ελέγχους προσβασιμότητας της Apple — έλεγχος ετικετών, αντίθεσης, μεγέθους περιοχών αφής και κλιμάκωσης κειμένου — ως μέρος της σουίτας δοκιμών της εφαρμογής, μαζί με χειροκίνητο έλεγχο με το VoiceOver. Αυτοί οι έλεγχοι εκτελούνται ξανά σε κάθε αλλαγή της διεπαφής, ώστε η προσβασιμότητα να μην υποβαθμίζεται σιωπηλά μεταξύ των εκδόσεων.",
+    "feedback_h": "Σχόλια",
+    "feedback_pre": "Αν κάτι στο Vela είναι δύσκολο να χρησιμοποιηθεί με υποστηρικτική τεχνολογία, αυτό είναι σφάλμα. Παρακαλούμε γράψτε στο ",
+    "feedback_post": " — οι αναφορές προσβασιμότητας έχουν προτεραιότητα για την επόμενη έκδοση.",
+  },
+  "landing": {
+    "nav_cta": "Λήψη",
+    "title_tag": "Vela — HRV για Apple Watch. Χωρίς συνδρομή. Ποτέ.",
+    "meta_desc": "Το Vela μετρά τη μεταβλητότητα του καρδιακού σας ρυθμού (HRV/SDNN) στο Apple Watch και χτίζει το δικό σας προσωπικό baseline. Όλα επεξεργάζονται στο ρολόι. Συγχρονίζεται με το iCloud σας. Χωρίς συνδρομή, ποτέ.",
+    "eyebrow1": "HRV για Apple Watch",
+    "h1": "Η ηρεμία σας δεν είναι <em>ο μέσος όρος κανενός</em>.",
+    "hero_p": "Το Vela μετρά τη μεταβλητότητα του καρδιακού σας ρυθμού (SDNN) απευθείας στο Apple Watch σας και χτίζει ένα baseline που είναι δικό σας — όχι ένα γενικό όριο πληθυσμού. Όλος ο υπολογισμός γίνεται στο ρολόι. Τίποτα δεν περνά ποτέ από τους διακομιστές μας, γιατί δεν έχουμε.",
+    "badge_alt": "Λήψη από το App Store",
+    "wave_kicker": "SDNN · ΖΩΝΤΑΝΑ", "wave_state": "ΣΕ ΗΡΕΜΙΑ",
+    "wave_left": "θόρυβος πληθυσμού", "wave_right_html": "<b>το baseline σας</b> σταθεροποιείται",
+    "baseline_eyebrow": "Γιατί ο μέσος όρος δεν λειτουργεί",
+    "baseline_h2": "25&nbsp;ms HRV μπορεί να είναι υψηλά για εσάς και χαμηλά για κάποιον άλλον.",
+    "baseline_p": "Το HRV διαφέρει τεράστια από άνθρωπο σε άνθρωπο. Ένα όριο πληθυσμού αντιμετωπίζει τους πάντες το ίδιο — και ακριβώς γι’ αυτό σχεδόν πάντα κάνει λάθος. Το Vela χτίζει το δικό σας baseline από το πραγματικό σας ιστορικό: αν έχετε ήδη δεδομένα HRV στο Apple Watch σας, μπορεί να ξεκινήσει από την πρώτη ημέρα· αν είστε νέος, χρειάζονται 7–14 ημέρες για να σταθεροποιηθεί.",
+    "legend1": "Γενικό όριο πληθυσμού", "legend2": "Μεμονωμένα δείγματα", "legend3": "Το προσωπικό σας baseline",
+    "principles_eyebrow": "Πώς λειτουργεί", "principles_h2": "Τέσσερις αποφάσεις, που πάρθηκαν για να μην τις αλλάξουμε.",
+    "principles": [
+      ("On-device", "Όλος ο υπολογισμός γίνεται στο Watch σας.", "Το HealthKit παρέχει τα δεδομένα, το ρολόι κάνει τα υπόλοιπα. Κανένα δεδομένο HRV δεν φεύγει ποτέ από τη συσκευή σας προς διακομιστή του Vela."),
+      ("Το iCloud σας, όχι το δικό μας", "Ο συγχρονισμός χρησιμοποιεί τον δικό σας λογαριασμό iCloud", "μέσω CloudKit. Το Vela δεν φιλοξενεί τα δεδομένα σας πουθενά — δεν μπορεί, γιατί δεν έχει πού."),
+      ("Χωρίς συνδρομή. Ποτέ.", "Χωρίς μηνιαίες ή ετήσιες χρεώσεις.", "Το Vela είναι δωρεάν σήμερα. Στο μέλλον θα υπάρξει μια πληρωμένη έκδοση Pro με εφάπαξ πληρωμή — ποτέ συνδρομή."),
+      ("Προσβάσιμο από προεπιλογή", "VoiceOver, Dynamic Type, Reduce Motion", "και 12 γλώσσες: ισπανικά, καταλανικά, βασκικά, γαλικιανά, αγγλικά, γαλλικά, γερμανικά, ιταλικά, πορτογαλικά, τσέχικα, ελληνικά και ιαπωνικά."),
+    ],
+    "showcase_eyebrow": "Στον καρπό σας", "showcase_h2": "Ένα σκορ, μία κατάσταση, μία τάση.",
+    "showcase_p": "Το χρώμα και η ετικέτα κειμένου πάνε πάντα μαζί — σχεδιασμένο και με γνώμονα την αχρωματοψία. Κάθε σκορ εξηγείται: ποιο εύρος θεωρείται «Φυσιολογικό», πότε γίνεται «Υψηλό» και γιατί.",
+    "showcase_alt": "Τρεις οθόνες του Vela σε Apple Watch Ultra: τρέχον σκορ άγχους με κατάσταση Φυσιολογικό, εβδομαδιαία τάση με τον μέσο όρο της ημέρας και μια οθόνη που εξηγεί τα εύρη Φυσιολογικό και Υψηλό.",
+    "tour_eyebrow": "Γρήγορη περιήγηση", "tour_h2": "Τρεις οθόνες, καθεμία με μία μόνο δουλειά.",
+    "tour": [
+      ("Τρέχον σκορ", "Ένας αριθμός, μία κατάσταση, υπολογισμένα εξ ολοκλήρου στο ρολόι — χωρίς αναμονή για κανέναν συγχρονισμό.", "Η κύρια οθόνη του Vela δείχνει σκορ άγχους 68, κατάσταση Φυσιολογικό, υπολογισμένο τη στιγμή εκείνη."),
+      ("Τάση", "Κάθε μέτρηση της ημέρας, σε σύγκριση με τη δική σας διακεκομμένη γραμμή — όχι κανενός άλλου.", "Γράφημα τάσης με τον μέσο όρο άγχους της ημέρας και τις ωριαίες μετρήσεις, σε σύγκριση με το προσωπικό baseline."),
+      ("Εξήγηση των εύρων", "Χωρίς κρυπτικούς αριθμούς: κάθε εύρος λέει τι σημαίνει και τι να περιμένετε.", "Οθόνη που εξηγεί τα εύρη άγχους: Φυσιολογικό μεταξύ 40 και 69, Υψηλό μεταξύ 70 και 100."),
+    ],
+    "onboarding_eyebrow": "Ξεκινώντας", "onboarding_h2": "Ζητάμε άδεια πριν μετρήσουμε οτιδήποτε.",
+    "onboarding_p": "Το Vela ζητά πρόσβαση στο HRV σας ρητά, όχι στα ψιλά γράμματα. Και αν είστε νέος στη μέτρηση HRV, σας λέει πόσος χρόνος απομένει μέχρι να έχετε ένα αξιόπιστο baseline — χωρίς να προσποιείται ότι σας γνωρίζει από την πρώτη ημέρα.",
+    "onboarding_alt": "Η ροή εισαγωγής του Vela στο Apple Watch: μια οθόνη υποδοχής, ένα ρητό αίτημα πρόσβασης στα δεδομένα μεταβλητότητας καρδιακού ρυθμού και μια οθόνη δημιουργίας baseline που δείχνει 7 ημέρες να απομένουν.",
+    "closing_eyebrow": "Κατεβάστε το σήμερα", "closing_h2": "Χωρίς συνδρομή. <em>Ποτέ.</em>",
+    "closing_p": "Το Vela διατίθεται δωρεάν στο App Store για Apple Watch.",
+    "footer_support": "Υποστήριξη", "footer_privacy": "Απόρρητο", "footer_contact": "Επικοινωνία",
+  },
+}
+
+L["ja"] = {
+  "lang_label": "言語", "back": "← サポートに戻る", "back_home": "← Vela に戻る", "rights": "無断複写・転載を禁じます",
+  "support_title": "Vela HRV — サポート",
+  "about_h": "アプリについて",
+  "about_p1": "Vela は心拍変動（HRV）を使って、Apple Watch から直接ストレスレベルを測定します。すべての処理はデバイス上で行われ、データが Apple Watch やプライベートな iCloud の外に出ることはありません。",
+  "about_p2": "最初の数日間で、Vela はあなた個人のベースラインを構築します。こうして、それぞれの測定値が統計的な平均ではなく、あなたの身体にとって意味を持つようになります。",
+  "faq_h": "よくある質問",
+  "faq": [
+    ("どの Apple Watch が必要ですか？", "Vela には watchOS 26 以降の Apple Watch が必要です。単体で動作するため、測定に iPhone が近くにある必要はありません。"),
+    ("スコアが表示されるまで数日かかるのはなぜですか？", "意味のあるスコアを算出するには、Vela がまずあなた個人の HRV を学習する必要があります。最初の 7〜14 日間でベースラインを構築し、それ以降は各測定値が実際の状態を反映します。"),
+    ("データはどこに保存されますか？", "データはあなた自身の iCloud を通じてプライベートに同期されます。Vela は独自のサーバーを持たず、あなたのアカウントの外にデータを送信・保存することは一切ありません。"),
+    ("Vela はどの権限を必要としますか？", "Vela は、Apple Watch がすでに自動的に収集している心拍変動データを読み取るために、HealthKit へのアクセスを求めます。"),
+  ],
+  "contact_h": "お問い合わせとサポート",
+  "contact_p": "ご質問、不具合の報告、フィードバックの共有などがあれば、直接ご連絡ください。",
+  "privacy": {
+    "title_tag": "Vela HRV — プライバシーポリシー", "title": "プライバシーポリシー",
+    "updated": "最終更新：2026年4月",
+    "highlight": "Vela は個人データを外部サーバーで収集・送信・保存することは一切ありません。すべてはあなたのデバイスとプライベートな iCloud にとどまります。",
+    "sections": [
+      ("Vela が使用するデータ", [
+        "Vela は Apple HealthKit から心拍変動（HRV）データを読み取り、あなた個人のストレススコアを算出します。このデータはすでに Apple Watch によって自動的に収集されています。",
+        "Vela は算出した測定値も保存します。ストレススコアの履歴、あなた個人の HRV ベースライン、そしてベースラインの算出に使われる HRV の生サンプルです。"]),
+      ("データの保存場所", [
+        "すべてのデータは Apple Watch にローカルで保存され、Apple の CloudKit フレームワークを使ってあなた自身の iCloud アカウントを通じてプライベートに同期されます。Vela はサーバーを持ちません。Vela が所有・運用するシステムをデータが通過することは一切ありません。",
+        "あなたのデータにアクセスできるのはあなただけです。私たちも第三者もアクセスできません。"]),
+      ("第三者", [
+        "Vela はいかなるデータも第三者と共有しません。分析サービス、広告 SDK、外部のトラッキングツールは一切使用していません。"]),
+      ("健康データ", [
+        "Vela が健康データにアクセスするのは、中核機能であるストレスレベルの測定と記録を提供するためだけです。健康データが広告に使われたり、いかなる相手にも販売されたりすることはありません。"]),
+      ("子ども", [
+        "Vela は13歳未満の子どもを対象としておらず、子どもからデータを意図的に収集することはありません。"]),
+      ("本ポリシーの変更", [
+        "本プライバシーポリシーが変更された場合、更新版が新しい日付とともにこの URL で公開されます。変更後もアプリを継続して使用することは、更新されたポリシーへの同意とみなされます。"]),
+    ],
+    "contact_h": "お問い合わせ",
+    "contact_pre": "本プライバシーポリシーについてのご質問は ", "contact_post": " までご連絡ください。",
+  },
+  "a11y": {
+    "title_tag": "Vela HRV — アクセシビリティ", "title": "アクセシビリティ",
+    "updated": "最終更新：2026年7月",
+    "highlight": "Vela は画面を見なくても完全に使えるように設計されています。すべての画面が VoiceOver に対応し、色だけで情報を伝えることは一切ありません。",
+    "approach_h": "私たちの考え方",
+    "approach_p": "Vela は Apple Watch 上で心拍変動を通じてストレスを測定します。自分の身体を理解できるかどうかが、見え方によって左右されるべきではありません。だからこそアクセシビリティを中核機能として扱っています。指針となるのは、目の見えない利用者がストレスレベルを確認し、履歴を調べ、週ごとの分析を読み、アプリを完全に自力で設定できることです。",
+    "supported_h": "Apple Watch での対応",
+    "items": [
+      ("VoiceOver。", "すべての要素に意味のあるラベル、値、ヒントが付いています。グラフは Audio Graph として提供され、Digital Crown を使って音でストレス履歴を探索できます。"),
+      ("大きな文字。", "インターフェースは全体で Dynamic Type に対応しています。スコアリングのようなコンパクトな表示では、拡大コンテンツビューアを利用できます。"),
+      ("ダークなインターフェース。", "Vela のインターフェースはすべての画面で意図的にダークに設計されており、まぶしい点滅はありません。"),
+      ("色以外での区別。", "ストレスレベルは常に数値と語で補強され、色だけで示されることはありません。「色を使わずに区別」をオンにすると、グラフにゾーンの線が追加されます。"),
+      ("十分なコントラスト。", "すべてのテキストが、ダークな背景に対して WCAG AA のコントラスト比（4.5:1 以上）を満たしています。"),
+      ("視差効果を減らす。", "「視差効果を減らす」がオンのとき、アニメーションは無効化されるか、静的な代替に置き換えられます。Vela は「透明度を下げる」と「文字を太くする」にも対応します。"),
+    ],
+    "no_media": "Vela には音声や動画が含まれないため、字幕や音声解説は該当しません。",
+    "verify_h": "検証方法",
+    "verify_p": "すべての画面は、アプリのテストスイートの一部として Apple の自動アクセシビリティ監査（ラベル、コントラスト、タップ領域のサイズ、テキストの拡大縮小のチェック）を通過し、あわせて VoiceOver による手動レビューも行っています。これらのチェックはインターフェースが変わるたびに再実行され、バージョン間でアクセシビリティが静かに後退しないようにしています。",
+    "feedback_h": "フィードバック",
+    "feedback_pre": "Vela の中に支援技術で使いにくい箇所があれば、それはバグです。",
+    "feedback_post": " までご連絡ください。アクセシビリティに関する報告は次のリリースで優先的に対応します。",
+  },
+  "landing": {
+    "nav_cta": "ダウンロード",
+    "title_tag": "Vela — Apple Watch 用 HRV。サブスクなし。ずっと。",
+    "meta_desc": "Vela は Apple Watch で心拍変動（HRV/SDNN）を測定し、あなた自身の個人ベースラインを構築します。すべては時計上で処理されます。iCloud と同期します。サブスクリプションは、ずっとありません。",
+    "eyebrow1": "Apple Watch 用 HRV",
+    "h1": "あなたの穏やかさは、<em>誰かの平均</em>ではない。",
+    "hero_p": "Vela は Apple Watch 上で直接あなたの心拍変動（SDNN）を測定し、一般的な集団のしきい値ではなく、あなただけのベースラインを構築します。すべての計算は時計上で行われます。私たちのサーバーを経由するものは何もありません。サーバーがないからです。",
+    "badge_alt": "App Store でダウンロード",
+    "wave_kicker": "SDNN · ライブ", "wave_state": "安静時",
+    "wave_left": "集団のノイズ", "wave_right_html": "<b>あなたのベースライン</b>が定まる",
+    "baseline_eyebrow": "なぜ平均では不十分なのか",
+    "baseline_h2": "同じ 25&nbsp;ms の HRV でも、ある人には高く、別の人には低いことがあります。",
+    "baseline_p": "HRV は人によって大きく異なります。集団のしきい値は誰もを同じように扱うため、ほとんどの場合それが外れる原因になります。Vela はあなたの実際の履歴からあなた自身のベースラインを構築します。Apple Watch にすでに HRV データがあれば初日から始められ、初めての場合は定まるまで 7〜14 日かかります。",
+    "legend1": "一般的な集団のしきい値", "legend2": "個々のサンプル", "legend3": "あなたの個人ベースライン",
+    "principles_eyebrow": "しくみ", "principles_h2": "考えを変えないために下した、4つの決定。",
+    "principles": [
+      ("On-device", "すべての計算は Watch 上で行われます。", "HealthKit がデータを提供し、残りは時計が処理します。HRV データが Vela のサーバーへ向けてデバイスの外に出ることはありません。"),
+      ("私たちのではなく、あなたの iCloud", "同期にはあなた自身の iCloud アカウントを使います。", "CloudKit 経由です。Vela はあなたのデータをどこにも保管しません。保管する場所がないため、できないのです。"),
+      ("サブスクなし。ずっと。", "月額も年額もありません。", "Vela は今は無料です。将来的には買い切りの Pro 版が登場します。サブスクリプションにはしません。"),
+      ("はじめからアクセシブル", "VoiceOver、Dynamic Type、視差効果を減らす。", "対応言語は12：スペイン語、カタルーニャ語、バスク語、ガリシア語、英語、フランス語、ドイツ語、イタリア語、ポルトガル語、チェコ語、ギリシャ語、日本語。"),
+    ],
+    "showcase_eyebrow": "手首の上で", "showcase_h2": "1つのスコア、1つの状態、1つのトレンド。",
+    "showcase_p": "色とテキストのラベルは常にセットで表示されます。色覚特性にも配慮した設計です。どのスコアにも説明があります。どの範囲が「正常」なのか、いつ「高い」になるのか、そしてその理由まで。",
+    "showcase_alt": "Apple Watch Ultra に表示された Vela の3画面：正常ステータスの現在のストレススコア、その日の平均を示す週間トレンド、正常と高いの範囲を説明する画面。",
+    "tour_eyebrow": "クイックツアー", "tour_h2": "3つの画面、それぞれに役割は1つ。",
+    "tour": [
+      ("現在のスコア", "1つの数字、1つの状態。すべて時計上で計算され、同期を待つ必要はありません。", "ストレススコア68、正常ステータスを表示する Vela のメイン画面。その場で計算されたもの。"),
+      ("トレンド", "その日のすべての測定値を、他の誰でもない、あなた自身の破線と比較します。", "その日の平均ストレスと1時間ごとの測定値を、個人ベースラインと比較したトレンドチャート。"),
+      ("範囲の説明", "分かりにくい数字はなし。どの範囲にも、意味と何を予期すべきかが書かれています。", "ストレスの範囲を説明する画面：正常は40〜69、高いは70〜100。"),
+    ],
+    "onboarding_eyebrow": "使い始める", "onboarding_h2": "何かを測定する前に、許可を求めます。",
+    "onboarding_p": "Vela は細かい文字の中ではなく、はっきりと HRV へのアクセスを求めます。そして HRV の測定が初めてなら、信頼できるベースラインができるまでの日数を伝えます。初日からあなたを知っているふりはしません。",
+    "onboarding_alt": "Apple Watch での Vela のオンボーディングの流れ：ようこそ画面、心拍変動データへのアクセスを求める明示的なリクエスト、残り7日と表示されたベースライン構築中の画面。",
+    "closing_eyebrow": "今すぐダウンロード", "closing_h2": "サブスクなし。<em>ずっと。</em>",
+    "closing_p": "Vela は Apple Watch 向けに App Store で無料で入手できます。",
+    "footer_support": "サポート", "footer_privacy": "プライバシー", "footer_contact": "お問い合わせ",
+  },
+}
+
+# ---------------------------------------------------------------- changelog
+# Public changelog. Version history is derived from the app repo's version tags
+# (1.0.0 … 1.2.3). 1.3.0 is not yet released — it is in App Store review, so it
+# carries a "review" status and shows as not-yet-available for transparency.
+
+_FOOTER_CHANGELOG = {
+  "es": "Novedades", "en": "Changelog", "ca": "Novetats", "eu": "Berritasunak",
+  "gl": "Novidades", "fr": "Nouveautés", "de": "Neuigkeiten", "it": "Novità",
+  "pt": "Novidades", "cs": "Novinky", "el": "Νέα", "ja": "変更履歴",
+}
+
+CHANGELOG = {}
+
+CHANGELOG["en"] = {
+  "title_tag": "Vela HRV — Changelog", "title": "Changelog",
+  "intro": "Every version of Vela, and what changed.",
+  "status_review": "In review · App Store",
+  "unreleased_note": "This build is with Apple for review and can't be downloaded yet.",
+  "entries": [
+    {"version": "1.3.0", "date": "Expected 14 September 2026", "status": "review", "changes": [
+      "Three new languages — Czech, Greek and Japanese. Vela now speaks 12.",
+      "Fixed repeated notifications when Vela catches up on older readings.",
+      "Notifications can be turned off inside the app even when the system permission is on.",
+      "The month view in History now refreshes when you reopen the app."]},
+    {"version": "1.2.3", "date": "6 September 2026", "status": "released", "changes": [
+      "Turn notifications on or off inside the app when the system permission is already granted."]},
+    {"version": "1.2.2", "date": "23 August 2026", "status": "released", "changes": [
+      "Dates now follow your language.",
+      "Vela falls back to English on devices set to an unsupported language."]},
+    {"version": "1.2.1", "date": "8 August 2026", "status": "released", "changes": [
+      "Removed a weekly-analysis notification that fired right after opening the app.",
+      "The baseline-building ring now appears on fresh installs."]},
+    {"version": "1.2.0", "date": "8 July 2026", "status": "released", "changes": [
+      "Seven more languages: Catalan, Basque, Galician, French, German, Italian and Portuguese.",
+      "Full VoiceOver support across every screen.",
+      "Dynamic Type, Reduce Transparency, Differentiate Without Color and the Large Content Viewer.",
+      "Higher text contrast to meet WCAG AA."]},
+    {"version": "1.1.1", "date": "16 June 2026", "status": "released", "changes": [
+      "Fixed the weekly-insight notification not always being delivered."]},
+    {"version": "1.1.0", "date": "26 May 2026", "status": "released", "changes": [
+      "Weekly Insights: Vela spots patterns in your stress and explains them in plain words.",
+      "Redesigned History with day, week and month drill-down.",
+      "New HRV complication with a bar chart for your watch face.",
+      "Overnight readings are recovered, so your history has fewer gaps."]},
+    {"version": "1.0.0", "date": "26 April 2026", "status": "released", "changes": [
+      "First release. On-device stress score from HRV on Apple Watch, your own baseline, trends and clear range explanations — no account, no servers, no subscription."]},
+  ],
+}
+
+CHANGELOG["es"] = {
+  "title_tag": "Vela HRV — Registro de cambios", "title": "Registro de cambios",
+  "intro": "Todas las versiones de Vela y qué cambió en cada una.",
+  "status_review": "En revisión · App Store",
+  "unreleased_note": "Esta versión está en revisión por Apple y todavía no se puede descargar.",
+  "entries": [
+    {"version": "1.3.0", "date": "Prevista: 14 de septiembre de 2026", "status": "review", "changes": [
+      "Tres idiomas nuevos: checo, griego y japonés. Vela ya está en 12 idiomas.",
+      "Corregidas las notificaciones repetidas cuando Vela recupera lecturas antiguas.",
+      "Las notificaciones se pueden desactivar dentro de la app aunque el permiso del sistema esté activado.",
+      "La vista de mes en el historial ahora se actualiza al volver a abrir la app."]},
+    {"version": "1.2.3", "date": "6 de septiembre de 2026", "status": "released", "changes": [
+      "Activa o desactiva las notificaciones dentro de la app cuando el permiso del sistema ya está concedido."]},
+    {"version": "1.2.2", "date": "23 de agosto de 2026", "status": "released", "changes": [
+      "Las fechas ahora siguen tu idioma.",
+      "Vela usa el inglés en dispositivos con un idioma no compatible."]},
+    {"version": "1.2.1", "date": "8 de agosto de 2026", "status": "released", "changes": [
+      "Eliminada una notificación de análisis semanal que aparecía justo al abrir la app.",
+      "El anillo de construcción de la línea base vuelve a aparecer en instalaciones nuevas."]},
+    {"version": "1.2.0", "date": "8 de julio de 2026", "status": "released", "changes": [
+      "Siete idiomas más: catalán, euskera, gallego, francés, alemán, italiano y portugués.",
+      "Compatibilidad completa con VoiceOver en todas las pantallas.",
+      "Dynamic Type, Reducir transparencia, Diferenciar sin color y el visor de contenido ampliado.",
+      "Mayor contraste de texto para cumplir WCAG AA."]},
+    {"version": "1.1.1", "date": "16 de junio de 2026", "status": "released", "changes": [
+      "Corregido el envío poco fiable de la notificación de análisis semanal."]},
+    {"version": "1.1.0", "date": "26 de mayo de 2026", "status": "released", "changes": [
+      "Análisis semanales: Vela detecta patrones en tu estrés y te los explica con palabras claras.",
+      "Historial rediseñado con navegación por día, semana y mes.",
+      "Nueva complicación de HRV con gráfico de barras para la esfera del reloj.",
+      "Se recuperan las lecturas nocturnas, así el historial tiene menos huecos."]},
+    {"version": "1.0.0", "date": "26 de abril de 2026", "status": "released", "changes": [
+      "Primera versión. Score de estrés a partir del HRV en el Apple Watch, tu propia línea base, tendencias y explicación clara de los rangos — sin cuenta, sin servidores, sin suscripción."]},
+  ],
+}
+
+CHANGELOG["ca"] = {
+  "title_tag": "Vela HRV — Registre de canvis", "title": "Registre de canvis",
+  "intro": "Totes les versions de Vela i què va canviar a cadascuna.",
+  "status_review": "En revisió · App Store",
+  "unreleased_note": "Aquesta versió està en revisió per Apple i encara no es pot descarregar.",
+  "entries": [
+    {"version": "1.3.0", "date": "Prevista: 14 de setembre de 2026", "status": "review", "changes": [
+      "Tres idiomes nous: txec, grec i japonès. Vela ja està en 12 idiomes.",
+      "Corregides les notificacions repetides quan Vela recupera lectures antigues.",
+      "Les notificacions es poden desactivar dins de l'app encara que el permís del sistema estigui activat.",
+      "La vista de mes a l'historial ara s'actualitza en tornar a obrir l'app."]},
+    {"version": "1.2.3", "date": "6 de setembre de 2026", "status": "released", "changes": [
+      "Activa o desactiva les notificacions dins de l'app quan el permís del sistema ja està concedit."]},
+    {"version": "1.2.2", "date": "23 d'agost de 2026", "status": "released", "changes": [
+      "Les dates ara segueixen el teu idioma.",
+      "Vela fa servir l'anglès en dispositius amb un idioma no compatible."]},
+    {"version": "1.2.1", "date": "8 d'agost de 2026", "status": "released", "changes": [
+      "Eliminada una notificació d'anàlisi setmanal que apareixia just en obrir l'app.",
+      "L'anell de construcció de la línia base torna a aparèixer en instal·lacions noves."]},
+    {"version": "1.2.0", "date": "8 de juliol de 2026", "status": "released", "changes": [
+      "Set idiomes més: català, èuscar, gallec, francès, alemany, italià i portuguès.",
+      "Compatibilitat completa amb VoiceOver a totes les pantalles.",
+      "Dynamic Type, Reduir la transparència, Diferenciar sense color i el visor de contingut ampliat.",
+      "Més contrast de text per complir WCAG AA."]},
+    {"version": "1.1.1", "date": "16 de juny de 2026", "status": "released", "changes": [
+      "Corregit l'enviament poc fiable de la notificació d'anàlisi setmanal."]},
+    {"version": "1.1.0", "date": "26 de maig de 2026", "status": "released", "changes": [
+      "Anàlisis setmanals: Vela detecta patrons en el teu estrès i te'ls explica amb paraules clares.",
+      "Historial redissenyat amb navegació per dia, setmana i mes.",
+      "Nova complicació d'HRV amb gràfic de barres per a l'esfera del rellotge.",
+      "Es recuperen les lectures nocturnes, així l'historial té menys buits."]},
+    {"version": "1.0.0", "date": "26 d'abril de 2026", "status": "released", "changes": [
+      "Primera versió. Score d'estrès a partir de l'HRV a l'Apple Watch, la teva pròpia línia base, tendències i explicació clara dels rangs — sense compte, sense servidors, sense subscripció."]},
+  ],
+}
+
+CHANGELOG["eu"] = {
+  "title_tag": "Vela HRV — Aldaketen erregistroa", "title": "Aldaketen erregistroa",
+  "intro": "Velaren bertsio guztiak eta bakoitzean zer aldatu zen.",
+  "status_review": "Berrikuspenean · App Store",
+  "unreleased_note": "Bertsio hau Apple-k berrikusten ari da eta oraindik ezin da deskargatu.",
+  "entries": [
+    {"version": "1.3.0", "date": "Aurreikusia: 2026ko irailaren 14a", "status": "review", "changes": [
+      "Hiru hizkuntza berri: txekiera, greziera eta japoniera. Vela 12 hizkuntzatan dago orain.",
+      "Konpondu dira jakinarazpen errepikatuak Velak irakurketa zaharrak berreskuratzean.",
+      "Jakinarazpenak aplikaziotik desaktiba daitezke sistemaren baimena aktibatuta egon arren.",
+      "Historialeko hilabete-ikuspegia orain eguneratu egiten da aplikazioa berriz irekitzean."]},
+    {"version": "1.2.3", "date": "2026ko irailaren 6a", "status": "released", "changes": [
+      "Aktibatu edo desaktibatu jakinarazpenak aplikaziotik sistemaren baimena jada emanda dagoenean."]},
+    {"version": "1.2.2", "date": "2026ko abuztuaren 23a", "status": "released", "changes": [
+      "Datek orain zure hizkuntza jarraitzen dute.",
+      "Velak ingelesa erabiltzen du bateragarria ez den hizkuntza duten gailuetan."]},
+    {"version": "1.2.1", "date": "2026ko abuztuaren 8a", "status": "released", "changes": [
+      "Kendu da aplikazioa irekitzean berehala agertzen zen asteko analisiaren jakinarazpen bat.",
+      "Oinarri-lerroa eraikitzeko eraztuna berriz agertzen da instalazio berrietan."]},
+    {"version": "1.2.0", "date": "2026ko uztailaren 8a", "status": "released", "changes": [
+      "Beste zazpi hizkuntza: katalana, euskara, galiziera, frantsesa, alemana, italiera eta portugesa.",
+      "VoiceOver-en euskarri osoa pantaila guztietan.",
+      "Dynamic Type, Gardentasuna murriztu, Bereizi kolorerik gabe eta eduki handituaren ikustailea.",
+      "Testu-kontraste handiagoa WCAG AA betetzeko."]},
+    {"version": "1.1.1", "date": "2026ko ekainaren 16a", "status": "released", "changes": [
+      "Konpondu da asteko analisiaren jakinarazpena beti bidaltzen ez zena."]},
+    {"version": "1.1.0", "date": "2026ko maiatzaren 26a", "status": "released", "changes": [
+      "Asteko analisiak: Velak zure estresaren patroiak antzematen ditu eta hitz argiekin azaltzen dizkizu.",
+      "Historial birdiseinatua egun, aste eta hilabeteko nabigazioarekin.",
+      "HRV konplikazio berria barra-grafikoarekin erlojuaren esferarako.",
+      "Gaueko irakurketak berreskuratzen dira, beraz historialak hutsune gutxiago ditu."]},
+    {"version": "1.0.0", "date": "2026ko apirilaren 26a", "status": "released", "changes": [
+      "Lehen bertsioa. Estres-puntuazioa HRVtik Apple Watch-en, zure oinarri-lerroa, joerak eta tarteen azalpen argia — konturik gabe, zerbitzaririk gabe, harpidetzarik gabe."]},
+  ],
+}
+
+CHANGELOG["gl"] = {
+  "title_tag": "Vela HRV — Rexistro de cambios", "title": "Rexistro de cambios",
+  "intro": "Todas as versións de Vela e que cambiou en cada unha.",
+  "status_review": "En revisión · App Store",
+  "unreleased_note": "Esta versión está en revisión por Apple e aínda non se pode descargar.",
+  "entries": [
+    {"version": "1.3.0", "date": "Prevista: 14 de setembro de 2026", "status": "review", "changes": [
+      "Tres idiomas novos: checo, grego e xaponés. Vela xa está en 12 idiomas.",
+      "Corrixidas as notificacións repetidas cando Vela recupera lecturas antigas.",
+      "As notificacións pódense desactivar dentro da app aínda que o permiso do sistema estea activado.",
+      "A vista de mes no historial agora actualízase ao volver abrir a app."]},
+    {"version": "1.2.3", "date": "6 de setembro de 2026", "status": "released", "changes": [
+      "Activa ou desactiva as notificacións dentro da app cando o permiso do sistema xa está concedido."]},
+    {"version": "1.2.2", "date": "23 de agosto de 2026", "status": "released", "changes": [
+      "As datas agora seguen o teu idioma.",
+      "Vela usa o inglés en dispositivos cun idioma non compatible."]},
+    {"version": "1.2.1", "date": "8 de agosto de 2026", "status": "released", "changes": [
+      "Eliminada unha notificación de análise semanal que aparecía xusto ao abrir a app.",
+      "O anel de construción da liña base volve aparecer en instalacións novas."]},
+    {"version": "1.2.0", "date": "8 de xullo de 2026", "status": "released", "changes": [
+      "Sete idiomas máis: catalán, éuscaro, galego, francés, alemán, italiano e portugués.",
+      "Compatibilidade completa con VoiceOver en todas as pantallas.",
+      "Dynamic Type, Reducir a transparencia, Diferenciar sen cor e o visor de contido ampliado.",
+      "Maior contraste de texto para cumprir WCAG AA."]},
+    {"version": "1.1.1", "date": "16 de xuño de 2026", "status": "released", "changes": [
+      "Corrixido o envío pouco fiable da notificación de análise semanal."]},
+    {"version": "1.1.0", "date": "26 de maio de 2026", "status": "released", "changes": [
+      "Análises semanais: Vela detecta patróns no teu estrés e explícachos con palabras claras.",
+      "Historial redeseñado con navegación por día, semana e mes.",
+      "Nova complicación de HRV con gráfico de barras para a esfera do reloxo.",
+      "Recupéranse as lecturas nocturnas, así o historial ten menos ocos."]},
+    {"version": "1.0.0", "date": "26 de abril de 2026", "status": "released", "changes": [
+      "Primeira versión. Puntuación de estrés a partir do HRV no Apple Watch, a túa propia liña base, tendencias e explicación clara dos rangos — sen conta, sen servidores, sen subscrición."]},
+  ],
+}
+
+CHANGELOG["fr"] = {
+  "title_tag": "Vela HRV — Journal des modifications", "title": "Journal des modifications",
+  "intro": "Toutes les versions de Vela et ce qui a changé dans chacune.",
+  "status_review": "En cours d'examen · App Store",
+  "unreleased_note": "Cette version est en cours d'examen par Apple et ne peut pas encore être téléchargée.",
+  "entries": [
+    {"version": "1.3.0", "date": "Prévue : 14 septembre 2026", "status": "review", "changes": [
+      "Trois nouvelles langues : tchèque, grec et japonais. Vela parle désormais 12 langues.",
+      "Correction des notifications répétées quand Vela rattrape d'anciennes mesures.",
+      "Les notifications peuvent être désactivées dans l'app même si l'autorisation système est active.",
+      "La vue par mois de l'historique se rafraîchit désormais à la réouverture de l'app."]},
+    {"version": "1.2.3", "date": "6 septembre 2026", "status": "released", "changes": [
+      "Activez ou désactivez les notifications dans l'app quand l'autorisation système est déjà accordée."]},
+    {"version": "1.2.2", "date": "23 août 2026", "status": "released", "changes": [
+      "Les dates suivent désormais votre langue.",
+      "Vela bascule en anglais sur les appareils réglés sur une langue non prise en charge."]},
+    {"version": "1.2.1", "date": "8 août 2026", "status": "released", "changes": [
+      "Suppression d'une notification d'analyse hebdomadaire qui apparaissait juste après l'ouverture de l'app.",
+      "L'anneau de construction de la référence réapparaît sur les nouvelles installations."]},
+    {"version": "1.2.0", "date": "8 juillet 2026", "status": "released", "changes": [
+      "Sept langues de plus : catalan, basque, galicien, français, allemand, italien et portugais.",
+      "Prise en charge complète de VoiceOver sur tous les écrans.",
+      "Dynamic Type, Réduire la transparence, Différencier sans couleur et le visualiseur de contenu agrandi.",
+      "Contraste du texte renforcé pour respecter WCAG AA."]},
+    {"version": "1.1.1", "date": "16 juin 2026", "status": "released", "changes": [
+      "Correction de la notification d'analyse hebdomadaire qui n'était pas toujours envoyée."]},
+    {"version": "1.1.0", "date": "26 mai 2026", "status": "released", "changes": [
+      "Analyses hebdomadaires : Vela repère des tendances dans votre stress et les explique simplement.",
+      "Historique repensé avec navigation par jour, semaine et mois.",
+      "Nouvelle complication VFC avec un graphique à barres pour votre cadran.",
+      "Les mesures nocturnes sont récupérées, l'historique a donc moins de trous."]},
+    {"version": "1.0.0", "date": "26 avril 2026", "status": "released", "changes": [
+      "Première version. Score de stress à partir de la VFC sur Apple Watch, votre propre référence, tendances et explication claire des plages — sans compte, sans serveurs, sans abonnement."]},
+  ],
+}
+
+CHANGELOG["de"] = {
+  "title_tag": "Vela HRV — Änderungsprotokoll", "title": "Änderungsprotokoll",
+  "intro": "Alle Versionen von Vela und was sich jeweils geändert hat.",
+  "status_review": "In Prüfung · App Store",
+  "unreleased_note": "Diese Version wird gerade von Apple geprüft und kann noch nicht geladen werden.",
+  "entries": [
+    {"version": "1.3.0", "date": "Geplant: 14. September 2026", "status": "review", "changes": [
+      "Drei neue Sprachen: Tschechisch, Griechisch und Japanisch. Vela spricht jetzt 12 Sprachen.",
+      "Wiederholte Benachrichtigungen behoben, wenn Vela ältere Messwerte nachholt.",
+      "Benachrichtigungen lassen sich in der App abschalten, auch wenn die Systemberechtigung aktiv ist.",
+      "Die Monatsansicht im Verlauf aktualisiert sich jetzt beim erneuten Öffnen der App."]},
+    {"version": "1.2.3", "date": "6. September 2026", "status": "released", "changes": [
+      "Benachrichtigungen in der App ein- oder ausschalten, wenn die Systemberechtigung bereits erteilt ist."]},
+    {"version": "1.2.2", "date": "23. August 2026", "status": "released", "changes": [
+      "Datumsangaben folgen jetzt deiner Sprache.",
+      "Vela wechselt zu Englisch auf Geräten mit nicht unterstützter Sprache."]},
+    {"version": "1.2.1", "date": "8. August 2026", "status": "released", "changes": [
+      "Eine Benachrichtigung zur Wochenanalyse entfernt, die direkt nach dem Öffnen der App erschien.",
+      "Der Ring zum Aufbau der Baseline erscheint wieder bei Neuinstallationen."]},
+    {"version": "1.2.0", "date": "8. Juli 2026", "status": "released", "changes": [
+      "Sieben weitere Sprachen: Katalanisch, Baskisch, Galicisch, Französisch, Deutsch, Italienisch und Portugiesisch.",
+      "Vollständige VoiceOver-Unterstützung auf jedem Bildschirm.",
+      "Dynamic Type, Transparenz reduzieren, Ohne Farben differenzieren und die vergrößerte Inhaltsanzeige.",
+      "Höherer Textkontrast zur Erfüllung von WCAG AA."]},
+    {"version": "1.1.1", "date": "16. Juni 2026", "status": "released", "changes": [
+      "Behoben, dass die Benachrichtigung zur Wochenanalyse nicht immer zugestellt wurde."]},
+    {"version": "1.1.0", "date": "26. Mai 2026", "status": "released", "changes": [
+      "Wochenanalysen: Vela erkennt Muster in deinem Stress und erklärt sie in klaren Worten.",
+      "Neu gestalteter Verlauf mit Aufschlüsselung nach Tag, Woche und Monat.",
+      "Neue HRV-Komplikation mit Balkendiagramm für dein Zifferblatt.",
+      "Nächtliche Messwerte werden nachgetragen, dein Verlauf hat weniger Lücken."]},
+    {"version": "1.0.0", "date": "26. April 2026", "status": "released", "changes": [
+      "Erste Version. Stress-Score aus der HRV auf der Apple Watch, deine eigene Baseline, Trends und klare Erklärung der Bereiche — kein Account, keine Server, kein Abo."]},
+  ],
+}
+
+CHANGELOG["it"] = {
+  "title_tag": "Vela HRV — Registro delle modifiche", "title": "Registro delle modifiche",
+  "intro": "Tutte le versioni di Vela e cosa è cambiato in ognuna.",
+  "status_review": "In revisione · App Store",
+  "unreleased_note": "Questa versione è in revisione da parte di Apple e non è ancora scaricabile.",
+  "entries": [
+    {"version": "1.3.0", "date": "Prevista: 14 settembre 2026", "status": "review", "changes": [
+      "Tre nuove lingue: ceco, greco e giapponese. Vela ora parla 12 lingue.",
+      "Corrette le notifiche ripetute quando Vela recupera letture più vecchie.",
+      "Le notifiche si possono disattivare dall'app anche se il permesso di sistema è attivo.",
+      "La vista per mese nello storico ora si aggiorna riaprendo l'app."]},
+    {"version": "1.2.3", "date": "6 settembre 2026", "status": "released", "changes": [
+      "Attiva o disattiva le notifiche dall'app quando il permesso di sistema è già concesso."]},
+    {"version": "1.2.2", "date": "23 agosto 2026", "status": "released", "changes": [
+      "Le date ora seguono la tua lingua.",
+      "Vela passa all'inglese sui dispositivi impostati su una lingua non supportata."]},
+    {"version": "1.2.1", "date": "8 agosto 2026", "status": "released", "changes": [
+      "Rimossa una notifica di analisi settimanale che compariva subito dopo l'apertura dell'app.",
+      "L'anello di costruzione della baseline ricompare sulle nuove installazioni."]},
+    {"version": "1.2.0", "date": "8 luglio 2026", "status": "released", "changes": [
+      "Altre sette lingue: catalano, basco, galiziano, francese, tedesco, italiano e portoghese.",
+      "Supporto completo di VoiceOver in ogni schermata.",
+      "Dynamic Type, Riduci trasparenza, Differenzia senza colore e il visualizzatore di contenuti ingranditi.",
+      "Maggiore contrasto del testo per soddisfare WCAG AA."]},
+    {"version": "1.1.1", "date": "16 giugno 2026", "status": "released", "changes": [
+      "Corretta la notifica di analisi settimanale che non veniva sempre recapitata."]},
+    {"version": "1.1.0", "date": "26 maggio 2026", "status": "released", "changes": [
+      "Analisi settimanali: Vela individua schemi nel tuo stress e li spiega con parole semplici.",
+      "Storico ridisegnato con navigazione per giorno, settimana e mese.",
+      "Nuova complication HRV con grafico a barre per il quadrante.",
+      "Le letture notturne vengono recuperate, così lo storico ha meno vuoti."]},
+    {"version": "1.0.0", "date": "26 aprile 2026", "status": "released", "changes": [
+      "Prima versione. Punteggio di stress dall'HRV su Apple Watch, la tua baseline, tendenze e spiegazione chiara degli intervalli — senza account, senza server, senza abbonamento."]},
+  ],
+}
+
+CHANGELOG["pt"] = {
+  "title_tag": "Vela HRV — Registo de alterações", "title": "Registo de alterações",
+  "intro": "Todas as versões da Vela e o que mudou em cada uma.",
+  "status_review": "Em revisão · App Store",
+  "unreleased_note": "Esta versão está em revisão pela Apple e ainda não pode ser transferida.",
+  "entries": [
+    {"version": "1.3.0", "date": "Prevista: 14 de setembro de 2026", "status": "review", "changes": [
+      "Três novos idiomas: checo, grego e japonês. A Vela já está em 12 idiomas.",
+      "Corrigidas as notificações repetidas quando a Vela recupera leituras antigas.",
+      "As notificações podem ser desativadas dentro da app mesmo com a permissão do sistema ativa.",
+      "A vista por mês no histórico passa a atualizar ao reabrir a app."]},
+    {"version": "1.2.3", "date": "6 de setembro de 2026", "status": "released", "changes": [
+      "Ative ou desative as notificações dentro da app quando a permissão do sistema já está concedida."]},
+    {"version": "1.2.2", "date": "23 de agosto de 2026", "status": "released", "changes": [
+      "As datas passam a seguir o teu idioma.",
+      "A Vela recorre ao inglês em dispositivos com um idioma não suportado."]},
+    {"version": "1.2.1", "date": "8 de agosto de 2026", "status": "released", "changes": [
+      "Removida uma notificação de análise semanal que surgia logo ao abrir a app.",
+      "O anel de construção da linha de base volta a aparecer em instalações novas."]},
+    {"version": "1.2.0", "date": "8 de julho de 2026", "status": "released", "changes": [
+      "Mais sete idiomas: catalão, basco, galego, francês, alemão, italiano e português.",
+      "Suporte completo de VoiceOver em todos os ecrãs.",
+      "Dynamic Type, Reduzir transparência, Diferenciar sem cor e o visualizador de conteúdo ampliado.",
+      "Maior contraste de texto para cumprir WCAG AA."]},
+    {"version": "1.1.1", "date": "16 de junho de 2026", "status": "released", "changes": [
+      "Corrigido o envio pouco fiável da notificação de análise semanal."]},
+    {"version": "1.1.0", "date": "26 de maio de 2026", "status": "released", "changes": [
+      "Análises semanais: a Vela deteta padrões no teu stress e explica-os por palavras simples.",
+      "Histórico redesenhado com navegação por dia, semana e mês.",
+      "Nova complicação de HRV com gráfico de barras para o mostrador.",
+      "As leituras noturnas são recuperadas, por isso o histórico tem menos falhas."]},
+    {"version": "1.0.0", "date": "26 de abril de 2026", "status": "released", "changes": [
+      "Primeira versão. Pontuação de stress a partir do HRV no Apple Watch, a tua própria linha de base, tendências e explicação clara dos intervalos — sem conta, sem servidores, sem subscrição."]},
+  ],
+}
+
+CHANGELOG["cs"] = {
+  "title_tag": "Vela HRV — Seznam změn", "title": "Seznam změn",
+  "intro": "Všechny verze Vely a co se v každé změnilo.",
+  "status_review": "V kontrole · App Store",
+  "unreleased_note": "Tato verze je v kontrole u Applu a zatím ji nelze stáhnout.",
+  "entries": [
+    {"version": "1.3.0", "date": "Očekáváno: 14. září 2026", "status": "review", "changes": [
+      "Tři nové jazyky: čeština, řečtina a japonština. Vela teď mluví 12 jazyky.",
+      "Opraveny opakované notifikace, když Vela dohání starší měření.",
+      "Notifikace lze vypnout přímo v aplikaci, i když je systémové oprávnění zapnuté.",
+      "Měsíční přehled v historii se nyní obnoví po opětovném otevření aplikace."]},
+    {"version": "1.2.3", "date": "6. září 2026", "status": "released", "changes": [
+      "Zapněte nebo vypněte notifikace v aplikaci, když je systémové oprávnění už uděleno."]},
+    {"version": "1.2.2", "date": "23. srpna 2026", "status": "released", "changes": [
+      "Data se nyní řídí vaším jazykem.",
+      "Vela se přepne do angličtiny na zařízeních s nepodporovaným jazykem."]},
+    {"version": "1.2.1", "date": "8. srpna 2026", "status": "released", "changes": [
+      "Odebrána notifikace týdenní analýzy, která se objevila hned po otevření aplikace.",
+      "Prstenec budování základní linie se znovu zobrazuje u nových instalací."]},
+    {"version": "1.2.0", "date": "8. července 2026", "status": "released", "changes": [
+      "Dalších sedm jazyků: katalánština, baskičtina, galicijština, francouzština, němčina, italština a portugalština.",
+      "Plná podpora VoiceOveru na každé obrazovce.",
+      "Dynamic Type, Omezit průhlednost, Rozlišovat bez barvy a Prohlížeč velkého obsahu.",
+      "Vyšší kontrast textu pro splnění WCAG AA."]},
+    {"version": "1.1.1", "date": "16. června 2026", "status": "released", "changes": [
+      "Opraveno nespolehlivé doručování notifikace týdenní analýzy."]},
+    {"version": "1.1.0", "date": "26. května 2026", "status": "released", "changes": [
+      "Týdenní přehledy: Vela odhalí vzorce ve vašem stresu a vysvětlí je srozumitelně.",
+      "Přepracovaná historie s procházením po dnech, týdnech a měsících.",
+      "Nová komplikace HRV se sloupcovým grafem pro ciferník.",
+      "Noční měření se dopočítají, takže historie má méně mezer."]},
+    {"version": "1.0.0", "date": "26. dubna 2026", "status": "released", "changes": [
+      "První verze. Skóre stresu z HRV na Apple Watch, vaše vlastní základní linie, trendy a srozumitelné vysvětlení rozsahů — bez účtu, bez serverů, bez předplatného."]},
+  ],
+}
+
+CHANGELOG["el"] = {
+  "title_tag": "Vela HRV — Αρχείο αλλαγών", "title": "Αρχείο αλλαγών",
+  "intro": "Όλες οι εκδόσεις του Vela και τι άλλαξε σε καθεμία.",
+  "status_review": "Υπό έλεγχο · App Store",
+  "unreleased_note": "Αυτή η έκδοση βρίσκεται υπό έλεγχο από την Apple και δεν είναι ακόμη διαθέσιμη για λήψη.",
+  "entries": [
+    {"version": "1.3.0", "date": "Αναμένεται: 14 Σεπτεμβρίου 2026", "status": "review", "changes": [
+      "Τρεις νέες γλώσσες: τσέχικα, ελληνικά και ιαπωνικά. Το Vela μιλά πλέον 12 γλώσσες.",
+      "Διορθώθηκαν οι επαναλαμβανόμενες ειδοποιήσεις όταν το Vela καλύπτει παλαιότερες μετρήσεις.",
+      "Οι ειδοποιήσεις μπορούν να απενεργοποιηθούν μέσα στην εφαρμογή ακόμη κι αν η άδεια του συστήματος είναι ενεργή.",
+      "Η προβολή μήνα στο ιστορικό ανανεώνεται πλέον όταν ανοίγετε ξανά την εφαρμογή."]},
+    {"version": "1.2.3", "date": "6 Σεπτεμβρίου 2026", "status": "released", "changes": [
+      "Ενεργοποιήστε ή απενεργοποιήστε τις ειδοποιήσεις μέσα στην εφαρμογή όταν η άδεια του συστήματος έχει ήδη δοθεί."]},
+    {"version": "1.2.2", "date": "23 Αυγούστου 2026", "status": "released", "changes": [
+      "Οι ημερομηνίες ακολουθούν πλέον τη γλώσσα σας.",
+      "Το Vela επιστρέφει στα αγγλικά σε συσκευές με μη υποστηριζόμενη γλώσσα."]},
+    {"version": "1.2.1", "date": "8 Αυγούστου 2026", "status": "released", "changes": [
+      "Αφαιρέθηκε μια ειδοποίηση εβδομαδιαίας ανάλυσης που εμφανιζόταν αμέσως μετά το άνοιγμα της εφαρμογής.",
+      "Ο δακτύλιος δημιουργίας baseline εμφανίζεται ξανά σε νέες εγκαταστάσεις."]},
+    {"version": "1.2.0", "date": "8 Ιουλίου 2026", "status": "released", "changes": [
+      "Άλλες επτά γλώσσες: καταλανικά, βασκικά, γαλικιανά, γαλλικά, γερμανικά, ιταλικά και πορτογαλικά.",
+      "Πλήρης υποστήριξη VoiceOver σε κάθε οθόνη.",
+      "Dynamic Type, Μείωση διαφάνειας, Διαφοροποίηση χωρίς χρώμα και πρόγραμμα προβολής μεγάλου περιεχομένου.",
+      "Υψηλότερη αντίθεση κειμένου για συμμόρφωση με το WCAG AA."]},
+    {"version": "1.1.1", "date": "16 Ιουνίου 2026", "status": "released", "changes": [
+      "Διορθώθηκε η ειδοποίηση εβδομαδιαίας ανάλυσης που δεν παραδιδόταν πάντα."]},
+    {"version": "1.1.0", "date": "26 Μαΐου 2026", "status": "released", "changes": [
+      "Εβδομαδιαίες αναλύσεις: το Vela εντοπίζει μοτίβα στο άγχος σας και τα εξηγεί με απλά λόγια.",
+      "Επανασχεδιασμένο ιστορικό με ανάλυση ανά ημέρα, εβδομάδα και μήνα.",
+      "Νέο complication HRV με ραβδόγραμμα για το καντράν σας.",
+      "Οι νυχτερινές μετρήσεις ανακτώνται, ώστε το ιστορικό να έχει λιγότερα κενά."]},
+    {"version": "1.0.0", "date": "26 Απριλίου 2026", "status": "released", "changes": [
+      "Πρώτη έκδοση. Σκορ άγχους από το HRV στο Apple Watch, το δικό σας baseline, τάσεις και σαφής εξήγηση των εύρων — χωρίς λογαριασμό, χωρίς διακομιστές, χωρίς συνδρομή."]},
+  ],
+}
+
+CHANGELOG["ja"] = {
+  "title_tag": "Vela HRV — 変更履歴", "title": "変更履歴",
+  "intro": "Vela のすべてのバージョンと、それぞれの変更点。",
+  "status_review": "審査中 · App Store",
+  "unreleased_note": "このバージョンは現在 Apple の審査中で、まだダウンロードできません。",
+  "entries": [
+    {"version": "1.3.0", "date": "公開予定：2026年9月14日", "status": "review", "changes": [
+      "3つの新しい言語（チェコ語、ギリシャ語、日本語）を追加。Vela は12言語に対応しました。",
+      "過去の測定値を取り込む際に通知が繰り返される問題を修正。",
+      "システムの許可がオンでも、アプリ内で通知をオフにできるようになりました。",
+      "履歴の月表示が、アプリを開き直したときに更新されるようになりました。"]},
+    {"version": "1.2.3", "date": "2026年9月6日", "status": "released", "changes": [
+      "システムの許可がすでに与えられている場合に、アプリ内で通知のオン・オフを切り替えられます。"]},
+    {"version": "1.2.2", "date": "2026年8月23日", "status": "released", "changes": [
+      "日付が使用言語に合わせて表示されるようになりました。",
+      "非対応の言語に設定されたデバイスでは、Vela は英語で表示されます。"]},
+    {"version": "1.2.1", "date": "2026年8月8日", "status": "released", "changes": [
+      "アプリを開いた直後に表示される週間分析の通知を削除。",
+      "新規インストール時にベースライン構築リングが再び表示されるようになりました。"]},
+    {"version": "1.2.0", "date": "2026年7月8日", "status": "released", "changes": [
+      "さらに7言語を追加：カタルーニャ語、バスク語、ガリシア語、フランス語、ドイツ語、イタリア語、ポルトガル語。",
+      "すべての画面で VoiceOver に完全対応。",
+      "Dynamic Type、透明度を下げる、色を使わずに区別、拡大コンテンツビューアに対応。",
+      "WCAG AA を満たすようテキストのコントラストを向上。"]},
+    {"version": "1.1.1", "date": "2026年6月16日", "status": "released", "changes": [
+      "週間分析の通知が常には届かない問題を修正。"]},
+    {"version": "1.1.0", "date": "2026年5月26日", "status": "released", "changes": [
+      "週間分析：Vela があなたのストレスのパターンを見つけ、分かりやすい言葉で説明します。",
+      "履歴を刷新し、日・週・月で掘り下げられるように。",
+      "文字盤用の棒グラフ付き HRV コンプリケーションを追加。",
+      "夜間の測定値を補完し、履歴の欠けが少なくなりました。"]},
+    {"version": "1.0.0", "date": "2026年4月26日", "status": "released", "changes": [
+      "最初のリリース。Apple Watch 上で HRV からストレススコアを算出し、あなた自身のベースライン、トレンド、範囲の分かりやすい説明を提供します。アカウント不要、サーバーなし、サブスクなし。"]},
+  ],
+}
+
+for _code, _cl in CHANGELOG.items():
+    L[_code]["changelog"] = _cl
+    L[_code]["landing"]["footer_changelog"] = _FOOTER_CHANGELOG[_code]
+
 # ------------------------------------------------------------ generation
 
 def write(path: Path, content: str):
@@ -2030,13 +2829,14 @@ def write(path: Path, content: str):
     print(f"  {path.relative_to(SITE)}")
 
 def main():
-    print("Generando páginas del sitio (9 idiomas x 4 páginas):")
+    print("Generando páginas del sitio (12 idiomas x 5 páginas):")
     for code in ORDER:
         t = L[code]
         write(out_path(code, "landing"), render_landing(code, t))
         write(out_path(code, "support"), render_support(code, t))
         write(out_path(code, "privacy"), render_privacy(code, t))
         write(out_path(code, "accessibility"), render_a11y(code, t))
+        write(out_path(code, "changelog"), render_changelog(code, t))
 
 if __name__ == "__main__":
     main()

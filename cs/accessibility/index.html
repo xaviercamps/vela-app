@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vela HRV — Přístupnost</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A1628;
+      --bg-deep: #060D1A;
+      --primary: #4A9EFF;
+      --primary-bright: #8ECFFF;
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.6);
+      --text-tertiary: rgba(255,255,255,0.35);
+      --surface: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse, rgba(74,158,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    header {
+      padding: 5rem 0 3rem;
+      text-align: center;
+    }
+    .back-link {
+      display: inline-block;
+      color: var(--primary-bright);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: 2.5rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .back-link:hover { opacity: 1; }
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .page-meta {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      margin: 3rem auto;
+    }
+    section { margin-bottom: 2.5rem; }
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    p {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    p + p { margin-top: 0.75rem; }
+    ul {
+      list-style: none;
+      margin-top: 0.75rem;
+    }
+    li {
+      font-size: 0.93rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      padding-left: 1.4rem;
+      position: relative;
+      margin-bottom: 0.6rem;
+    }
+    li::before {
+      content: '·';
+      position: absolute;
+      left: 0.4rem;
+      color: var(--primary-bright);
+    }
+    li strong { color: var(--text); font-weight: 500; }
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid rgba(74,158,255,0.15);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .highlight-card p {
+      font-size: 0.9rem;
+      color: var(--primary-bright);
+    }
+    .contact-link {
+      color: var(--primary-bright);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(142,207,255,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-link:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+    footer {
+      padding: 3rem 0 4rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    .lang-row { margin-top: 1rem; }
+    .lang-row a, .lang-row span {
+      color: var(--text-tertiary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+    .lang-row a:hover { color: var(--primary-bright); }
+    .lang-row span { color: var(--primary-bright); }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fade-in, .hero-icon { animation: none; opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="/cs/support/">← Zpět na podporu</a>
+      <h1 class="page-title">Přístupnost</h1>
+      <p class="page-meta">Poslední aktualizace: červenec 2026</p>
+    </header>
+
+    <div class="highlight-card fade-in">
+      <p>Vela je navržena tak, aby byla plně použitelná i bez zraku: každá obrazovka funguje s VoiceOverem a žádná informace není nikdy sdělována pouze barvou.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Náš přístup</h2>
+        <p>Vela měří stres prostřednictvím variability srdečního tepu na Apple Watch. Porozumění vlastnímu tělu by nemělo záviset na tom, jak vidíte, a proto je přístupnost považována za základní funkci: hlavní zásadou je, aby si nevidomý uživatel mohl zkontrolovat úroveň stresu, procházet svou historii, číst týdenní přehledy a nastavit aplikaci zcela samostatně.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Podpora na Apple Watch</h2>
+        <ul>
+          <li><strong>VoiceOver.</strong> Každý prvek má smysluplný popisek, hodnotu a nápovědu. Grafy jsou dostupné jako zvukové grafy (Audio Graphs), takže historii stresu lze prozkoumat sluchem pomocí Digital Crown.</li>
+          <li><strong>Větší text.</strong> Rozhraní všude používá Dynamic Type. Kompaktní prvky, jako je prstenec skóre, nabízejí Prohlížeč velkého obsahu.</li>
+          <li><strong>Tmavé rozhraní.</strong> Rozhraní Vely je záměrně tmavé na každé obrazovce, bez jasných záblesků.</li>
+          <li><strong>Rozlišení bez barvy.</strong> Úrovně stresu jsou vždy doplněny číslem a slovem — nikdy jen barvou. Grafy přidávají linie pásem, když je zapnuto „Rozlišovat bez barvy“.</li>
+          <li><strong>Dostatečný kontrast.</strong> Veškerý text splňuje kontrastní poměr WCAG AA (4,5:1 nebo lepší) na tmavém pozadí.</li>
+          <li><strong>Omezení pohybu.</strong> Animace se vypnou nebo nahradí statickými alternativami, když je zapnuto „Omezit pohyb“. Vela také respektuje Omezit průhlednost a Tučný text.</li>
+        </ul>
+        <p>Vela neobsahuje žádný zvuk ani video, takže titulky a zvukové popisy se neuplatňují.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Jak to ověřujeme</h2>
+        <p>Každá obrazovka prochází automatickými audity přístupnosti od Applu — kontrola popisků, kontrastu, velikosti dotykových cílů a škálování textu — jako součást testovací sady aplikace, spolu s ruční kontrolou pomocí VoiceOveru. Tyto kontroly se spouští znovu při každé změně rozhraní, aby se přístupnost mezi verzemi tiše nezhoršila.</p>
+      </section>
+    </div>
+
+    <div class="fade-in">
+      <section>
+        <h2>Zpětná vazba</h2>
+        <p>Pokud se něco ve Vele obtížně používá s asistivními technologiemi, je to chyba. Napište prosím na <a class="contact-link" href="mailto:xaviercampsnovi@gmail.com">xaviercampsnovi@gmail.com</a> — hlášení o přístupnosti mají prioritu pro další vydání.</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>© 2026 Vela HRV · Všechna práva vyhrazena</p>
+      <nav class="lang-row" aria-label="Jazyk"><a href="/es/accessibility/" hreflang="es">ES</a> · <a href="/accessibility/" hreflang="en">EN</a> · <a href="/ca/accessibility/" hreflang="ca">CA</a> · <a href="/eu/accessibility/" hreflang="eu">EU</a> · <a href="/gl/accessibility/" hreflang="gl">GL</a> · <a href="/fr/accessibility/" hreflang="fr">FR</a> · <a href="/de/accessibility/" hreflang="de">DE</a> · <a href="/it/accessibility/" hreflang="it">IT</a> · <a href="/pt/accessibility/" hreflang="pt">PT</a> · <span aria-current="true">CS</span> · <a href="/el/accessibility/" hreflang="el">EL</a> · <a href="/ja/accessibility/" hreflang="ja">JA</a></nav>
+    </footer>
+  </div>
+</body>
+</html>
