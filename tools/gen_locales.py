@@ -1000,6 +1000,16 @@ def render_landing(code, t):
     </div>
   </section>
 
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">{L['story_eyebrow']}</p>
+        <h2>{L['story_h2']}</h2>
+        <p>{L['story_p']}</p>
+      </div>
+    </div>
+  </section>
+
   <section class="baseline">
     <div class="wrap">
       <div class="section-head">
@@ -1254,6 +1264,8 @@ L["es"] = {
     "badge_alt": "Descargar en el App Store",
     "wave_kicker": "SDNN · TIEMPO REAL", "wave_state": "EN REPOSO",
     "wave_left": "ruido de población", "wave_right_html": "<b>tu línea base</b> se asienta",
+    "story_eyebrow": "Sobre el nombre", "story_h2": "Por qué “Vela”",
+    "story_p": "“Vela” también es la vela de un barco — del latín velum. Un velero no lucha contra el viento: lo lee y ajusta el rumbo. Esa es la idea detrás de la app. En lugar de compararte con un estándar externo, Vela lee tu propia línea base personal y te ayuda a entender tus propios patrones. El estrés no se combate, se lee y se ajusta.",
     "baseline_eyebrow": "Por qué el promedio no sirve",
     "baseline_h2": "25&nbsp;ms de HRV puede ser alto para ti y bajo para otra persona.",
     "baseline_p": "El HRV varía enormemente entre personas. Un umbral de población trata a todo el mundo igual — y por eso casi siempre se equivoca. Vela construye tu propia línea base a partir de tu historial real: si ya tienes datos de HRV en tu Apple Watch, puede empezar desde el primer día; si eres nuevo, tarda entre 7 y 14 días en asentarse.",
@@ -1353,6 +1365,8 @@ L["en"] = {
     "badge_alt": "Download on the App Store",
     "wave_kicker": "SDNN · LIVE", "wave_state": "AT REST",
     "wave_left": "population noise", "wave_right_html": "<b>your baseline</b> settles",
+    "story_eyebrow": "About the name", "story_h2": "Why “Vela”",
+    "story_p": "“Vela” is also the Spanish word for a boat's sail — from the Latin velum. A sailboat doesn't fight the wind: it reads it and adjusts course. That's the idea behind the app. Instead of comparing you to an external standard, Vela reads your own personal baseline and helps you understand your own patterns. Stress isn't something to fight — it's something to read and adjust to.",
     "baseline_eyebrow": "Why the average doesn't work",
     "baseline_h2": "25&nbsp;ms of HRV can be high for you and low for someone else.",
     "baseline_p": "HRV varies enormously between people. A population threshold treats everyone the same — which is exactly why it's almost always wrong. Vela builds your own baseline from your real history: if you already have HRV data on your Apple Watch, it can start from day one; if you're new, it takes 7–14 days to settle.",
@@ -1452,6 +1466,8 @@ L["ca"] = {
     "badge_alt": "Descarrega-la a l'App Store",
     "wave_kicker": "SDNN · EN TEMPS REAL", "wave_state": "EN REPÒS",
     "wave_left": "soroll de població", "wave_right_html": "<b>la teva línia base</b> s'assenta",
+    "story_eyebrow": "Sobre el nom", "story_h2": "Per què «Vela»",
+    "story_p": "«Vela» també és la vela d'un vaixell — del llatí velum. Un veler no lluita contra el vent: el llegeix i ajusta el rumb. Aquesta és la idea darrere de l'aplicació. En lloc de comparar-te amb un estàndard extern, Vela llegeix la teva pròpia línia base personal i t'ajuda a entendre els teus propis patrons. L'estrès no es combat: es llegeix i s'ajusta.",
     "baseline_eyebrow": "Per què el promig no serveix",
     "baseline_h2": "25&nbsp;ms d'HRV pot ser alt per a tu i baix per a una altra persona.",
     "baseline_p": "L'HRV varia enormement entre persones. Un llindar de població tracta tothom igual — i per això gairebé sempre s'equivoca. Vela construeix la teva pròpia línia base a partir del teu historial real: si ja tens dades d'HRV al teu Apple Watch, pot començar des del primer dia; si ets nou, triga entre 7 i 14 dies a assentar-se.",
@@ -1551,6 +1567,8 @@ L["eu"] = {
     "badge_alt": "Deskargatu App Store-n",
     "wave_kicker": "SDNN · ZUZENEAN", "wave_state": "ATSEDENEAN",
     "wave_left": "populazioaren zarata", "wave_right_html": "<b>zure oinarri-lerroa</b> finkatzen",
+    "story_eyebrow": "Izenari buruz", "story_h2": "Zergatik «Vela»",
+    "story_p": "«Vela» gaztelaniazko hitza da itsasontzi baten belarako — latinezko velum hitzetik dator. Belaontzi bat ez da haizearen aurka borrokatzen: irakurri egiten du eta norabidea doitzen du. Hori da aplikazioaren atzean dagoen ideia. Kanpoko estandar batekin alderatu beharrean, Velak zure oinarri-lerro pertsonala irakurtzen du eta zeure patroiak ulertzen laguntzen dizu. Estresa ez da borrokatzen: irakurri eta doitu egiten da.",
     "baseline_eyebrow": "Zergatik ez duen batez bestekoak balio",
     "baseline_h2": "25&nbsp;ms-ko HRV altua izan daiteke zuretzat eta baxua beste norbaitentzat.",
     "baseline_p": "HRV asko aldatzen da pertsonen artean. Populazio-atalase batek denak berdin tratatzen ditu — eta horregatik huts egiten du ia beti. Velak zure oinarri-lerro propioa eraikitzen du zure benetako historialetik abiatuta: dagoeneko HRV daturik baduzu Apple Watch-en, lehen egunetik has daiteke; berria bazara, 7-14 egun behar ditu finkatzeko.",
@@ -1650,6 +1668,8 @@ L["gl"] = {
     "badge_alt": "Descárgao na App Store",
     "wave_kicker": "SDNN · EN TEMPO REAL", "wave_state": "EN REPOUSO",
     "wave_left": "ruído de poboación", "wave_right_html": "<b>a túa liña base</b> aséntase",
+    "story_eyebrow": "Sobre o nome", "story_h2": "Por que «Vela»",
+    "story_p": "«Vela» tamén é a vela dun barco — do latín velum. Un veleiro non loita contra o vento: lee o vento e axusta o rumbo. Esa é a idea detrás da aplicación. No canto de compararte cun estándar externo, Vela le a túa propia liña base persoal e axúdache a comprender os teus propios patróns. O estrés non se combate: lese e axústase.",
     "baseline_eyebrow": "Por que a media non serve",
     "baseline_h2": "25&nbsp;ms de HRV pode ser alto para ti e baixo para outra persoa.",
     "baseline_p": "A HRV varía enormemente entre persoas. Un limiar de poboación trata a todos igual — e por iso case sempre falla. Vela constrúe a túa propia liña base a partir do teu historial real: se xa tes datos de HRV no teu Apple Watch, pode empezar dende o primeiro día; se es novo, tarda entre 7 e 14 días en asentarse.",
@@ -1749,6 +1769,8 @@ L["fr"] = {
     "badge_alt": "Télécharger dans l'App Store",
     "wave_kicker": "VFC · EN DIRECT", "wave_state": "AU REPOS",
     "wave_left": "bruit de population", "wave_right_html": "<b>votre référence</b> se stabilise",
+    "story_eyebrow": "À propos du nom", "story_h2": "Pourquoi « Vela »",
+    "story_p": "« Vela » est le mot espagnol pour désigner la voile d'un bateau — du latin velum. Un voilier ne lutte pas contre le vent : il le lit et ajuste son cap. C'est l'idée qui sous-tend l'application. Plutôt que de vous comparer à une norme extérieure, Vela lit votre propre référence personnelle et vous aide à comprendre vos propres schémas. Le stress ne se combat pas : il se lit et s'ajuste.",
     "baseline_eyebrow": "Pourquoi la moyenne ne fonctionne pas",
     "baseline_h2": "25&nbsp;ms de VFC peut être élevé pour vous et bas pour quelqu'un d'autre.",
     "baseline_p": "La VFC varie énormément d'une personne à l'autre. Un seuil de population traite tout le monde de la même façon — et c'est précisément pour ça qu'il se trompe presque toujours. Vela construit votre propre référence à partir de votre historique réel : si vous avez déjà des données VFC sur votre Apple Watch, elle peut démarrer dès le premier jour ; si vous êtes nouveau, il faut 7 à 14 jours pour qu'elle se stabilise.",
@@ -1848,6 +1870,8 @@ L["de"] = {
     "badge_alt": "Laden im App Store",
     "wave_kicker": "SDNN · LIVE", "wave_state": "IN RUHE",
     "wave_left": "Bevölkerungsrauschen", "wave_right_html": "<b>deine Baseline</b> stabilisiert sich",
+    "story_eyebrow": "Über den Namen", "story_h2": "Warum „Vela“",
+    "story_p": "„Vela“ ist das spanische Wort für das Segel eines Bootes — vom lateinischen velum. Ein Segelboot kämpft nicht gegen den Wind: Es liest ihn und passt den Kurs an. Das ist die Idee hinter der App. Statt dich mit einem externen Standard zu vergleichen, liest Vela deine eigene persönliche Baseline und hilft dir, deine eigenen Muster zu verstehen. Stress wird nicht bekämpft, sondern gelesen und angepasst.",
     "baseline_eyebrow": "Warum der Durchschnitt nicht funktioniert",
     "baseline_h2": "25&nbsp;ms HRV können für dich hoch und für jemand anderen niedrig sein.",
     "baseline_p": "HRV variiert enorm zwischen Menschen. Ein Bevölkerungsschwellenwert behandelt alle gleich — und liegt genau deshalb fast immer falsch. Vela erstellt deine eigene Baseline aus deiner echten Historie: Hast du bereits HRV-Daten auf deiner Apple Watch, kann sie ab Tag eins starten; bist du neu, dauert es 7–14 Tage, bis sie sich stabilisiert.",
@@ -1947,6 +1971,8 @@ L["it"] = {
     "badge_alt": "Scarica su App Store",
     "wave_kicker": "SDNN · IN TEMPO REALE", "wave_state": "A RIPOSO",
     "wave_left": "rumore di popolazione", "wave_right_html": "<b>la tua baseline</b> si assesta",
+    "story_eyebrow": "Sul nome", "story_h2": "Perché «Vela»",
+    "story_p": "«Vela» è anche la vela di una barca — dal latino velum. Una barca a vela non lotta contro il vento: lo legge e regola la rotta. È l'idea alla base dell'app. Invece di confrontarti con uno standard esterno, Vela legge la tua baseline personale e ti aiuta a capire i tuoi schemi. Lo stress non si combatte: si legge e si regola.",
     "baseline_eyebrow": "Perché la media non funziona",
     "baseline_h2": "25&nbsp;ms di HRV può essere alto per te e basso per un'altra persona.",
     "baseline_p": "L'HRV varia enormemente da persona a persona. Una soglia di popolazione tratta tutti allo stesso modo — ed è proprio per questo che quasi sempre sbaglia. Vela costruisce la tua baseline a partire dalla tua storia reale: se hai già dati HRV sul tuo Apple Watch, può partire dal primo giorno; se sei nuovo, ci vogliono 7–14 giorni per assestarsi.",
@@ -2046,6 +2072,8 @@ L["pt"] = {
     "badge_alt": "Transferir da App Store",
     "wave_kicker": "SDNN · EM TEMPO REAL", "wave_state": "EM REPOUSO",
     "wave_left": "ruído de população", "wave_right_html": "<b>a sua linha de base</b> assenta",
+    "story_eyebrow": "Sobre o nome", "story_h2": "Porquê «Vela»",
+    "story_p": "«Vela» também é a vela de um barco — do latim velum. Um veleiro não luta contra o vento: lê-o e ajusta o rumo. Essa é a ideia por trás da aplicação. Em vez de impor um padrão externo, a Vela lê a sua própria linha de base pessoal e ajuda a perceber os seus próprios padrões. O stress não se combate: lê-se e ajusta-se.",
     "baseline_eyebrow": "Porque é que a média não serve",
     "baseline_h2": "25&nbsp;ms de HRV pode ser alto para si e baixo para outra pessoa.",
     "baseline_p": "A HRV varia enormemente entre pessoas. Um limiar de população trata todos da mesma forma — e é precisamente por isso que quase sempre falha. A Vela constrói a sua própria linha de base a partir do seu histórico real: se já tem dados de HRV no seu Apple Watch, pode começar desde o primeiro dia; se é novo, demora entre 7 e 14 dias a assentar.",
@@ -2145,6 +2173,8 @@ L["cs"] = {
     "badge_alt": "Stáhnout v App Store",
     "wave_kicker": "SDNN · ŽIVĚ", "wave_state": "V KLIDU",
     "wave_left": "populační šum", "wave_right_html": "<b>vaše základní linie</b> se ustálí",
+    "story_eyebrow": "O názvu", "story_h2": "Proč „Vela“",
+    "story_p": "„Vela“ je španělsky také plachta lodi — z latinského velum. Plachetnice s větrem nebojuje: čte ho a upravuje kurz. To je myšlenka celé aplikace. Místo aby vás srovnávala s vnějším standardem, Vela čte vaši vlastní osobní základní linii a pomáhá vám pochopit vaše vlastní vzorce. Se stresem se nebojuje — čte se a přizpůsobuje.",
     "baseline_eyebrow": "Proč průměr nefunguje",
     "baseline_h2": "25&nbsp;ms HRV může být pro vás vysoká a pro někoho jiného nízká.",
     "baseline_p": "HRV se mezi lidmi enormně liší. Populační práh zachází se všemi stejně — a přesně proto se skoro vždy mýlí. Vela vytváří vaši vlastní základní linii z vaší skutečné historie: pokud už na Apple Watch data HRV máte, může začít hned první den; pokud jste noví, ustálí se za 7–14 dní.",
@@ -2244,6 +2274,8 @@ L["el"] = {
     "badge_alt": "Λήψη από το App Store",
     "wave_kicker": "SDNN · ΖΩΝΤΑΝΑ", "wave_state": "ΣΕ ΗΡΕΜΙΑ",
     "wave_left": "θόρυβος πληθυσμού", "wave_right_html": "<b>το baseline σας</b> σταθεροποιείται",
+    "story_eyebrow": "Σχετικά με το όνομα", "story_h2": "Γιατί «Vela»",
+    "story_p": "«Vela» είναι επίσης η ισπανική λέξη για το πανί ενός σκάφους — από το λατινικό velum. Ένα ιστιοφόρο δεν παλεύει με τον άνεμο: τον διαβάζει και προσαρμόζει την πορεία του. Αυτή είναι η ιδέα πίσω από την εφαρμογή. Αντί να σας συγκρίνει με ένα εξωτερικό πρότυπο, το Vela διαβάζει το δικό σας προσωπικό baseline και σας βοηθά να κατανοήσετε τα δικά σας μοτίβα. Το άγχος δεν το πολεμάς — το διαβάζεις και προσαρμόζεσαι.",
     "baseline_eyebrow": "Γιατί ο μέσος όρος δεν λειτουργεί",
     "baseline_h2": "25&nbsp;ms HRV μπορεί να είναι υψηλά για εσάς και χαμηλά για κάποιον άλλον.",
     "baseline_p": "Το HRV διαφέρει τεράστια από άνθρωπο σε άνθρωπο. Ένα όριο πληθυσμού αντιμετωπίζει τους πάντες το ίδιο — και ακριβώς γι’ αυτό σχεδόν πάντα κάνει λάθος. Το Vela χτίζει το δικό σας baseline από το πραγματικό σας ιστορικό: αν έχετε ήδη δεδομένα HRV στο Apple Watch σας, μπορεί να ξεκινήσει από την πρώτη ημέρα· αν είστε νέος, χρειάζονται 7–14 ημέρες για να σταθεροποιηθεί.",
@@ -2343,6 +2375,8 @@ L["ja"] = {
     "badge_alt": "App Store でダウンロード",
     "wave_kicker": "SDNN · ライブ", "wave_state": "安静時",
     "wave_left": "集団のノイズ", "wave_right_html": "<b>あなたのベースライン</b>が定まる",
+    "story_eyebrow": "名前について", "story_h2": "なぜ「Vela」なのか",
+    "story_p": "「Vela」はスペイン語で船の帆のことでもあり、ラテン語の velum に由来します。ヨットは風と戦いません。風を読み、針路を調整します。それがこのアプリの考え方です。外部の基準と比べるのではなく、Vela はあなた自身の個人ベースラインを読み取り、あなた自身のパターンを理解する手助けをします。ストレスは戦うものではなく、読み取って合わせていくものです。",
     "baseline_eyebrow": "なぜ平均では不十分なのか",
     "baseline_h2": "同じ 25&nbsp;ms の HRV でも、ある人には高く、別の人には低いことがあります。",
     "baseline_p": "HRV は人によって大きく異なります。集団のしきい値は誰もを同じように扱うため、ほとんどの場合それが外れる原因になります。Vela はあなたの実際の履歴からあなた自身のベースラインを構築します。Apple Watch にすでに HRV データがあれば初日から始められ、初めての場合は定まるまで 7〜14 日かかります。",
