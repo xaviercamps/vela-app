@@ -137,6 +137,27 @@
   .beta-cta:hover{ opacity:0.85; }
   .v2-showcase{ max-width:960px; margin:0 auto; }
   .v2-showcase img{ border-radius:18px; }
+  .v2-zoom{ cursor:zoom-in; }
+  .v2-zoom:focus-visible{ outline:2px solid var(--teal); outline-offset:4px; border-radius:18px; }
+  .v2-hint{ margin-top:12px; text-align:center; font-size:13px; color:var(--text-3); }
+  .v2-lightbox{
+    border:0; padding:0; margin:0; width:100vw; height:100vh; max-width:none; max-height:none;
+    background:rgba(6,13,20,0.96); color:var(--text-1);
+  }
+  .v2-lightbox::backdrop{ background:rgba(6,13,20,0.96); }
+  .v2-lightbox-scroll{ width:100%; height:100%; overflow:auto; display:flex; align-items:center; cursor:zoom-out; }
+  .v2-lightbox-scroll img{ display:block; margin:auto; width:min(96vw, 1800px); height:auto; border-radius:12px; }
+  @media (max-width:700px){
+    /* The overview's small print needs real pixels on a phone: scroll it sideways. */
+    .v2-lightbox-scroll img{ width:1400px; max-width:none; margin:24px; }
+  }
+  .v2-close{
+    position:fixed; top:16px; right:16px; z-index:1;
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--hairline); background:rgba(6,13,20,0.8); color:var(--text-1);
+    font-size:26px; line-height:1; cursor:pointer;
+  }
+  .v2-close:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -418,10 +439,17 @@
         <a class="beta-cta" href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">Rejoindre la bêta sur TestFlight</a>
       </div>
       <div class="watch-showcase v2-showcase">
-        <div class="shot-card">
+        <a class="shot-card v2-zoom" href="/assets/vela-2-beta.png" aria-haspopup="dialog">
           <img src="/assets/vela-2-beta.png" alt="Aperçu de Vela 2.0 : la Batterie à 78 avec la courbe de la journée ; seul le sommeil la recharge ; les siestes et les postes de nuit comptent ; basée sur le SDNN ; ce qui vous a le plus fatigué aujourd'hui, un entraînement de 45 minutes à −18 ; le résumé du matin gratuit ; Vela Pro en achat unique ; traitement sur l'appareil et aucun serveur Vela ; et une invitation à rejoindre la bêta publique sur TestFlight." loading="lazy">
-        </div>
+        </a>
+        <p class="v2-hint">Touchez l'image pour l'afficher en grand</p>
       </div>
+      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="Une batterie pour vous, pas pour votre montre.">
+        <button class="v2-close" type="button" aria-label="Fermer">×</button>
+        <div class="v2-lightbox-scroll">
+          <img src="/assets/vela-2-beta.png" alt="Aperçu de Vela 2.0 : la Batterie à 78 avec la courbe de la journée ; seul le sommeil la recharge ; les siestes et les postes de nuit comptent ; basée sur le SDNN ; ce qui vous a le plus fatigué aujourd'hui, un entraînement de 45 minutes à −18 ; le résumé du matin gratuit ; Vela Pro en achat unique ; traitement sur l'appareil et aucun serveur Vela ; et une invitation à rejoindre la bêta publique sur TestFlight.">
+        </div>
+      </dialog>
     </div>
   </section>
 
@@ -577,6 +605,21 @@
     <nav class="lang-row" aria-label="Langue"><a href="/es/" hreflang="es">ES</a> · <a href="/" hreflang="en">EN</a> · <a href="/ca/" hreflang="ca">CA</a> · <a href="/eu/" hreflang="eu">EU</a> · <a href="/gl/" hreflang="gl">GL</a> · <span aria-current="true">FR</span> · <a href="/de/" hreflang="de">DE</a> · <a href="/it/" hreflang="it">IT</a> · <a href="/pt/" hreflang="pt">PT</a> · <a href="/cs/" hreflang="cs">CS</a> · <a href="/el/" hreflang="el">EL</a> · <a href="/ja/" hreflang="ja">JA</a></nav>
   </div>
 </footer>
+
+<script>
+(function(){
+  var zoom = document.querySelector('.v2-zoom');
+  var box = document.getElementById('v2-lightbox');
+  if(!zoom || !box || typeof box.showModal !== 'function') return;  // no dialog support: the link opens the image
+  zoom.addEventListener('click', function(e){ e.preventDefault(); box.showModal(); });
+  box.querySelector('.v2-close').addEventListener('click', function(){ box.close(); });
+  box.addEventListener('click', function(e){
+    // On a phone the image is scrolled sideways, so only a tap off the image closes.
+    if(e.target === box || e.target.classList.contains('v2-lightbox-scroll') || window.innerWidth > 700) box.close();
+  });
+  box.addEventListener('close', function(){ zoom.focus(); });
+})();
+</script>
 
 <script>
 (function(){

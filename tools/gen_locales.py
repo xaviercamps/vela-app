@@ -512,6 +512,27 @@ LANDING_CSS = """  :root{
   .beta-cta:hover{ opacity:0.85; }
   .v2-showcase{ max-width:960px; margin:0 auto; }
   .v2-showcase img{ border-radius:18px; }
+  .v2-zoom{ cursor:zoom-in; }
+  .v2-zoom:focus-visible{ outline:2px solid var(--teal); outline-offset:4px; border-radius:18px; }
+  .v2-hint{ margin-top:12px; text-align:center; font-size:13px; color:var(--text-3); }
+  .v2-lightbox{
+    border:0; padding:0; margin:0; width:100vw; height:100vh; max-width:none; max-height:none;
+    background:rgba(6,13,20,0.96); color:var(--text-1);
+  }
+  .v2-lightbox::backdrop{ background:rgba(6,13,20,0.96); }
+  .v2-lightbox-scroll{ width:100%; height:100%; overflow:auto; display:flex; align-items:center; cursor:zoom-out; }
+  .v2-lightbox-scroll img{ display:block; margin:auto; width:min(96vw, 1800px); height:auto; border-radius:12px; }
+  @media (max-width:700px){
+    /* The overview's small print needs real pixels on a phone: scroll it sideways. */
+    .v2-lightbox-scroll img{ width:1400px; max-width:none; margin:24px; }
+  }
+  .v2-close{
+    position:fixed; top:16px; right:16px; z-index:1;
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--hairline); background:rgba(6,13,20,0.8); color:var(--text-1);
+    font-size:26px; line-height:1; cursor:pointer;
+  }
+  .v2-close:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -1034,10 +1055,17 @@ def render_landing(code, t):
         <a class="beta-cta" href="{TESTFLIGHT_URL}" target="_blank" rel="noopener">{V['cta']}</a>
       </div>
       <div class="watch-showcase v2-showcase">
-        <div class="shot-card">
+        <a class="shot-card v2-zoom" href="/assets/{V2_IMAGE}" aria-haspopup="dialog">
           <img src="/assets/{V2_IMAGE}" alt="{V['alt']}" loading="lazy">
-        </div>
+        </a>
+        <p class="v2-hint">{V['zoom']}</p>
       </div>
+      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="{V['h2']}">
+        <button class="v2-close" type="button" aria-label="{V['close']}">×</button>
+        <div class="v2-lightbox-scroll">
+          <img src="/assets/{V2_IMAGE}" alt="{V['alt']}">
+        </div>
+      </dialog>
     </div>
   </section>
 
@@ -1158,6 +1186,21 @@ def render_landing(code, t):
     {lang_row('landing', code, t['lang_label'])}
   </div>
 </footer>
+
+<script>
+(function(){{
+  var zoom = document.querySelector('.v2-zoom');
+  var box = document.getElementById('v2-lightbox');
+  if(!zoom || !box || typeof box.showModal !== 'function') return;  // no dialog support: the link opens the image
+  zoom.addEventListener('click', function(e){{ e.preventDefault(); box.showModal(); }});
+  box.querySelector('.v2-close').addEventListener('click', function(){{ box.close(); }});
+  box.addEventListener('click', function(e){{
+    // On a phone the image is scrolled sideways, so only a tap off the image closes.
+    if(e.target === box || e.target.classList.contains('v2-lightbox-scroll') || window.innerWidth > 700) box.close();
+  }});
+  box.addEventListener('close', function(){{ zoom.focus(); }});
+}})();
+</script>
 
 <script>
 (function(){{
@@ -2957,6 +3000,8 @@ _V2 = {
     "h2": "A battery for you, not for your watch.",
     "p": "Vela 2.0 adds Battery: it charges only while you sleep and drains with stress, activity and workouts, measured against your own HRV baseline. It's in public beta on TestFlight now, ahead of the December release.",
     "cta": "Join the beta on TestFlight",
+    "zoom": "Tap the image to see it full size",
+    "close": "Close",
     "alt": "Vela 2.0 overview: Battery at 78 with the day's curve; only sleep recharges it; naps and night shifts count; based on SDNN; what drained you most today, a 45-minute workout at −18; a free morning snapshot; Vela Pro as a one-time purchase; on-device processing and no Vela servers; and an invitation to join the public beta on TestFlight.",
   },
   "es": {
@@ -2972,6 +3017,8 @@ _V2 = {
     "h2": "Una batería para ti, no para tu reloj.",
     "p": "Vela 2.0 añade la Batería: se carga solo mientras duermes y se gasta con el estrés, la actividad y los entrenos, medida contra tu propia línea base de HRV. Ya está en beta pública en TestFlight, antes del lanzamiento de diciembre.",
     "cta": "Únete a la beta en TestFlight",
+    "zoom": "Toca la imagen para verla a tamaño completo",
+    "close": "Cerrar",
     "alt": "Resumen de Vela 2.0: la Batería a 78 con la curva del día; solo se recarga durmiendo; cuentan las siestas y los turnos de noche; basada en SDNN; lo que más te ha gastado hoy, un entreno de 45 minutos con −18; resumen de la mañana gratis; Vela Pro como compra única; procesamiento en el dispositivo y sin servidores de Vela; e invitación a la beta pública en TestFlight.",
   },
   "ca": {
@@ -2987,6 +3034,8 @@ _V2 = {
     "h2": "Una bateria per a tu, no per al teu rellotge.",
     "p": "Vela 2.0 afegeix la Bateria: només es carrega mentre dorms i es gasta amb l'estrès, l'activitat i els entrenaments, mesurada contra la teva pròpia línia base d'HRV. Ja és en beta pública a TestFlight, abans del llançament de desembre.",
     "cta": "Uneix-te a la beta a TestFlight",
+    "zoom": "Toca la imatge per veure-la a mida completa",
+    "close": "Tanca",
     "alt": "Resum de Vela 2.0: la Bateria a 78 amb la corba del dia; només es recarrega dormint; compten les migdiades i els torns de nit; basada en SDNN; el que més t'ha gastat avui, un entrenament de 45 minuts amb −18; resum del matí gratis; Vela Pro com a compra única; processament al dispositiu i sense servidors de Vela; i invitació a la beta pública a TestFlight.",
   },
   "eu": {
@@ -3002,6 +3051,8 @@ _V2 = {
     "h2": "Zuretzako bateria bat, ez zure erlojuarentzat.",
     "p": "Vela 2.0-k Bateria gehitzen du: lo egiten duzun bitartean bakarrik kargatzen da eta estresarekin, jarduerarekin eta entrenamenduekin gastatzen da, zure HRV oinarri-lerroaren arabera neurtuta. Beta publikoan dago dagoeneko TestFlight-en, abenduko argitalpenaren aurretik.",
     "cta": "Batu beta-ra TestFlight-en",
+    "zoom": "Ukitu irudia tamaina osoan ikusteko",
+    "close": "Itxi",
     "alt": "Vela 2.0-ren laburpena: Bateria 78an eguneko kurbarekin; loak bakarrik kargatzen du; siestak eta gaueko txandak kontatzen dira; SDNN-n oinarritua; gaur gehien gastatu dizuna, 45 minutuko entrenamendua −18rekin; goizeko laburpena doan; Vela Pro behin ordaintzekoa; gailuan prozesatua eta Velaren zerbitzaririk gabe; eta TestFlight-eko beta publikora batzeko gonbidapena.",
   },
   "gl": {
@@ -3017,6 +3068,8 @@ _V2 = {
     "h2": "Unha batería para ti, non para o teu reloxo.",
     "p": "Vela 2.0 engade a Batería: só se carga mentres dormes e gástase co estrés, a actividade e os adestramentos, medida contra a túa propia liña base de HRV. Xa está en beta pública en TestFlight, antes do lanzamento de decembro.",
     "cta": "Únete á beta en TestFlight",
+    "zoom": "Toca a imaxe para vela a tamaño completo",
+    "close": "Pechar",
     "alt": "Resumo de Vela 2.0: a Batería a 78 coa curva do día; só se recarga durmindo; contan as sestas e as quendas de noite; baseada en SDNN; o que máis che gastou hoxe, un adestramento de 45 minutos con −18; resumo da mañá de balde; Vela Pro como compra única; procesamento no dispositivo e sen servidores de Vela; e invitación á beta pública en TestFlight.",
   },
   "fr": {
@@ -3032,6 +3085,8 @@ _V2 = {
     "h2": "Une batterie pour vous, pas pour votre montre.",
     "p": "Vela 2.0 ajoute la Batterie : elle ne se recharge que pendant votre sommeil et se vide avec le stress, l'activité et les entraînements, mesurée par rapport à votre propre référence de VFC. Elle est déjà en bêta publique sur TestFlight, avant la sortie de décembre.",
     "cta": "Rejoindre la bêta sur TestFlight",
+    "zoom": "Touchez l'image pour l'afficher en grand",
+    "close": "Fermer",
     "alt": "Aperçu de Vela 2.0 : la Batterie à 78 avec la courbe de la journée ; seul le sommeil la recharge ; les siestes et les postes de nuit comptent ; basée sur le SDNN ; ce qui vous a le plus fatigué aujourd'hui, un entraînement de 45 minutes à −18 ; le résumé du matin gratuit ; Vela Pro en achat unique ; traitement sur l'appareil et aucun serveur Vela ; et une invitation à rejoindre la bêta publique sur TestFlight.",
   },
   "de": {
@@ -3047,6 +3102,8 @@ _V2 = {
     "h2": "Eine Batterie für dich, nicht für deine Uhr.",
     "p": "Vela 2.0 bringt die Batterie: Sie lädt sich nur im Schlaf auf und leert sich durch Stress, Aktivität und Trainings, gemessen an deiner eigenen HRV-Baseline. Schon jetzt gibt es sie als öffentliche Beta auf TestFlight, vor dem Start im Dezember.",
     "cta": "Zur Beta auf TestFlight",
+    "zoom": "Tippe auf das Bild, um es in voller Größe zu sehen",
+    "close": "Schließen",
     "alt": "Überblick über Vela 2.0: die Batterie bei 78 mit der Tageskurve; nur Schlaf lädt sie auf; Nickerchen und Nachtschichten zählen; auf Basis von SDNN; was dich heute am meisten Energie gekostet hat, ein 45-minütiges Training mit −18; der Morgen-Überblick kostenlos; Vela Pro als Einmalkauf; Verarbeitung auf dem Gerät und keine Vela-Server; und eine Einladung zur öffentlichen Beta auf TestFlight.",
   },
   "it": {
@@ -3062,6 +3119,8 @@ _V2 = {
     "h2": "Una batteria per te, non per il tuo orologio.",
     "p": "Vela 2.0 aggiunge la Batteria: si ricarica solo mentre dormi e si consuma con lo stress, l'attività e gli allenamenti, misurata rispetto alla tua baseline di HRV. È già in beta pubblica su TestFlight, prima del lancio di dicembre.",
     "cta": "Unisciti alla beta su TestFlight",
+    "zoom": "Tocca l'immagine per vederla a grandezza intera",
+    "close": "Chiudi",
     "alt": "Panoramica di Vela 2.0: la Batteria a 78 con la curva della giornata; solo il sonno la ricarica; contano i pisolini e i turni di notte; basata sull'SDNN; cosa ti ha consumato di più oggi, un allenamento di 45 minuti a −18; il riepilogo del mattino gratis; Vela Pro come acquisto unico; elaborazione sul dispositivo e nessun server Vela; e un invito alla beta pubblica su TestFlight.",
   },
   "pt": {
@@ -3077,6 +3136,8 @@ _V2 = {
     "h2": "Uma bateria para si, não para o seu relógio.",
     "p": "O Vela 2.0 acrescenta a Bateria: só carrega enquanto dorme e gasta-se com o stress, a atividade e os treinos, medida face à sua própria linha de base de HRV. Já está em beta pública no TestFlight, antes do lançamento de dezembro.",
     "cta": "Junte-se à beta no TestFlight",
+    "zoom": "Toque na imagem para a ver em tamanho real",
+    "close": "Fechar",
     "alt": "Resumo do Vela 2.0: a Bateria a 78 com a curva do dia; só o sono a recarrega; as sestas e os turnos da noite contam; baseada no SDNN; o que mais lhe gastou energia hoje, um treino de 45 minutos com −18; o resumo da manhã grátis; Vela Pro como compra única; processamento no dispositivo e sem servidores do Vela; e um convite para a beta pública no TestFlight.",
   },
   "cs": {
@@ -3092,6 +3153,8 @@ _V2 = {
     "h2": "Baterie pro vás, ne pro vaše hodinky.",
     "p": "Vela 2.0 přidává Baterii: nabíjí se jen ve spánku a vybíjí se stresem, aktivitou a tréninky, měřeno vůči vaší vlastní základní linii HRV. Už teď je ve veřejné betě v TestFlightu, před vydáním v prosinci.",
     "cta": "Připojit se k betě v TestFlightu",
+    "zoom": "Klepnutím na obrázek ho zobrazíte v plné velikosti",
+    "close": "Zavřít",
     "alt": "Přehled Vela 2.0: Baterie na 78 s křivkou dne; nabíjí ji jen spánek; počítají se zdřímnutí i noční směny; založeno na SDNN; co vás dnes vyčerpalo nejvíc, 45minutový trénink za −18; ranní přehled zdarma; Vela Pro jako jednorázový nákup; zpracování v zařízení a žádné servery Vely; a pozvánka do veřejné bety v TestFlightu.",
   },
   "el": {
@@ -3107,6 +3170,8 @@ _V2 = {
     "h2": "Μια μπαταρία για εσάς, όχι για το ρολόι σας.",
     "p": "Το Vela 2.0 προσθέτει την Μπαταρία: φορτίζει μόνο όσο κοιμάστε και αδειάζει με το άγχος, τη δραστηριότητα και τις προπονήσεις, με μέτρο το δικό σας baseline HRV. Είναι ήδη σε δημόσια beta στο TestFlight, πριν από την κυκλοφορία του Δεκεμβρίου.",
     "cta": "Μπείτε στη beta στο TestFlight",
+    "zoom": "Πατήστε την εικόνα για να τη δείτε σε πλήρες μέγεθος",
+    "close": "Κλείσιμο",
     "alt": "Επισκόπηση του Vela 2.0: η Μπαταρία στο 78 με την καμπύλη της ημέρας· μόνο ο ύπνος τη φορτίζει· μετράνε οι υπνάκοι και οι νυχτερινές βάρδιες· βασισμένη στο SDNN· τι σας κούρασε περισσότερο σήμερα, μια προπόνηση 45 λεπτών με −18· η πρωινή σύνοψη δωρεάν· το Vela Pro ως εφάπαξ αγορά· επεξεργασία στη συσκευή και χωρίς διακομιστές του Vela· και πρόσκληση στη δημόσια beta στο TestFlight.",
   },
   "ja": {
@@ -3122,6 +3187,8 @@ _V2 = {
     "h2": "時計のためではなく、あなたのためのバッテリー。",
     "p": "Vela 2.0 にはバッテリーが加わりました。充電されるのは眠っている間だけで、ストレス、活動量、ワークアウトで減っていきます。基準になるのは、あなた自身の HRV ベースラインです。12月の公開に先立ち、TestFlight でパブリックベータを公開中です。",
     "cta": "TestFlight でベータに参加",
+    "zoom": "画像をタップすると拡大表示されます",
+    "close": "閉じる",
     "alt": "Vela 2.0 の概要：1日のカーブとともに 78 を示すバッテリー、充電は睡眠中だけ、昼寝や夜勤も対象、SDNN に基づく計算、今日いちばん消耗した原因（45分のワークアウトで −18）、無料の朝のスナップショット、買い切りの Vela Pro、デバイス上での処理と Vela のサーバーなし、そして TestFlight のパブリックベータへの招待。",
   },
 }
@@ -3133,7 +3200,7 @@ for _code, _v in _V2.items():
     _cl["status_beta"] = _v["status_beta"]
     _cl["beta_note"] = _v["beta_note"].format(link=_V2_LINK, end="</a>")
     _cl["entries"].insert(0, {"version": "2.0.0", "date": _v["date"], "status": "beta", "changes": _v["changes"]})
-    L[_code]["landing"]["v2"] = {k: _v[k] for k in ("eyebrow", "h2", "p", "cta", "alt")}
+    L[_code]["landing"]["v2"] = {k: _v[k] for k in ("eyebrow", "h2", "p", "cta", "alt", "zoom", "close")}
 
 # ------------------------------------------------------------ generation
 
