@@ -122,6 +122,21 @@
     white-space:nowrap;
   }
   .nav-cta:hover{ background:var(--teal); color:var(--bg-deep); }
+  .beta-cta{
+    display:inline-block;
+    margin-top:28px;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:12px 22px;
+    border-radius:100px;
+    text-decoration:none;
+    background:var(--teal);
+    color:var(--bg-deep);
+    transition:opacity .18s ease;
+  }
+  .beta-cta:hover{ opacity:0.85; }
+  .v2-showcase{ max-width:960px; margin:0 auto; }
+  .v2-showcase img{ border-radius:18px; }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -389,6 +404,22 @@
         <div class="wave-readout">
           <span>bruit de population</span>
           <span><b>votre référence</b> se stabilise</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="v2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Nouveau dans Vela 2.0 · Bêta publique</p>
+        <h2>Une batterie pour vous, pas pour votre montre.</h2>
+        <p>Vela 2.0 ajoute la Batterie : elle ne se recharge que pendant votre sommeil et se vide avec le stress, l'activité et les entraînements, mesurée par rapport à votre propre référence de VFC. Elle est déjà en bêta publique sur TestFlight, avant la sortie de décembre.</p>
+        <a class="beta-cta" href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">Rejoindre la bêta sur TestFlight</a>
+      </div>
+      <div class="watch-showcase v2-showcase">
+        <div class="shot-card">
+          <img src="/assets/vela-2-beta.png" alt="Aperçu de Vela 2.0 : la Batterie à 78 avec la courbe de la journée ; seul le sommeil la recharge ; les siestes et les postes de nuit comptent ; basée sur le SDNN ; ce qui vous a le plus fatigué aujourd'hui, un entraînement de 45 minutes à −18 ; le résumé du matin gratuit ; Vela Pro en achat unique ; traitement sur l'appareil et aucun serveur Vela ; et une invitation à rejoindre la bêta publique sur TestFlight." loading="lazy">
         </div>
       </div>
     </div>

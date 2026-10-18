@@ -122,6 +122,21 @@
     white-space:nowrap;
   }
   .nav-cta:hover{ background:var(--teal); color:var(--bg-deep); }
+  .beta-cta{
+    display:inline-block;
+    margin-top:28px;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:12px 22px;
+    border-radius:100px;
+    text-decoration:none;
+    background:var(--teal);
+    color:var(--bg-deep);
+    transition:opacity .18s ease;
+  }
+  .beta-cta:hover{ opacity:0.85; }
+  .v2-showcase{ max-width:960px; margin:0 auto; }
+  .v2-showcase img{ border-radius:18px; }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -389,6 +404,22 @@
         <div class="wave-readout">
           <span>集団のノイズ</span>
           <span><b>あなたのベースライン</b>が定まる</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="v2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Vela 2.0 の新機能 · パブリックベータ</p>
+        <h2>時計のためではなく、あなたのためのバッテリー。</h2>
+        <p>Vela 2.0 にはバッテリーが加わりました。充電されるのは眠っている間だけで、ストレス、活動量、ワークアウトで減っていきます。基準になるのは、あなた自身の HRV ベースラインです。12月の公開に先立ち、TestFlight でパブリックベータを公開中です。</p>
+        <a class="beta-cta" href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">TestFlight でベータに参加</a>
+      </div>
+      <div class="watch-showcase v2-showcase">
+        <div class="shot-card">
+          <img src="/assets/vela-2-beta.png" alt="Vela 2.0 の概要：1日のカーブとともに 78 を示すバッテリー、充電は睡眠中だけ、昼寝や夜勤も対象、SDNN に基づく計算、今日いちばん消耗した原因（45分のワークアウトで −18）、無料の朝のスナップショット、買い切りの Vela Pro、デバイス上での処理と Vela のサーバーなし、そして TestFlight のパブリックベータへの招待。" loading="lazy">
         </div>
       </div>
     </div>

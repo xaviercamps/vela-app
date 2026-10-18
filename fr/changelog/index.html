@@ -177,6 +177,8 @@
       border: 1px solid rgba(74,158,255,0.35); color: var(--primary-bright);
     }
     .badge.review { border-color: rgba(255,190,90,0.5); color: #FFCF8E; }
+    .badge.beta { border-color: rgba(61,207,207,0.5); color: #7EEAEA; }
+    .release p a { color: var(--primary-bright); }
   </style>
 </head>
 <body>
@@ -189,6 +191,22 @@
 
     <div class="divider"></div>
 
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>2.0.0</h2>
+          <span class="release-date">Prévue : 1er décembre 2026</span>
+        </div>
+        <span class="badge beta">Bêta publique · TestFlight</span>
+        <p>Cette version est en bêta publique et n'est pas encore sur l'App Store. <a href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">Rejoignez la bêta sur TestFlight</a> pour l'essayer et aider à calibrer la batterie.</p>
+        <ul>
+          <li>Batterie : une estimation de l'énergie qu'il vous reste aujourd'hui, calculée à partir de votre propre référence de VFC. Seul le sommeil la recharge, siestes et sommeil de jour après un poste de nuit compris.</li>
+          <li>Gratuit : votre charge après chaque sommeil, et ce qui l'explique : combien de temps vous avez dormi et votre VFC cette nuit-là.</li>
+          <li>Vela Pro, en achat unique et sans abonnement : la batterie en direct, la courbe de la journée, l'historique et ce qui vous a le plus fatigué aujourd'hui.</li>
+          <li>Trois nouvelles complications : la charge de la nuit pour tous, et avec Pro la batterie en direct et les barres horaires du jour.</li>
+        </ul>
+      </section>
+    </div>
     <div class="fade-in">
       <section class="release">
         <div class="release-head">

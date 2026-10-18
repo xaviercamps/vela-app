@@ -122,6 +122,21 @@
     white-space:nowrap;
   }
   .nav-cta:hover{ background:var(--teal); color:var(--bg-deep); }
+  .beta-cta{
+    display:inline-block;
+    margin-top:28px;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:12px 22px;
+    border-radius:100px;
+    text-decoration:none;
+    background:var(--teal);
+    color:var(--bg-deep);
+    transition:opacity .18s ease;
+  }
+  .beta-cta:hover{ opacity:0.85; }
+  .v2-showcase{ max-width:960px; margin:0 auto; }
+  .v2-showcase img{ border-radius:18px; }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -389,6 +404,22 @@
         <div class="wave-readout">
           <span>population noise</span>
           <span><b>your baseline</b> settles</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="v2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">New in Vela 2.0 · Public beta</p>
+        <h2>A battery for you, not for your watch.</h2>
+        <p>Vela 2.0 adds Battery: it charges only while you sleep and drains with stress, activity and workouts, measured against your own HRV baseline. It's in public beta on TestFlight now, ahead of the December release.</p>
+        <a class="beta-cta" href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">Join the beta on TestFlight</a>
+      </div>
+      <div class="watch-showcase v2-showcase">
+        <div class="shot-card">
+          <img src="/assets/vela-2-beta.png" alt="Vela 2.0 overview: Battery at 78 with the day's curve; only sleep recharges it; naps and night shifts count; based on SDNN; what drained you most today, a 45-minute workout at −18; a free morning snapshot; Vela Pro as a one-time purchase; on-device processing and no Vela servers; and an invitation to join the public beta on TestFlight." loading="lazy">
         </div>
       </div>
     </div>

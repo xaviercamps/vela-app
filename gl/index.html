@@ -122,6 +122,21 @@
     white-space:nowrap;
   }
   .nav-cta:hover{ background:var(--teal); color:var(--bg-deep); }
+  .beta-cta{
+    display:inline-block;
+    margin-top:28px;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:12px 22px;
+    border-radius:100px;
+    text-decoration:none;
+    background:var(--teal);
+    color:var(--bg-deep);
+    transition:opacity .18s ease;
+  }
+  .beta-cta:hover{ opacity:0.85; }
+  .v2-showcase{ max-width:960px; margin:0 auto; }
+  .v2-showcase img{ border-radius:18px; }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -389,6 +404,22 @@
         <div class="wave-readout">
           <span>ruído de poboación</span>
           <span><b>a túa liña base</b> aséntase</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="v2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Novo en Vela 2.0 · Beta pública</p>
+        <h2>Unha batería para ti, non para o teu reloxo.</h2>
+        <p>Vela 2.0 engade a Batería: só se carga mentres dormes e gástase co estrés, a actividade e os adestramentos, medida contra a túa propia liña base de HRV. Xa está en beta pública en TestFlight, antes do lanzamento de decembro.</p>
+        <a class="beta-cta" href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">Únete á beta en TestFlight</a>
+      </div>
+      <div class="watch-showcase v2-showcase">
+        <div class="shot-card">
+          <img src="/assets/vela-2-beta.png" alt="Resumo de Vela 2.0: a Batería a 78 coa curva do día; só se recarga durmindo; contan as sestas e as quendas de noite; baseada en SDNN; o que máis che gastou hoxe, un adestramento de 45 minutos con −18; resumo da mañá de balde; Vela Pro como compra única; procesamento no dispositivo e sen servidores de Vela; e invitación á beta pública en TestFlight." loading="lazy">
         </div>
       </div>
     </div>

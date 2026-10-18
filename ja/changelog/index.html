@@ -177,6 +177,8 @@
       border: 1px solid rgba(74,158,255,0.35); color: var(--primary-bright);
     }
     .badge.review { border-color: rgba(255,190,90,0.5); color: #FFCF8E; }
+    .badge.beta { border-color: rgba(61,207,207,0.5); color: #7EEAEA; }
+    .release p a { color: var(--primary-bright); }
   </style>
 </head>
 <body>
@@ -189,6 +191,22 @@
 
     <div class="divider"></div>
 
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>2.0.0</h2>
+          <span class="release-date">公開予定：2026年12月1日</span>
+        </div>
+        <span class="badge beta">パブリックベータ · TestFlight</span>
+        <p>このバージョンはパブリックベータ中で、まだ App Store では配信されていません。<a href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">TestFlight でベータに参加</a>して、バッテリーの調整にご協力ください。</p>
+        <ul>
+          <li>バッテリー：あなた自身の HRV ベースラインをもとに、今日残っているエネルギーを推定します。充電されるのは睡眠中だけで、昼寝や夜勤明けの日中の睡眠も含みます。</li>
+          <li>無料：睡眠ごとの充電量と、その内訳（睡眠時間とその夜の HRV）を表示します。</li>
+          <li>Vela Pro は買い切りで、サブスクリプションはありません。リアルタイムのバッテリー、1日のカーブ、履歴、今日いちばん消耗した原因を表示します。</li>
+          <li>3つの新しいコンプリケーション：夜間の充電はすべての方に、リアルタイムのバッテリーと今日の時間別バーは Pro で。</li>
+        </ul>
+      </section>
+    </div>
     <div class="fade-in">
       <section class="release">
         <div class="release-head">
