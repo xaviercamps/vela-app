@@ -381,6 +381,8 @@ CHANGELOG_CSS = SUB_CSS + """    .release { margin-bottom: 2.75rem; }
       border: 1px solid rgba(74,158,255,0.35); color: var(--primary-bright);
     }
     .badge.review { border-color: rgba(255,190,90,0.5); color: #FFCF8E; }
+    .badge.beta { border-color: rgba(61,207,207,0.5); color: #7EEAEA; }
+    .release p a { color: var(--primary-bright); }
 """
 
 LANDING_CSS = """  :root{
@@ -495,6 +497,42 @@ LANDING_CSS = """  :root{
     white-space:nowrap;
   }
   .nav-cta:hover{ background:var(--teal); color:var(--bg-deep); }
+  .beta-cta{
+    display:inline-block;
+    margin-top:28px;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:12px 22px;
+    border-radius:100px;
+    text-decoration:none;
+    background:var(--teal);
+    color:var(--bg-deep);
+    transition:opacity .18s ease;
+  }
+  .beta-cta:hover{ opacity:0.85; }
+  .v2-showcase{ max-width:960px; margin:0 auto; }
+  .v2-showcase img{ border-radius:18px; }
+  .v2-zoom{ cursor:zoom-in; }
+  .v2-zoom:focus-visible{ outline:2px solid var(--teal); outline-offset:4px; border-radius:18px; }
+  .v2-hint{ margin-top:12px; text-align:center; font-size:13px; color:var(--text-3); }
+  .v2-lightbox{
+    border:0; padding:0; margin:0; width:100vw; height:100vh; max-width:none; max-height:none;
+    background:rgba(6,13,20,0.96); color:var(--text-1);
+  }
+  .v2-lightbox::backdrop{ background:rgba(6,13,20,0.96); }
+  .v2-lightbox-scroll{ width:100%; height:100%; overflow:auto; display:flex; align-items:center; cursor:zoom-out; }
+  .v2-lightbox-scroll img{ display:block; margin:auto; width:min(96vw, 1800px); height:auto; border-radius:12px; }
+  @media (max-width:700px){
+    /* The overview's small print needs real pixels on a phone: scroll it sideways. */
+    .v2-lightbox-scroll img{ width:1400px; max-width:none; margin:24px; }
+  }
+  .v2-close{
+    position:fixed; top:16px; right:16px; z-index:1;
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--hairline); background:rgba(6,13,20,0.8); color:var(--text-1);
+    font-size:26px; line-height:1; cursor:pointer;
+  }
+  .v2-close:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -910,8 +948,15 @@ def render_changelog(code, t):
     c = t["changelog"]
     blocks = []
     for e in c["entries"]:
-        badge = f'\n        <span class="badge review">{c["status_review"]}</span>' if e.get("status") == "review" else ""
-        note = f'\n        <p>{c["unreleased_note"]}</p>' if e.get("status") == "review" else ""
+        status = e.get("status")
+        if status == "review":
+            badge = f'\n        <span class="badge review">{c["status_review"]}</span>'
+            note = f'\n        <p>{c["unreleased_note"]}</p>'
+        elif status == "beta":
+            badge = f'\n        <span class="badge beta">{c["status_beta"]}</span>'
+            note = f'\n        <p>{c["beta_note"]}</p>'
+        else:
+            badge = note = ""
         changes = "\n".join(f"          <li>{x}</li>" for x in e["changes"])
         blocks.append(f"""    <div class="fade-in">
       <section class="release">
@@ -945,6 +990,7 @@ def render_changelog(code, t):
 
 def render_landing(code, t):
     L = t["landing"]
+    V = L["v2"]
     principles = "\n".join(
         f'''        <div class="principle">
           <span class="tag">{tag}</span>
@@ -997,6 +1043,29 @@ def render_landing(code, t):
           <span>{L['wave_right_html']}</span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="v2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">{V['eyebrow']}</p>
+        <h2>{V['h2']}</h2>
+        <p>{V['p']}</p>
+        <a class="beta-cta" href="{TESTFLIGHT_URL}" target="_blank" rel="noopener">{V['cta']}</a>
+      </div>
+      <div class="watch-showcase v2-showcase">
+        <a class="shot-card v2-zoom" href="/assets/{V2_IMAGE}" aria-haspopup="dialog">
+          <img src="/assets/{V2_IMAGE}" alt="{V['alt']}" loading="lazy">
+        </a>
+        <p class="v2-hint">{V['zoom']}</p>
+      </div>
+      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="{V['h2']}">
+        <button class="v2-close" type="button" aria-label="{V['close']}">×</button>
+        <div class="v2-lightbox-scroll">
+          <img src="/assets/{V2_IMAGE}" alt="{V['alt']}">
+        </div>
+      </dialog>
     </div>
   </section>
 
@@ -1117,6 +1186,21 @@ def render_landing(code, t):
     {lang_row('landing', code, t['lang_label'])}
   </div>
 </footer>
+
+<script>
+(function(){{
+  var zoom = document.querySelector('.v2-zoom');
+  var box = document.getElementById('v2-lightbox');
+  if(!zoom || !box || typeof box.showModal !== 'function') return;  // no dialog support: the link opens the image
+  zoom.addEventListener('click', function(e){{ e.preventDefault(); box.showModal(); }});
+  box.querySelector('.v2-close').addEventListener('click', function(){{ box.close(); }});
+  box.addEventListener('click', function(e){{
+    // On a phone the image is scrolled sideways, so only a tap off the image closes.
+    if(e.target === box || e.target.classList.contains('v2-lightbox-scroll') || window.innerWidth > 700) box.close();
+  }});
+  box.addEventListener('close', function(){{ zoom.focus(); }});
+}})();
+</script>
 
 <script>
 (function(){{
@@ -2408,8 +2492,9 @@ L["ja"] = {
 
 # ---------------------------------------------------------------- changelog
 # Public changelog. Version history is derived from the app repo's version tags
-# (1.0.0 … 1.2.3). 1.3.0 is not yet released — it is in App Store review, so it
-# carries a "review" status and shows as not-yet-available for transparency.
+# (1.0.0 … 1.3.1). A build in App Store review carries a "review" status and a build
+# in public beta a "beta" status (see the Vela 2.0 block below); both show as
+# not-yet-available for transparency.
 
 _FOOTER_CHANGELOG = {
   "es": "Novedades", "en": "Changelog", "ca": "Novetats", "eu": "Berritasunak",
@@ -2425,7 +2510,10 @@ CHANGELOG["en"] = {
   "status_review": "In review · App Store",
   "unreleased_note": "This build is with Apple for review and can't be downloaded yet.",
   "entries": [
-    {"version": "1.3.0", "date": "Expected 14 September 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 September 2026", "status": "released", "changes": [
+      "Fixed a bug where updating from an older version could temporarily leave the app without your data until it finished resyncing."]},
+    {"version": "1.3.0", "date": "14 September 2026", "status": "released", "changes": [
+      "New ring-style complication showing your stress score on your watch face.",
       "Three new languages — Czech, Greek and Japanese. Vela now speaks 12.",
       "Fixed repeated notifications when Vela catches up on older readings.",
       "Notifications can be turned off inside the app even when the system permission is on.",
@@ -2461,7 +2549,10 @@ CHANGELOG["es"] = {
   "status_review": "En revisión · App Store",
   "unreleased_note": "Esta versión está en revisión por Apple y todavía no se puede descargar.",
   "entries": [
-    {"version": "1.3.0", "date": "Prevista: 14 de septiembre de 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 de septiembre de 2026", "status": "released", "changes": [
+      "Corregido un fallo por el que actualizar desde una versión anterior podía dejar la app sin tus datos temporalmente hasta que terminaba de sincronizar."]},
+    {"version": "1.3.0", "date": "14 de septiembre de 2026", "status": "released", "changes": [
+      "Nueva complicación circular con tu puntuación de estrés en la esfera del reloj.",
       "Tres idiomas nuevos: checo, griego y japonés. Vela ya está en 12 idiomas.",
       "Corregidas las notificaciones repetidas cuando Vela recupera lecturas antiguas.",
       "Las notificaciones se pueden desactivar dentro de la app aunque el permiso del sistema esté activado.",
@@ -2497,7 +2588,10 @@ CHANGELOG["ca"] = {
   "status_review": "En revisió · App Store",
   "unreleased_note": "Aquesta versió està en revisió per Apple i encara no es pot descarregar.",
   "entries": [
-    {"version": "1.3.0", "date": "Prevista: 14 de setembre de 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 de setembre de 2026", "status": "released", "changes": [
+      "Corregit un error pel qual actualitzar des d'una versió anterior podia deixar l'app sense les teves dades temporalment fins que acabava de sincronitzar-se."]},
+    {"version": "1.3.0", "date": "14 de setembre de 2026", "status": "released", "changes": [
+      "Nova complicació circular amb la teva puntuació d'estrès a l'esfera del rellotge.",
       "Tres idiomes nous: txec, grec i japonès. Vela ja està en 12 idiomes.",
       "Corregides les notificacions repetides quan Vela recupera lectures antigues.",
       "Les notificacions es poden desactivar dins de l'app encara que el permís del sistema estigui activat.",
@@ -2533,7 +2627,10 @@ CHANGELOG["eu"] = {
   "status_review": "Berrikuspenean · App Store",
   "unreleased_note": "Bertsio hau Apple-k berrikusten ari da eta oraindik ezin da deskargatu.",
   "entries": [
-    {"version": "1.3.0", "date": "Aurreikusia: 2026ko irailaren 14a", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "2026ko irailaren 15a", "status": "released", "changes": [
+      "Konpondu da akats bat: bertsio zaharrago batetik eguneratzean, aplikazioa aldi baterako datu gabe gera zitekeen berriro sinkronizatu arte."]},
+    {"version": "1.3.0", "date": "2026ko irailaren 14a", "status": "released", "changes": [
+      "Erlojuaren aurpegian zure estres-puntuazioa erakusten duen konplikazio biribil berria.",
       "Hiru hizkuntza berri: txekiera, greziera eta japoniera. Vela 12 hizkuntzatan dago orain.",
       "Konpondu dira jakinarazpen errepikatuak Velak irakurketa zaharrak berreskuratzean.",
       "Jakinarazpenak aplikaziotik desaktiba daitezke sistemaren baimena aktibatuta egon arren.",
@@ -2569,7 +2666,10 @@ CHANGELOG["gl"] = {
   "status_review": "En revisión · App Store",
   "unreleased_note": "Esta versión está en revisión por Apple e aínda non se pode descargar.",
   "entries": [
-    {"version": "1.3.0", "date": "Prevista: 14 de setembro de 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 de setembro de 2026", "status": "released", "changes": [
+      "Corrixido un erro polo que actualizar desde unha versión anterior podía deixar a app sen os teus datos temporalmente ata que remataba de sincronizar."]},
+    {"version": "1.3.0", "date": "14 de setembro de 2026", "status": "released", "changes": [
+      "Nova complicación circular coa túa puntuación de estrés na esfera do reloxo.",
       "Tres idiomas novos: checo, grego e xaponés. Vela xa está en 12 idiomas.",
       "Corrixidas as notificacións repetidas cando Vela recupera lecturas antigas.",
       "As notificacións pódense desactivar dentro da app aínda que o permiso do sistema estea activado.",
@@ -2605,7 +2705,10 @@ CHANGELOG["fr"] = {
   "status_review": "En cours d'examen · App Store",
   "unreleased_note": "Cette version est en cours d'examen par Apple et ne peut pas encore être téléchargée.",
   "entries": [
-    {"version": "1.3.0", "date": "Prévue : 14 septembre 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 septembre 2026", "status": "released", "changes": [
+      "Correction d'un bug où la mise à jour depuis une version antérieure pouvait temporairement priver l'app de vos données jusqu'à la fin de la resynchronisation."]},
+    {"version": "1.3.0", "date": "14 septembre 2026", "status": "released", "changes": [
+      "Nouvelle complication circulaire affichant votre score de stress sur le cadran de la montre.",
       "Trois nouvelles langues : tchèque, grec et japonais. Vela parle désormais 12 langues.",
       "Correction des notifications répétées quand Vela rattrape d'anciennes mesures.",
       "Les notifications peuvent être désactivées dans l'app même si l'autorisation système est active.",
@@ -2641,7 +2744,10 @@ CHANGELOG["de"] = {
   "status_review": "In Prüfung · App Store",
   "unreleased_note": "Diese Version wird gerade von Apple geprüft und kann noch nicht geladen werden.",
   "entries": [
-    {"version": "1.3.0", "date": "Geplant: 14. September 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15. September 2026", "status": "released", "changes": [
+      "Ein Fehler behoben, durch den ein Update von einer älteren Version die App vorübergehend ohne deine Daten zeigen konnte, bis die Synchronisierung abgeschlossen war."]},
+    {"version": "1.3.0", "date": "14. September 2026", "status": "released", "changes": [
+      "Neue runde Komplikation mit deinem Stresswert auf dem Zifferblatt.",
       "Drei neue Sprachen: Tschechisch, Griechisch und Japanisch. Vela spricht jetzt 12 Sprachen.",
       "Wiederholte Benachrichtigungen behoben, wenn Vela ältere Messwerte nachholt.",
       "Benachrichtigungen lassen sich in der App abschalten, auch wenn die Systemberechtigung aktiv ist.",
@@ -2677,7 +2783,10 @@ CHANGELOG["it"] = {
   "status_review": "In revisione · App Store",
   "unreleased_note": "Questa versione è in revisione da parte di Apple e non è ancora scaricabile.",
   "entries": [
-    {"version": "1.3.0", "date": "Prevista: 14 settembre 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 settembre 2026", "status": "released", "changes": [
+      "Corretto un bug per cui l'aggiornamento da una versione precedente poteva lasciare temporaneamente l'app senza i tuoi dati fino al termine della risincronizzazione."]},
+    {"version": "1.3.0", "date": "14 settembre 2026", "status": "released", "changes": [
+      "Nuova complicazione circolare con il tuo punteggio di stress sul quadrante.",
       "Tre nuove lingue: ceco, greco e giapponese. Vela ora parla 12 lingue.",
       "Corrette le notifiche ripetute quando Vela recupera letture più vecchie.",
       "Le notifiche si possono disattivare dall'app anche se il permesso di sistema è attivo.",
@@ -2713,7 +2822,10 @@ CHANGELOG["pt"] = {
   "status_review": "Em revisão · App Store",
   "unreleased_note": "Esta versão está em revisão pela Apple e ainda não pode ser transferida.",
   "entries": [
-    {"version": "1.3.0", "date": "Prevista: 14 de setembro de 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 de setembro de 2026", "status": "released", "changes": [
+      "Corrigido um erro em que atualizar a partir de uma versão anterior podia deixar a app temporariamente sem os teus dados até terminar de sincronizar."]},
+    {"version": "1.3.0", "date": "14 de setembro de 2026", "status": "released", "changes": [
+      "Nova complicação circular com a tua pontuação de stress no mostrador do relógio.",
       "Três novos idiomas: checo, grego e japonês. A Vela já está em 12 idiomas.",
       "Corrigidas as notificações repetidas quando a Vela recupera leituras antigas.",
       "As notificações podem ser desativadas dentro da app mesmo com a permissão do sistema ativa.",
@@ -2749,7 +2861,10 @@ CHANGELOG["cs"] = {
   "status_review": "V kontrole · App Store",
   "unreleased_note": "Tato verze je v kontrole u Applu a zatím ji nelze stáhnout.",
   "entries": [
-    {"version": "1.3.0", "date": "Očekáváno: 14. září 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15. září 2026", "status": "released", "changes": [
+      "Opravena chyba, kvůli které mohla aktualizace ze starší verze dočasně ponechat aplikaci bez tvých dat, dokud se znovu nesynchronizovala."]},
+    {"version": "1.3.0", "date": "14. září 2026", "status": "released", "changes": [
+      "Nová kruhová komplikace se skóre stresu na ciferníku hodinek.",
       "Tři nové jazyky: čeština, řečtina a japonština. Vela teď mluví 12 jazyky.",
       "Opraveny opakované notifikace, když Vela dohání starší měření.",
       "Notifikace lze vypnout přímo v aplikaci, i když je systémové oprávnění zapnuté.",
@@ -2785,7 +2900,10 @@ CHANGELOG["el"] = {
   "status_review": "Υπό έλεγχο · App Store",
   "unreleased_note": "Αυτή η έκδοση βρίσκεται υπό έλεγχο από την Apple και δεν είναι ακόμη διαθέσιμη για λήψη.",
   "entries": [
-    {"version": "1.3.0", "date": "Αναμένεται: 14 Σεπτεμβρίου 2026", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "15 Σεπτεμβρίου 2026", "status": "released", "changes": [
+      "Διορθώθηκε ένα σφάλμα όπου η ενημέρωση από παλαιότερη έκδοση μπορούσε να αφήσει προσωρινά την εφαρμογή χωρίς τα δεδομένα σας μέχρι να ολοκληρωθεί ο επανασυγχρονισμός."]},
+    {"version": "1.3.0", "date": "14 Σεπτεμβρίου 2026", "status": "released", "changes": [
+      "Νέα κυκλική επιπλοκή (complication) με τη βαθμολογία άγχους σας στο καντράν του ρολογιού.",
       "Τρεις νέες γλώσσες: τσέχικα, ελληνικά και ιαπωνικά. Το Vela μιλά πλέον 12 γλώσσες.",
       "Διορθώθηκαν οι επαναλαμβανόμενες ειδοποιήσεις όταν το Vela καλύπτει παλαιότερες μετρήσεις.",
       "Οι ειδοποιήσεις μπορούν να απενεργοποιηθούν μέσα στην εφαρμογή ακόμη κι αν η άδεια του συστήματος είναι ενεργή.",
@@ -2821,7 +2939,10 @@ CHANGELOG["ja"] = {
   "status_review": "審査中 · App Store",
   "unreleased_note": "このバージョンは現在 Apple の審査中で、まだダウンロードできません。",
   "entries": [
-    {"version": "1.3.0", "date": "公開予定：2026年9月14日", "status": "review", "changes": [
+    {"version": "1.3.1", "date": "2026年9月15日", "status": "released", "changes": [
+      "古いバージョンからのアップデート時に、再同期が終わるまで一時的にデータが表示されなくなる不具合を修正しました。"]},
+    {"version": "1.3.0", "date": "2026年9月14日", "status": "released", "changes": [
+      "文字盤に表示するストレススコアの新しい円形コンプリケーションを追加。",
       "3つの新しい言語（チェコ語、ギリシャ語、日本語）を追加。Vela は12言語に対応しました。",
       "過去の測定値を取り込む際に通知が繰り返される問題を修正。",
       "システムの許可がオンでも、アプリ内で通知をオフにできるようになりました。",
@@ -2854,6 +2975,232 @@ CHANGELOG["ja"] = {
 for _code, _cl in CHANGELOG.items():
     L[_code]["changelog"] = _cl
     L[_code]["landing"]["footer_changelog"] = _FOOTER_CHANGELOG[_code]
+
+# ---------------------------------------------------------------- vela 2.0 (public beta)
+# Vela 2.0 is in public beta on TestFlight ahead of the 1 December 2026 release. Its
+# changelog entry carries a "beta" status (badge + join link) and the landing shows a
+# "New in 2.0" section right after the hero. On release: set the entry's status to
+# "released", give it the real date and drop the landing section or point it at the
+# App Store.
+
+TESTFLIGHT_URL = "https://testflight.apple.com/join/pJ3esgGy"
+V2_IMAGE = "vela-2-beta.png"
+
+_V2 = {
+  "en": {
+    "date": "Expected 1 December 2026",
+    "changes": [
+      "Battery: an estimate of the energy you have left today, built on your own HRV baseline. Only sleep charges it, naps and daytime sleep after a night shift included.",
+      "Free: your charge after each sleep, and what went into it: how long you slept and your HRV that night.",
+      "Vela Pro, a one-time purchase with no subscription: the live battery, the day's curve, history, and what drained you most today.",
+      "Three new complications: last night's charge for everyone, plus the live battery and today's hourly bars with Pro."],
+    "status_beta": "Public beta · TestFlight",
+    "beta_note": "This version is in public beta and not on the App Store yet. {link}Join the beta on TestFlight{end} to try it and help calibrate the battery.",
+    "eyebrow": "New in Vela 2.0 · Public beta",
+    "h2": "A battery for you, not for your watch.",
+    "p": "Vela 2.0 adds Battery: it charges only while you sleep and drains with stress, activity and workouts, measured against your own HRV baseline. It's in public beta on TestFlight now, ahead of the December release.",
+    "cta": "Join the beta on TestFlight",
+    "zoom": "Tap the image to see it full size",
+    "close": "Close",
+    "alt": "Vela 2.0 overview: Battery at 78 with the day's curve; only sleep recharges it; naps and night shifts count; based on SDNN; what drained you most today, a 45-minute workout at −18; a free morning snapshot; Vela Pro as a one-time purchase; on-device processing and no Vela servers; and an invitation to join the public beta on TestFlight.",
+  },
+  "es": {
+    "date": "Prevista: 1 de diciembre de 2026",
+    "changes": [
+      "Batería: una estimación de la energía que te queda hoy, construida sobre tu propia línea base de HRV. Solo la carga el sueño, incluidas las siestas y el sueño de día tras un turno de noche.",
+      "Gratis: tu carga después de cada sueño y de dónde sale: cuánto dormiste y tu HRV de esa noche.",
+      "Vela Pro, compra única y sin suscripción: la batería en directo, la curva del día, el histórico y lo que más te ha gastado hoy.",
+      "Tres complicaciones nuevas: la carga de la noche para todos, y con Pro la batería en directo y las barras por hora de hoy."],
+    "status_beta": "Beta pública · TestFlight",
+    "beta_note": "Esta versión está en beta pública y todavía no está en la App Store. {link}Únete a la beta en TestFlight{end} para probarla y ayudar a calibrar la batería.",
+    "eyebrow": "Nuevo en Vela 2.0 · Beta pública",
+    "h2": "Una batería para ti, no para tu reloj.",
+    "p": "Vela 2.0 añade la Batería: se carga solo mientras duermes y se gasta con el estrés, la actividad y los entrenos, medida contra tu propia línea base de HRV. Ya está en beta pública en TestFlight, antes del lanzamiento de diciembre.",
+    "cta": "Únete a la beta en TestFlight",
+    "zoom": "Toca la imagen para verla a tamaño completo",
+    "close": "Cerrar",
+    "alt": "Resumen de Vela 2.0: la Batería a 78 con la curva del día; solo se recarga durmiendo; cuentan las siestas y los turnos de noche; basada en SDNN; lo que más te ha gastado hoy, un entreno de 45 minutos con −18; resumen de la mañana gratis; Vela Pro como compra única; procesamiento en el dispositivo y sin servidores de Vela; e invitación a la beta pública en TestFlight.",
+  },
+  "ca": {
+    "date": "Prevista: 1 de desembre de 2026",
+    "changes": [
+      "Bateria: una estimació de l'energia que et queda avui, construïda sobre la teva pròpia línia base d'HRV. Només la carrega el son, incloses les migdiades i el son de dia després d'un torn de nit.",
+      "Gratis: la teva càrrega després de cada son i d'on surt: quant vas dormir i la teva HRV d'aquella nit.",
+      "Vela Pro, compra única i sense subscripció: la bateria en directe, la corba del dia, l'historial i el que més t'ha gastat avui.",
+      "Tres complicacions noves: la càrrega de la nit per a tothom, i amb Pro la bateria en directe i les barres per hores d'avui."],
+    "status_beta": "Beta pública · TestFlight",
+    "beta_note": "Aquesta versió és en beta pública i encara no és a l'App Store. {link}Uneix-te a la beta a TestFlight{end} per provar-la i ajudar a calibrar la bateria.",
+    "eyebrow": "Novetat a Vela 2.0 · Beta pública",
+    "h2": "Una bateria per a tu, no per al teu rellotge.",
+    "p": "Vela 2.0 afegeix la Bateria: només es carrega mentre dorms i es gasta amb l'estrès, l'activitat i els entrenaments, mesurada contra la teva pròpia línia base d'HRV. Ja és en beta pública a TestFlight, abans del llançament de desembre.",
+    "cta": "Uneix-te a la beta a TestFlight",
+    "zoom": "Toca la imatge per veure-la a mida completa",
+    "close": "Tanca",
+    "alt": "Resum de Vela 2.0: la Bateria a 78 amb la corba del dia; només es recarrega dormint; compten les migdiades i els torns de nit; basada en SDNN; el que més t'ha gastat avui, un entrenament de 45 minuts amb −18; resum del matí gratis; Vela Pro com a compra única; processament al dispositiu i sense servidors de Vela; i invitació a la beta pública a TestFlight.",
+  },
+  "eu": {
+    "date": "Aurreikusia: 2026ko abenduaren 1a",
+    "changes": [
+      "Bateria: gaur geratzen zaizun energiaren estimazioa, zure HRV oinarri-lerro pertsonalaren gainean eraikia. Loak bakarrik kargatzen du, siestak eta gaueko txandaren ondorengo eguneko loa barne.",
+      "Doan: lo bakoitzaren ondorengo karga eta nondik datorren: zenbat lo egin zenuen eta gau horretako zure HRV.",
+      "Vela Pro, behin ordaintzekoa eta harpidetzarik gabe: bateria zuzenean, eguneko kurba, historia eta gaur gehien gastatu dizuna.",
+      "Hiru konplikazio berri: gaueko karga guztientzat, eta Pro-rekin bateria zuzenean eta gaurko orduko barrak."],
+    "status_beta": "Beta publikoa · TestFlight",
+    "beta_note": "Bertsio hau beta publikoan dago eta oraindik ez dago App Store-n. {link}Batu beta-ra TestFlight-en{end} probatzeko eta bateria kalibratzen laguntzeko.",
+    "eyebrow": "Berria Vela 2.0-n · Beta publikoa",
+    "h2": "Zuretzako bateria bat, ez zure erlojuarentzat.",
+    "p": "Vela 2.0-k Bateria gehitzen du: lo egiten duzun bitartean bakarrik kargatzen da eta estresarekin, jarduerarekin eta entrenamenduekin gastatzen da, zure HRV oinarri-lerroaren arabera neurtuta. Beta publikoan dago dagoeneko TestFlight-en, abenduko argitalpenaren aurretik.",
+    "cta": "Batu beta-ra TestFlight-en",
+    "zoom": "Ukitu irudia tamaina osoan ikusteko",
+    "close": "Itxi",
+    "alt": "Vela 2.0-ren laburpena: Bateria 78an eguneko kurbarekin; loak bakarrik kargatzen du; siestak eta gaueko txandak kontatzen dira; SDNN-n oinarritua; gaur gehien gastatu dizuna, 45 minutuko entrenamendua −18rekin; goizeko laburpena doan; Vela Pro behin ordaintzekoa; gailuan prozesatua eta Velaren zerbitzaririk gabe; eta TestFlight-eko beta publikora batzeko gonbidapena.",
+  },
+  "gl": {
+    "date": "Prevista: 1 de decembro de 2026",
+    "changes": [
+      "Batería: unha estimación da enerxía que che queda hoxe, construída sobre a túa propia liña base de HRV. Só a carga o sono, incluídas as sestas e o sono de día despois dunha quenda de noite.",
+      "De balde: a túa carga despois de cada sono e de onde sae: canto durmiches e a túa HRV desa noite.",
+      "Vela Pro, compra única e sen subscrición: a batería en directo, a curva do día, o historial e o que máis che gastou hoxe.",
+      "Tres complicacións novas: a carga da noite para todos, e con Pro a batería en directo e as barras por hora de hoxe."],
+    "status_beta": "Beta pública · TestFlight",
+    "beta_note": "Esta versión está en beta pública e aínda non está na App Store. {link}Únete á beta en TestFlight{end} para probala e axudar a calibrar a batería.",
+    "eyebrow": "Novo en Vela 2.0 · Beta pública",
+    "h2": "Unha batería para ti, non para o teu reloxo.",
+    "p": "Vela 2.0 engade a Batería: só se carga mentres dormes e gástase co estrés, a actividade e os adestramentos, medida contra a túa propia liña base de HRV. Xa está en beta pública en TestFlight, antes do lanzamento de decembro.",
+    "cta": "Únete á beta en TestFlight",
+    "zoom": "Toca a imaxe para vela a tamaño completo",
+    "close": "Pechar",
+    "alt": "Resumo de Vela 2.0: a Batería a 78 coa curva do día; só se recarga durmindo; contan as sestas e as quendas de noite; baseada en SDNN; o que máis che gastou hoxe, un adestramento de 45 minutos con −18; resumo da mañá de balde; Vela Pro como compra única; procesamento no dispositivo e sen servidores de Vela; e invitación á beta pública en TestFlight.",
+  },
+  "fr": {
+    "date": "Prévue : 1er décembre 2026",
+    "changes": [
+      "Batterie : une estimation de l'énergie qu'il vous reste aujourd'hui, calculée à partir de votre propre référence de VFC. Seul le sommeil la recharge, siestes et sommeil de jour après un poste de nuit compris.",
+      "Gratuit : votre charge après chaque sommeil, et ce qui l'explique : combien de temps vous avez dormi et votre VFC cette nuit-là.",
+      "Vela Pro, en achat unique et sans abonnement : la batterie en direct, la courbe de la journée, l'historique et ce qui vous a le plus fatigué aujourd'hui.",
+      "Trois nouvelles complications : la charge de la nuit pour tous, et avec Pro la batterie en direct et les barres horaires du jour."],
+    "status_beta": "Bêta publique · TestFlight",
+    "beta_note": "Cette version est en bêta publique et n'est pas encore sur l'App Store. {link}Rejoignez la bêta sur TestFlight{end} pour l'essayer et aider à calibrer la batterie.",
+    "eyebrow": "Nouveau dans Vela 2.0 · Bêta publique",
+    "h2": "Une batterie pour vous, pas pour votre montre.",
+    "p": "Vela 2.0 ajoute la Batterie : elle ne se recharge que pendant votre sommeil et se vide avec le stress, l'activité et les entraînements, mesurée par rapport à votre propre référence de VFC. Elle est déjà en bêta publique sur TestFlight, avant la sortie de décembre.",
+    "cta": "Rejoindre la bêta sur TestFlight",
+    "zoom": "Touchez l'image pour l'afficher en grand",
+    "close": "Fermer",
+    "alt": "Aperçu de Vela 2.0 : la Batterie à 78 avec la courbe de la journée ; seul le sommeil la recharge ; les siestes et les postes de nuit comptent ; basée sur le SDNN ; ce qui vous a le plus fatigué aujourd'hui, un entraînement de 45 minutes à −18 ; le résumé du matin gratuit ; Vela Pro en achat unique ; traitement sur l'appareil et aucun serveur Vela ; et une invitation à rejoindre la bêta publique sur TestFlight.",
+  },
+  "de": {
+    "date": "Geplant: 1. Dezember 2026",
+    "changes": [
+      "Batterie: eine Schätzung, wie viel Energie dir heute noch bleibt, aufgebaut auf deiner eigenen HRV-Baseline. Nur Schlaf lädt sie auf, auch Nickerchen und Tagschlaf nach einer Nachtschicht.",
+      "Kostenlos: deine Ladung nach jedem Schlaf und woraus sie sich ergibt: wie lange du geschlafen hast und deine HRV in dieser Nacht.",
+      "Vela Pro, als Einmalkauf ohne Abo: die Live-Batterie, die Tageskurve, der Verlauf und was dich heute am meisten Energie gekostet hat.",
+      "Drei neue Komplikationen: die Ladung der Nacht für alle, dazu mit Pro die Live-Batterie und die Stundenbalken von heute."],
+    "status_beta": "Öffentliche Beta · TestFlight",
+    "beta_note": "Diese Version ist in der öffentlichen Beta und noch nicht im App Store. {link}Mach bei der Beta auf TestFlight mit{end}, um sie auszuprobieren und die Batterie mitzukalibrieren.",
+    "eyebrow": "Neu in Vela 2.0 · Öffentliche Beta",
+    "h2": "Eine Batterie für dich, nicht für deine Uhr.",
+    "p": "Vela 2.0 bringt die Batterie: Sie lädt sich nur im Schlaf auf und leert sich durch Stress, Aktivität und Trainings, gemessen an deiner eigenen HRV-Baseline. Schon jetzt gibt es sie als öffentliche Beta auf TestFlight, vor dem Start im Dezember.",
+    "cta": "Zur Beta auf TestFlight",
+    "zoom": "Tippe auf das Bild, um es in voller Größe zu sehen",
+    "close": "Schließen",
+    "alt": "Überblick über Vela 2.0: die Batterie bei 78 mit der Tageskurve; nur Schlaf lädt sie auf; Nickerchen und Nachtschichten zählen; auf Basis von SDNN; was dich heute am meisten Energie gekostet hat, ein 45-minütiges Training mit −18; der Morgen-Überblick kostenlos; Vela Pro als Einmalkauf; Verarbeitung auf dem Gerät und keine Vela-Server; und eine Einladung zur öffentlichen Beta auf TestFlight.",
+  },
+  "it": {
+    "date": "Prevista: 1 dicembre 2026",
+    "changes": [
+      "Batteria: una stima dell'energia che ti resta oggi, costruita sulla tua baseline di HRV. Solo il sonno la ricarica, compresi i pisolini e il sonno diurno dopo un turno di notte.",
+      "Gratis: la tua carica dopo ogni sonno e da cosa dipende: quanto hai dormito e la tua HRV di quella notte.",
+      "Vela Pro, acquisto unico e senza abbonamento: la batteria in tempo reale, la curva della giornata, lo storico e cosa ti ha consumato di più oggi.",
+      "Tre nuove complicazioni: la carica della notte per tutti, e con Pro la batteria in tempo reale e le barre orarie di oggi."],
+    "status_beta": "Beta pubblica · TestFlight",
+    "beta_note": "Questa versione è in beta pubblica e non è ancora sull'App Store. {link}Unisciti alla beta su TestFlight{end} per provarla e aiutare a calibrare la batteria.",
+    "eyebrow": "Novità in Vela 2.0 · Beta pubblica",
+    "h2": "Una batteria per te, non per il tuo orologio.",
+    "p": "Vela 2.0 aggiunge la Batteria: si ricarica solo mentre dormi e si consuma con lo stress, l'attività e gli allenamenti, misurata rispetto alla tua baseline di HRV. È già in beta pubblica su TestFlight, prima del lancio di dicembre.",
+    "cta": "Unisciti alla beta su TestFlight",
+    "zoom": "Tocca l'immagine per vederla a grandezza intera",
+    "close": "Chiudi",
+    "alt": "Panoramica di Vela 2.0: la Batteria a 78 con la curva della giornata; solo il sonno la ricarica; contano i pisolini e i turni di notte; basata sull'SDNN; cosa ti ha consumato di più oggi, un allenamento di 45 minuti a −18; il riepilogo del mattino gratis; Vela Pro come acquisto unico; elaborazione sul dispositivo e nessun server Vela; e un invito alla beta pubblica su TestFlight.",
+  },
+  "pt": {
+    "date": "Prevista: 1 de dezembro de 2026",
+    "changes": [
+      "Bateria: uma estimativa da energia que lhe resta hoje, construída sobre a sua própria linha de base de HRV. Só o sono a carrega, incluindo as sestas e o sono de dia depois de um turno da noite.",
+      "Grátis: a sua carga depois de cada sono e de onde vem: quanto tempo dormiu e a sua HRV nessa noite.",
+      "Vela Pro, compra única e sem subscrição: a bateria em direto, a curva do dia, o histórico e o que mais lhe gastou energia hoje.",
+      "Três novas complicações: a carga da noite para todos e, com o Pro, a bateria em direto e as barras por hora de hoje."],
+    "status_beta": "Beta pública · TestFlight",
+    "beta_note": "Esta versão está em beta pública e ainda não está na App Store. {link}Junte-se à beta no TestFlight{end} para a experimentar e ajudar a calibrar a bateria.",
+    "eyebrow": "Novo no Vela 2.0 · Beta pública",
+    "h2": "Uma bateria para si, não para o seu relógio.",
+    "p": "O Vela 2.0 acrescenta a Bateria: só carrega enquanto dorme e gasta-se com o stress, a atividade e os treinos, medida face à sua própria linha de base de HRV. Já está em beta pública no TestFlight, antes do lançamento de dezembro.",
+    "cta": "Junte-se à beta no TestFlight",
+    "zoom": "Toque na imagem para a ver em tamanho real",
+    "close": "Fechar",
+    "alt": "Resumo do Vela 2.0: a Bateria a 78 com a curva do dia; só o sono a recarrega; as sestas e os turnos da noite contam; baseada no SDNN; o que mais lhe gastou energia hoje, um treino de 45 minutos com −18; o resumo da manhã grátis; Vela Pro como compra única; processamento no dispositivo e sem servidores do Vela; e um convite para a beta pública no TestFlight.",
+  },
+  "cs": {
+    "date": "Očekáváno: 1. prosince 2026",
+    "changes": [
+      "Baterie: odhad, kolik energie vám dnes zbývá, postavený na vaší vlastní základní linii HRV. Nabíjí ji jen spánek, včetně zdřímnutí a denního spánku po noční směně.",
+      "Zdarma: vaše nabití po každém spánku a z čeho vychází: jak dlouho jste spali a vaše HRV té noci.",
+      "Vela Pro, jednorázový nákup bez předplatného: baterie v reálném čase, křivka dne, historie a co vás dnes vyčerpalo nejvíc.",
+      "Tři nové komplikace: noční nabití pro všechny, s Pro navíc baterie v reálném čase a dnešní hodinové sloupce."],
+    "status_beta": "Veřejná beta · TestFlight",
+    "beta_note": "Tato verze je ve veřejné betě a zatím není v App Storu. {link}Připojte se k betě v TestFlightu{end}, vyzkoušejte ji a pomozte kalibrovat baterii.",
+    "eyebrow": "Novinka ve Vela 2.0 · Veřejná beta",
+    "h2": "Baterie pro vás, ne pro vaše hodinky.",
+    "p": "Vela 2.0 přidává Baterii: nabíjí se jen ve spánku a vybíjí se stresem, aktivitou a tréninky, měřeno vůči vaší vlastní základní linii HRV. Už teď je ve veřejné betě v TestFlightu, před vydáním v prosinci.",
+    "cta": "Připojit se k betě v TestFlightu",
+    "zoom": "Klepnutím na obrázek ho zobrazíte v plné velikosti",
+    "close": "Zavřít",
+    "alt": "Přehled Vela 2.0: Baterie na 78 s křivkou dne; nabíjí ji jen spánek; počítají se zdřímnutí i noční směny; založeno na SDNN; co vás dnes vyčerpalo nejvíc, 45minutový trénink za −18; ranní přehled zdarma; Vela Pro jako jednorázový nákup; zpracování v zařízení a žádné servery Vely; a pozvánka do veřejné bety v TestFlightu.",
+  },
+  "el": {
+    "date": "Αναμένεται: 1 Δεκεμβρίου 2026",
+    "changes": [
+      "Μπαταρία: μια εκτίμηση της ενέργειας που σας απομένει σήμερα, με βάση το προσωπικό σας baseline HRV. Μόνο ο ύπνος τη φορτίζει, μαζί με τους υπνάκους και τον ημερήσιο ύπνο μετά από νυχτερινή βάρδια.",
+      "Δωρεάν: η φόρτισή σας μετά από κάθε ύπνο και από τι προκύπτει: πόσο κοιμηθήκατε και το HRV σας εκείνη τη νύχτα.",
+      "Vela Pro, εφάπαξ αγορά χωρίς συνδρομή: η μπαταρία σε πραγματικό χρόνο, η καμπύλη της ημέρας, το ιστορικό και τι σας κούρασε περισσότερο σήμερα.",
+      "Τρεις νέες επιπλοκές (complications): η φόρτιση της νύχτας για όλους, και με το Pro η μπαταρία σε πραγματικό χρόνο και οι ωριαίες μπάρες της ημέρας."],
+    "status_beta": "Δημόσια beta · TestFlight",
+    "beta_note": "Αυτή η έκδοση βρίσκεται σε δημόσια beta και δεν είναι ακόμη στο App Store. {link}Μπείτε στη beta στο TestFlight{end} για να τη δοκιμάσετε και να βοηθήσετε στη βαθμονόμηση της μπαταρίας.",
+    "eyebrow": "Νέο στο Vela 2.0 · Δημόσια beta",
+    "h2": "Μια μπαταρία για εσάς, όχι για το ρολόι σας.",
+    "p": "Το Vela 2.0 προσθέτει την Μπαταρία: φορτίζει μόνο όσο κοιμάστε και αδειάζει με το άγχος, τη δραστηριότητα και τις προπονήσεις, με μέτρο το δικό σας baseline HRV. Είναι ήδη σε δημόσια beta στο TestFlight, πριν από την κυκλοφορία του Δεκεμβρίου.",
+    "cta": "Μπείτε στη beta στο TestFlight",
+    "zoom": "Πατήστε την εικόνα για να τη δείτε σε πλήρες μέγεθος",
+    "close": "Κλείσιμο",
+    "alt": "Επισκόπηση του Vela 2.0: η Μπαταρία στο 78 με την καμπύλη της ημέρας· μόνο ο ύπνος τη φορτίζει· μετράνε οι υπνάκοι και οι νυχτερινές βάρδιες· βασισμένη στο SDNN· τι σας κούρασε περισσότερο σήμερα, μια προπόνηση 45 λεπτών με −18· η πρωινή σύνοψη δωρεάν· το Vela Pro ως εφάπαξ αγορά· επεξεργασία στη συσκευή και χωρίς διακομιστές του Vela· και πρόσκληση στη δημόσια beta στο TestFlight.",
+  },
+  "ja": {
+    "date": "公開予定：2026年12月1日",
+    "changes": [
+      "バッテリー：あなた自身の HRV ベースラインをもとに、今日残っているエネルギーを推定します。充電されるのは睡眠中だけで、昼寝や夜勤明けの日中の睡眠も含みます。",
+      "無料：睡眠ごとの充電量と、その内訳（睡眠時間とその夜の HRV）を表示します。",
+      "Vela Pro は買い切りで、サブスクリプションはありません。リアルタイムのバッテリー、1日のカーブ、履歴、今日いちばん消耗した原因を表示します。",
+      "3つの新しいコンプリケーション：夜間の充電はすべての方に、リアルタイムのバッテリーと今日の時間別バーは Pro で。"],
+    "status_beta": "パブリックベータ · TestFlight",
+    "beta_note": "このバージョンはパブリックベータ中で、まだ App Store では配信されていません。{link}TestFlight でベータに参加{end}して、バッテリーの調整にご協力ください。",
+    "eyebrow": "Vela 2.0 の新機能 · パブリックベータ",
+    "h2": "時計のためではなく、あなたのためのバッテリー。",
+    "p": "Vela 2.0 にはバッテリーが加わりました。充電されるのは眠っている間だけで、ストレス、活動量、ワークアウトで減っていきます。基準になるのは、あなた自身の HRV ベースラインです。12月の公開に先立ち、TestFlight でパブリックベータを公開中です。",
+    "cta": "TestFlight でベータに参加",
+    "zoom": "画像をタップすると拡大表示されます",
+    "close": "閉じる",
+    "alt": "Vela 2.0 の概要：1日のカーブとともに 78 を示すバッテリー、充電は睡眠中だけ、昼寝や夜勤も対象、SDNN に基づく計算、今日いちばん消耗した原因（45分のワークアウトで −18）、無料の朝のスナップショット、買い切りの Vela Pro、デバイス上での処理と Vela のサーバーなし、そして TestFlight のパブリックベータへの招待。",
+  },
+}
+
+_V2_LINK = f'<a href="{TESTFLIGHT_URL}" target="_blank" rel="noopener">'
+
+for _code, _v in _V2.items():
+    _cl = CHANGELOG[_code]
+    _cl["status_beta"] = _v["status_beta"]
+    _cl["beta_note"] = _v["beta_note"].format(link=_V2_LINK, end="</a>")
+    _cl["entries"].insert(0, {"version": "2.0.0", "date": _v["date"], "status": "beta", "changes": _v["changes"]})
+    L[_code]["landing"]["v2"] = {k: _v[k] for k in ("eyebrow", "h2", "p", "cta", "alt", "zoom", "close")}
 
 # ------------------------------------------------------------ generation
 

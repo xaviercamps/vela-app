@@ -177,6 +177,8 @@
       border: 1px solid rgba(74,158,255,0.35); color: var(--primary-bright);
     }
     .badge.review { border-color: rgba(255,190,90,0.5); color: #FFCF8E; }
+    .badge.beta { border-color: rgba(61,207,207,0.5); color: #7EEAEA; }
+    .release p a { color: var(--primary-bright); }
   </style>
 </head>
 <body>
@@ -189,6 +191,22 @@
 
     <div class="divider"></div>
 
+    <div class="fade-in">
+      <section class="release">
+        <div class="release-head">
+          <h2>2.0.0</h2>
+          <span class="release-date">Expected 1 December 2026</span>
+        </div>
+        <span class="badge beta">Public beta · TestFlight</span>
+        <p>This version is in public beta and not on the App Store yet. <a href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">Join the beta on TestFlight</a> to try it and help calibrate the battery.</p>
+        <ul>
+          <li>Battery: an estimate of the energy you have left today, built on your own HRV baseline. Only sleep charges it, naps and daytime sleep after a night shift included.</li>
+          <li>Free: your charge after each sleep, and what went into it: how long you slept and your HRV that night.</li>
+          <li>Vela Pro, a one-time purchase with no subscription: the live battery, the day's curve, history, and what drained you most today.</li>
+          <li>Three new complications: last night's charge for everyone, plus the live battery and today's hourly bars with Pro.</li>
+        </ul>
+      </section>
+    </div>
     <div class="fade-in">
       <section class="release">
         <div class="release-head">
