@@ -15,7 +15,9 @@ SITE = Path(__file__).parent.parent
 MAIL = "xaviercampsnovi@gmail.com"
 ORDER = ["es", "en", "ca", "eu", "gl", "fr", "de", "it", "pt", "cs", "el", "ja"]
 APPSTORE_URL = "https://apps.apple.com/app/vela-hrv/id6762096428"
-TOUR_IMAGES = ["watch-shot-score.png", "watch-shot-trend.png", "watch-shot-explain.png"]
+# Per-language images made by vela-store/2.0.0/scripts/web_images.py (Apple Watch Ultra,
+# Ocean band, the app in that language). 1920x1920 JPEG.
+TOUR_IMAGES = ["tour-score", "tour-trend", "tour-ranges"]
 SITE_URL = "https://velahrv.com"
 DEFAULT_LOCALE = "en"  # served at the domain root; used as the x-default hreflang target
 BUILD_DATE = date.today().isoformat()
@@ -1095,7 +1097,7 @@ def render_landing(code, t):
     tour = "\n".join(
         f'''        <div class="tour-item">
           <div class="shot-card">
-            <img src="/assets/{img}" alt="{alt}" width="1920" height="1920" loading="lazy" decoding="async">
+            <img src="/assets/{img}-{code}.jpg" alt="{alt}" width="1920" height="1920" loading="lazy" decoding="async">
           </div>
           <span class="tag">{tag}</span>
           <p>{p}</p>
@@ -1221,7 +1223,7 @@ def render_landing(code, t):
       </div>
       <div class="watch-showcase">
         <div class="shot-card">
-          <img src="/assets/watch-mockup-combined.png" alt="{L['showcase_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
+          <img src="/assets/showcase-{code}.jpg" alt="{L['showcase_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -1248,7 +1250,7 @@ def render_landing(code, t):
       </div>
       <div class="watch-showcase">
         <div class="shot-card">
-          <img src="/assets/watch-onboarding.png" alt="{L['onboarding_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
+          <img src="/assets/onboarding-{code}.jpg" alt="{L['onboarding_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -1463,16 +1465,16 @@ L["es"] = {
     ],
     "showcase_eyebrow": "En tu muñeca", "showcase_h2": "Un score, un estado, una tendencia.",
     "showcase_p": "El color y la etiqueta de texto siempre van juntos — también pensado para quienes no distinguen bien los colores. Cada score se explica: qué rango es “Normal”, cuándo pasa a “Alto” y por qué.",
-    "showcase_alt": "Tres pantallas de Vela en Apple Watch Ultra: score de estrés actual con estado Normal, tendencia semanal con la media del día, y pantalla de explicación de los rangos Normal y Alto.",
+    "showcase_alt": "Tres pantallas de Vela en Apple Watch Ultra: nivel de estrés de 34, estado Bajo; el día de hoy, con una media de 46 y una barra por hora comparada con tu línea base; y la explicación de los rangos Normal y Alto.",
     "tour_eyebrow": "Recorrido rápido", "tour_h2": "Tres pantallas, cada una con un único trabajo.",
     "tour": [
-      ("Score actual", "Un número, un estado, calculado enteramente en el reloj — sin esperar a que nada sincronice.", "Pantalla principal de Vela mostrando un score de estrés de 68, estado Normal, calculado en el momento."),
+      ("Score actual", "Un número, un estado, calculado enteramente en el reloj — sin esperar a que nada sincronice.", "Pantalla principal de Vela mostrando un nivel de estrés de 34, estado Bajo, calculado en el momento."),
       ("Tendencia", "Cada lectura del día, comparada contra tu propia línea discontinua — no contra la de nadie más.", "Gráfico de tendencia con la media de estrés del día y las lecturas de cada hora, comparadas contra la línea base personal."),
       ("Rangos explicados", "Nada de cifras crípticas: cada rango dice qué significa y qué esperar de él.", "Pantalla de explicación de los rangos de estrés: Normal entre 40 y 69, Alto entre 70 y 100."),
     ],
     "onboarding_eyebrow": "Así empiezas", "onboarding_h2": "Te pedimos permiso antes de medir nada.",
     "onboarding_p": "Vela te pide acceso a tus datos de salud de forma explícita, no en la letra pequeña, y te dice para qué usa cada uno. Y si eres nuevo midiendo HRV, te dice cuánto falta para tener una línea base fiable — sin fingir que el primer día ya sabe quién eres.",
-    "onboarding_alt": "Flujo de bienvenida de Vela en Apple Watch: pantalla de bienvenida, solicitud explícita de acceso a los datos de variabilidad cardíaca, y pantalla de construcción de la línea base con 7 días restantes.",
+    "onboarding_alt": "Dos pasos de la bienvenida de Vela en Apple Watch: la pantalla de bienvenida y la petición de acceso a los datos de salud, que explica para qué se usa cada uno.",
     "closing_eyebrow": "Descárgala hoy", "closing_h2": "Sin suscripción. <em>Nunca.</em>",
     "closing_p": "Vela es gratis en el App Store para Apple Watch, con Vela Pro como compra única.",
     "footer_support": "Soporte", "footer_privacy": "Privacidad", "footer_contact": "Contacto",
@@ -1566,16 +1568,16 @@ L["en"] = {
     ],
     "showcase_eyebrow": "On your wrist", "showcase_h2": "One score, one state, one trend.",
     "showcase_p": "Color and text label always go together — designed with color blindness in mind too. Every score is explained: which range counts as “Normal”, when it becomes “High”, and why.",
-    "showcase_alt": "Three Vela screens on Apple Watch Ultra: current stress score with Normal status, weekly trend with the day's average, and a screen explaining the Normal and High ranges.",
+    "showcase_alt": "Three Vela screens on Apple Watch Ultra: a stress level of 34, Low status; today, with an average of 46 and one bar per hour compared with your baseline; and the explanation of the Normal and High ranges.",
     "tour_eyebrow": "Quick tour", "tour_h2": "Three screens, each with a single job.",
     "tour": [
-      ("Current score", "One number, one state, computed entirely on the watch — no waiting for anything to sync.", "Vela's main screen showing a stress score of 68, Normal status, calculated in the moment."),
+      ("Current score", "One number, one state, computed entirely on the watch — no waiting for anything to sync.", "Vela's main screen showing a stress level of 34, Low status, calculated in the moment."),
       ("Trend", "Every reading of the day, compared against your own dashed line — not anyone else's.", "Trend chart with the day's average stress and hourly readings, compared against the personal baseline."),
       ("Ranges explained", "No cryptic numbers: every range says what it means and what to expect.", "Screen explaining the stress ranges: Normal between 40 and 69, High between 70 and 100."),
     ],
     "onboarding_eyebrow": "Getting started", "onboarding_h2": "We ask permission before measuring anything.",
     "onboarding_p": "Vela asks for access to your health data explicitly, not in the fine print, and tells you what it uses each piece for. And if you're new to measuring HRV, it tells you how long until you have a reliable baseline — without pretending it knows who you are on day one.",
-    "onboarding_alt": "Vela's onboarding flow on Apple Watch: a welcome screen, an explicit request for access to heart rate variability data, and a baseline-building screen showing 7 days remaining.",
+    "onboarding_alt": "Two steps of Vela's onboarding on Apple Watch: the welcome screen and the request for access to health data, which explains what each one is used for.",
     "closing_eyebrow": "Download it today", "closing_h2": "No subscription. <em>Ever.</em>",
     "closing_p": "Vela is free on the App Store for Apple Watch, with Vela Pro as a one-time purchase.",
     "footer_support": "Support", "footer_privacy": "Privacy", "footer_contact": "Contact",
@@ -1669,16 +1671,16 @@ L["ca"] = {
     ],
     "showcase_eyebrow": "Al teu canell", "showcase_h2": "Un score, un estat, una tendència.",
     "showcase_p": "El color i l'etiqueta de text sempre van junts — pensat també per a qui no distingeix bé els colors. Cada score s'explica: quin rang és «Normal», quan passa a «Alt» i per què.",
-    "showcase_alt": "Tres pantalles de Vela a l'Apple Watch Ultra: score d'estrès actual amb estat Normal, tendència setmanal amb la mitjana del dia, i pantalla d'explicació dels rangs Normal i Alt.",
+    "showcase_alt": "Tres pantalles de Vela a l'Apple Watch Ultra: nivell d'estrès de 34, estat Baix; el dia d'avui, amb una mitjana de 46 i una barra per hora comparada amb la teva línia base; i l'explicació dels rangs Normal i Alt.",
     "tour_eyebrow": "Recorregut ràpid", "tour_h2": "Tres pantalles, cadascuna amb una única feina.",
     "tour": [
-      ("Score actual", "Un número, un estat, calculat íntegrament al rellotge — sense esperar que res se sincronitzi.", "Pantalla principal de Vela mostrant un score d'estrès de 68, estat Normal, calculat en el moment."),
+      ("Score actual", "Un número, un estat, calculat íntegrament al rellotge — sense esperar que res se sincronitzi.", "Pantalla principal de Vela mostrant un nivell d'estrès de 34, estat Baix, calculat en el moment."),
       ("Tendència", "Cada lectura del dia, comparada amb la teva pròpia línia discontínua — no amb la de ningú més.", "Gràfic de tendència amb la mitjana d'estrès del dia i les lectures de cada hora, comparades amb la línia base personal."),
       ("Rangs explicats", "Res de xifres críptiques: cada rang diu què significa i què esperar-ne.", "Pantalla d'explicació dels rangs d'estrès: Normal entre 40 i 69, Alt entre 70 i 100."),
     ],
     "onboarding_eyebrow": "Així comences", "onboarding_h2": "Et demanem permís abans de mesurar res.",
     "onboarding_p": "Vela et demana accés a les teves dades de salut de manera explícita, no en la lletra petita, i et diu per a què fa servir cadascuna. I si ets nou mesurant HRV, et diu quant falta per tenir una línia base fiable — sense fingir que el primer dia ja sap qui ets.",
-    "onboarding_alt": "Flux de benvinguda de Vela a l'Apple Watch: pantalla de benvinguda, sol·licitud explícita d'accés a les dades de variabilitat cardíaca, i pantalla de construcció de la línia base amb 7 dies restants.",
+    "onboarding_alt": "Dos passos de la benvinguda de Vela a l'Apple Watch: la pantalla de benvinguda i la petició d'accés a les dades de salut, que explica per a què es fa servir cadascuna.",
     "closing_eyebrow": "Descarrega-la avui", "closing_h2": "Sense subscripció. <em>Mai.</em>",
     "closing_p": "Vela és gratuïta a l'App Store per a l'Apple Watch, amb Vela Pro com a compra única.",
     "footer_support": "Suport", "footer_privacy": "Privadesa", "footer_contact": "Contacte",
@@ -1772,16 +1774,16 @@ L["eu"] = {
     ],
     "showcase_eyebrow": "Zure eskumuturrean", "showcase_h2": "Puntuazio bat, egoera bat, joera bat.",
     "showcase_p": "Kolorea eta testu-etiketa beti batera doaz — kolore-itsutasuna kontuan hartuta ere. Puntuazio bakoitza azaltzen da: zein tarte den «Normal», noiz bihurtzen den «Altu» eta zergatik.",
-    "showcase_alt": "Velaren hiru pantaila Apple Watch Ultran: uneko estres-puntuazioa Normal egoerarekin, asteko joera egunaren batez bestekoarekin, eta Normal eta Altu tarteak azaltzen dituen pantaila.",
+    "showcase_alt": "Velaren hiru pantaila Apple Watch Ultran: 34ko estres-maila, Baxua egoera; gaurko eguna, 46ko batez bestekoarekin eta orduko barra batekin zure oinarri-lerroarekin alderatuta; eta Normala eta Altua tarteen azalpena.",
     "tour_eyebrow": "Bira azkarra", "tour_h2": "Hiru pantaila, bakoitza lan bakar batekin.",
     "tour": [
-      ("Uneko puntuazioa", "Zenbaki bat, egoera bat, erlojuan bertan kalkulatua — ezer sinkronizatzeko itxaron gabe.", "Velaren pantaila nagusia, 68ko estres-puntuazioa eta Normal egoera erakusten, unean kalkulatua."),
+      ("Uneko puntuazioa", "Zenbaki bat, egoera bat, erlojuan bertan kalkulatua — ezer sinkronizatzeko itxaron gabe.", "Velaren pantaila nagusia, 34ko estres-maila erakusten duena, Baxua egoera, unean bertan kalkulatua."),
       ("Joera", "Eguneko irakurketa bakoitza, zure marra etenarekin alderatuta — ez beste inorenarekin.", "Joera-grafikoa eguneko estres-batez bestekoarekin eta orduroko irakurketekin, oinarri-lerro pertsonalarekin alderatuta."),
       ("Tarteak azalduta", "Zifra kriptikorik ez: tarte bakoitzak esan nahi duena eta zer espero eskaintzen du.", "Estres-tarteak azaltzen dituen pantaila: Normal 40 eta 69 artean, Altu 70 eta 100 artean."),
     ],
     "onboarding_eyebrow": "Horrela hasten zara", "onboarding_h2": "Baimena eskatzen dizugu ezer neurtu aurretik.",
     "onboarding_p": "Velak zure osasun-datuetarako sarbidea modu esplizituan eskatzen du, ez letra txikian, eta bakoitza zertarako erabiltzen duen esaten dizu. Eta HRV neurtzen berria bazara, oinarri-lerro fidagarri bat izateko zenbat falta den esaten dizu — lehen egunetik nor zaren jakingo balu bezala itxuratu gabe.",
-    "onboarding_alt": "Velaren ongietorri-fluxua Apple Watch-en: ongietorri-pantaila, bihotz-maiztasunaren aldakortasun-datuetarako sarbidearen eskaera esplizitua, eta 7 egun falta direla erakusten duen oinarri-lerroa eraikitzeko pantaila.",
+    "onboarding_alt": "Velaren ongietorriko bi urrats Apple Watch-ean: ongietorri-pantaila eta osasun-datuetarako sarbide-eskaera, bakoitza zertarako erabiltzen den azaltzen duena.",
     "closing_eyebrow": "Deskargatu gaur", "closing_h2": "Harpidetzarik gabe. <em>Inoiz ez.</em>",
     "closing_p": "Vela doakoa da App Store-n Apple Watch-erako, eta Vela Pro erosketa bakarra da.",
     "footer_support": "Laguntza", "footer_privacy": "Pribatutasuna", "footer_contact": "Kontaktua",
@@ -1875,16 +1877,16 @@ L["gl"] = {
     ],
     "showcase_eyebrow": "No teu pulso", "showcase_h2": "Unha puntuación, un estado, unha tendencia.",
     "showcase_p": "A cor e a etiqueta de texto van sempre xuntas — pensado tamén para quen non distingue ben as cores. Cada puntuación explícase: que rango é «Normal», cando pasa a «Alto» e por que.",
-    "showcase_alt": "Tres pantallas de Vela no Apple Watch Ultra: puntuación de estrés actual con estado Normal, tendencia semanal coa media do día, e pantalla de explicación dos rangos Normal e Alto.",
+    "showcase_alt": "Tres pantallas de Vela no Apple Watch Ultra: nivel de estrés de 34, estado Baixo; o día de hoxe, cunha media de 46 e unha barra por hora comparada coa túa liña base; e a explicación dos rangos Normal e Alto.",
     "tour_eyebrow": "Percorrido rápido", "tour_h2": "Tres pantallas, cada unha cun único traballo.",
     "tour": [
-      ("Puntuación actual", "Un número, un estado, calculado enteiramente no reloxo — sen esperar a que nada sincronice.", "Pantalla principal de Vela amosando unha puntuación de estrés de 68, estado Normal, calculado no momento."),
+      ("Puntuación actual", "Un número, un estado, calculado enteiramente no reloxo — sen esperar a que nada sincronice.", "Pantalla principal de Vela mostrando un nivel de estrés de 34, estado Baixo, calculado no momento."),
       ("Tendencia", "Cada lectura do día, comparada coa túa propia liña discontinua — non coa de ninguén máis.", "Gráfico de tendencia coa media de estrés do día e as lecturas de cada hora, comparadas coa liña base persoal."),
       ("Rangos explicados", "Nada de cifras crípticas: cada rango di que significa e que esperar del.", "Pantalla de explicación dos rangos de estrés: Normal entre 40 e 69, Alto entre 70 e 100."),
     ],
     "onboarding_eyebrow": "Así comezas", "onboarding_h2": "Pedímosche permiso antes de medir nada.",
     "onboarding_p": "Vela pídeche acceso aos teus datos de saúde de forma explícita, non na letra pequena, e dille para que usa cada un. E se es novo medindo HRV, dicheche canto falta para ter unha liña base fiable — sen finxir que o primeiro día xa sabe quen es.",
-    "onboarding_alt": "Fluxo de benvida de Vela no Apple Watch: pantalla de benvida, solicitude explícita de acceso aos datos de variabilidade cardíaca, e pantalla de construción da liña base con 7 días restantes.",
+    "onboarding_alt": "Dous pasos da benvida de Vela no Apple Watch: a pantalla de benvida e a petición de acceso aos datos de saúde, que explica para que se usa cada un.",
     "closing_eyebrow": "Descárgaa hoxe", "closing_h2": "Sen subscrición. <em>Nunca.</em>",
     "closing_p": "Vela é gratis na App Store para Apple Watch, con Vela Pro como compra única.",
     "footer_support": "Soporte", "footer_privacy": "Privacidade", "footer_contact": "Contacto",
@@ -1978,16 +1980,16 @@ L["fr"] = {
     ],
     "showcase_eyebrow": "À votre poignet", "showcase_h2": "Un score, un état, une tendance.",
     "showcase_p": "La couleur et l'étiquette textuelle vont toujours ensemble — pensé aussi pour les personnes daltoniennes. Chaque score est expliqué : quelle plage est « Normale », quand elle devient « Élevée », et pourquoi.",
-    "showcase_alt": "Trois écrans de Vela sur Apple Watch Ultra : score de stress actuel avec statut Normal, tendance hebdomadaire avec la moyenne du jour, et un écran expliquant les plages Normale et Élevée.",
+    "showcase_alt": "Trois écrans de Vela sur Apple Watch Ultra : un niveau de stress de 34, état Faible ; la journée en cours, avec une moyenne de 46 et une barre par heure comparée à votre référence ; et l'explication des plages Normal et Élevé.",
     "tour_eyebrow": "Visite rapide", "tour_h2": "Trois écrans, chacun avec un seul rôle.",
     "tour": [
-      ("Score actuel", "Un chiffre, un état, calculé entièrement sur la montre — sans attendre la moindre synchronisation.", "Écran principal de Vela affichant un score de stress de 68, statut Normal, calculé à l'instant."),
+      ("Score actuel", "Un chiffre, un état, calculé entièrement sur la montre — sans attendre la moindre synchronisation.", "Écran principal de Vela affichant un niveau de stress de 34, état Faible, calculé sur le moment."),
       ("Tendance", "Chaque mesure de la journée, comparée à votre propre ligne pointillée — pas à celle de quelqu'un d'autre.", "Graphique de tendance avec la moyenne de stress du jour et les mesures horaires, comparées à la référence personnelle."),
       ("Plages expliquées", "Fini les chiffres cryptiques : chaque plage indique ce qu'elle signifie et ce à quoi s'attendre.", "Écran expliquant les plages de stress : Normale entre 40 et 69, Élevée entre 70 et 100."),
     ],
     "onboarding_eyebrow": "Comment ça démarre", "onboarding_h2": "Nous demandons la permission avant de mesurer quoi que ce soit.",
     "onboarding_p": "Vela demande l'accès à vos données de santé de façon explicite, pas dans les petits caractères, et vous dit à quoi sert chacune. Et si vous débutez avec la mesure de la VFC, elle vous indique combien de temps il reste avant d'avoir une référence fiable — sans prétendre savoir qui vous êtes dès le premier jour.",
-    "onboarding_alt": "Parcours d'accueil de Vela sur Apple Watch : écran de bienvenue, demande explicite d'accès aux données de variabilité de la fréquence cardiaque, et écran de construction de la référence indiquant 7 jours restants.",
+    "onboarding_alt": "Deux étapes de l'accueil de Vela sur Apple Watch : l'écran de bienvenue et la demande d'accès aux données de santé, qui explique à quoi sert chacune.",
     "closing_eyebrow": "Téléchargez-la aujourd'hui", "closing_h2": "Sans abonnement. <em>Jamais.</em>",
     "closing_p": "Vela est gratuite sur l'App Store pour Apple Watch, avec Vela Pro en achat unique.",
     "footer_support": "Assistance", "footer_privacy": "Confidentialité", "footer_contact": "Contact",
@@ -2081,16 +2083,16 @@ L["de"] = {
     ],
     "showcase_eyebrow": "An deinem Handgelenk", "showcase_h2": "Ein Score, ein Zustand, ein Trend.",
     "showcase_p": "Farbe und Textlabel gehören immer zusammen — auch für Menschen mit Farbsehschwäche gedacht. Jeder Score wird erklärt: welcher Bereich „Normal“ ist, wann er zu „Hoch“ wird, und warum.",
-    "showcase_alt": "Drei Vela-Bildschirme auf der Apple Watch Ultra: aktueller Stress-Score mit Status Normal, Wochentrend mit Tagesdurchschnitt, und ein Bildschirm, der die Bereiche Normal und Hoch erklärt.",
+    "showcase_alt": "Drei Vela-Bildschirme auf der Apple Watch Ultra: ein Stresslevel von 34, Status Niedrig; der heutige Tag mit einem Durchschnitt von 46 und einem Balken pro Stunde im Vergleich zu deiner Baseline; und die Erklärung der Bereiche Normal und Hoch.",
     "tour_eyebrow": "Kurzer Rundgang", "tour_h2": "Drei Bildschirme, jeder mit genau einer Aufgabe.",
     "tour": [
-      ("Aktueller Score", "Eine Zahl, ein Zustand, vollständig auf der Uhr berechnet — ohne auf eine Synchronisierung zu warten.", "Velas Hauptbildschirm mit einem Stress-Score von 68, Status Normal, im Moment berechnet."),
+      ("Aktueller Score", "Eine Zahl, ein Zustand, vollständig auf der Uhr berechnet — ohne auf eine Synchronisierung zu warten.", "Hauptbildschirm von Vela mit einem Stresslevel von 34, Status Niedrig, im Moment berechnet."),
       ("Trend", "Jede Messung des Tages, verglichen mit deiner eigenen gestrichelten Linie — mit niemand anderem.", "Trenddiagramm mit dem Tagesdurchschnitt des Stresses und stündlichen Messwerten, verglichen mit der persönlichen Baseline."),
       ("Bereiche erklärt", "Keine kryptischen Zahlen: Jeder Bereich sagt, was er bedeutet und was zu erwarten ist.", "Bildschirm, der die Stressbereiche erklärt: Normal zwischen 40 und 69, Hoch zwischen 70 und 100."),
     ],
     "onboarding_eyebrow": "So startest du", "onboarding_h2": "Wir fragen um Erlaubnis, bevor wir irgendetwas messen.",
     "onboarding_p": "Vela bittet ausdrücklich um Zugriff auf deine Gesundheitsdaten — nicht im Kleingedruckten — und sagt dir, wofür es welche Daten nutzt. Und wenn du neu im Messen von HRV bist, sagt dir Vela, wie lange es noch dauert, bis du eine verlässliche Baseline hast — ohne so zu tun, als würde es dich schon am ersten Tag kennen.",
-    "onboarding_alt": "Velas Onboarding-Ablauf auf der Apple Watch: ein Willkommensbildschirm, eine ausdrückliche Zugriffsanfrage für Herzfrequenzvariabilitätsdaten und ein Bildschirm zum Aufbau der Baseline mit noch 7 verbleibenden Tagen.",
+    "onboarding_alt": "Zwei Schritte der Begrüßung von Vela auf der Apple Watch: der Willkommensbildschirm und die Anfrage nach Zugriff auf Gesundheitsdaten, die erklärt, wofür welche Daten genutzt werden.",
     "closing_eyebrow": "Heute herunterladen", "closing_h2": "Kein Abo. <em>Niemals.</em>",
     "closing_p": "Vela ist kostenlos im App Store für Apple Watch erhältlich, mit Vela Pro als Einmalkauf.",
     "footer_support": "Support", "footer_privacy": "Datenschutz", "footer_contact": "Kontakt",
@@ -2184,16 +2186,16 @@ L["it"] = {
     ],
     "showcase_eyebrow": "Al tuo polso", "showcase_h2": "Un punteggio, uno stato, una tendenza.",
     "showcase_p": "Colore ed etichetta testuale vanno sempre insieme — pensato anche per chi non distingue bene i colori. Ogni punteggio è spiegato: quale intervallo è «Normale», quando diventa «Alto» e perché.",
-    "showcase_alt": "Tre schermate di Vela su Apple Watch Ultra: punteggio di stress attuale con stato Normale, tendenza settimanale con la media del giorno, e una schermata che spiega gli intervalli Normale e Alto.",
+    "showcase_alt": "Tre schermate di Vela su Apple Watch Ultra: un livello di stress di 34, stato Basso; la giornata di oggi, con una media di 46 e una barra per ora confrontata con la tua baseline; e la spiegazione degli intervalli Normale e Alto.",
     "tour_eyebrow": "Tour rapido", "tour_h2": "Tre schermate, ognuna con un solo compito.",
     "tour": [
-      ("Punteggio attuale", "Un numero, uno stato, calcolato interamente sull'orologio — senza aspettare alcuna sincronizzazione.", "Schermata principale di Vela con un punteggio di stress di 68, stato Normale, calcolato al momento."),
+      ("Punteggio attuale", "Un numero, uno stato, calcolato interamente sull'orologio — senza aspettare alcuna sincronizzazione.", "Schermata principale di Vela con un livello di stress di 34, stato Basso, calcolato sul momento."),
       ("Tendenza", "Ogni rilevazione del giorno, confrontata con la tua linea tratteggiata — non con quella di nessun altro.", "Grafico della tendenza con la media di stress del giorno e le rilevazioni orarie, confrontate con la baseline personale."),
       ("Intervalli spiegati", "Niente numeri criptici: ogni intervallo dice cosa significa e cosa aspettarsi.", "Schermata che spiega gli intervalli di stress: Normale tra 40 e 69, Alto tra 70 e 100."),
     ],
     "onboarding_eyebrow": "Così inizi", "onboarding_h2": "Ti chiediamo il permesso prima di misurare qualsiasi cosa.",
     "onboarding_p": "Vela chiede l'accesso ai tuoi dati sanitari in modo esplicito, non nelle note in piccolo, e ti dice a cosa serve ciascuno. E se sei nuovo nella misurazione dell'HRV, ti dice quanto manca per avere una baseline affidabile — senza fingere di sapere già chi sei il primo giorno.",
-    "onboarding_alt": "Flusso di benvenuto di Vela su Apple Watch: schermata di benvenuto, richiesta esplicita di accesso ai dati di variabilità della frequenza cardiaca, e schermata di costruzione della baseline con 7 giorni rimanenti.",
+    "onboarding_alt": "Due passaggi del benvenuto di Vela su Apple Watch: la schermata di benvenuto e la richiesta di accesso ai dati sanitari, che spiega a cosa serve ciascuno.",
     "closing_eyebrow": "Scaricala oggi", "closing_h2": "Senza abbonamento. <em>Mai.</em>",
     "closing_p": "Vela è gratis su App Store per Apple Watch, con Vela Pro come acquisto unico.",
     "footer_support": "Supporto", "footer_privacy": "Privacy", "footer_contact": "Contatti",
@@ -2287,16 +2289,16 @@ L["pt"] = {
     ],
     "showcase_eyebrow": "No seu pulso", "showcase_h2": "Uma pontuação, um estado, uma tendência.",
     "showcase_p": "A cor e a etiqueta de texto andam sempre juntas — pensado também para quem não distingue bem as cores. Cada pontuação é explicada: que intervalo é «Normal», quando passa a «Alto» e porquê.",
-    "showcase_alt": "Três ecrãs da Vela no Apple Watch Ultra: pontuação de stress atual com estado Normal, tendência semanal com a média do dia, e um ecrã a explicar os intervalos Normal e Alto.",
+    "showcase_alt": "Três ecrãs da Vela no Apple Watch Ultra: um nível de stress de 34, estado Baixo; o dia de hoje, com uma média de 46 e uma barra por hora comparada com a sua linha de base; e a explicação dos intervalos Normal e Alto.",
     "tour_eyebrow": "Percurso rápido", "tour_h2": "Três ecrãs, cada um com uma única função.",
     "tour": [
-      ("Pontuação atual", "Um número, um estado, calculado inteiramente no relógio — sem esperar que nada sincronize.", "Ecrã principal da Vela a mostrar uma pontuação de stress de 68, estado Normal, calculado no momento."),
+      ("Pontuação atual", "Um número, um estado, calculado inteiramente no relógio — sem esperar que nada sincronize.", "Ecrã principal da Vela a mostrar um nível de stress de 34, estado Baixo, calculado no momento."),
       ("Tendência", "Cada leitura do dia, comparada com a sua própria linha tracejada — não com a de mais ninguém.", "Gráfico de tendência com a média de stress do dia e as leituras de cada hora, comparadas com a linha de base pessoal."),
       ("Intervalos explicados", "Nada de números crípticos: cada intervalo diz o que significa e o que esperar.", "Ecrã a explicar os intervalos de stress: Normal entre 40 e 69, Alto entre 70 e 100."),
     ],
     "onboarding_eyebrow": "Assim começa", "onboarding_h2": "Pedimos permissão antes de medir seja o que for.",
     "onboarding_p": "A Vela pede acesso aos seus dados de saúde de forma explícita, não na letra pequena, e diz-lhe para que usa cada um. E se é novo a medir HRV, diz-lhe quanto falta para ter uma linha de base fiável — sem fingir que já sabe quem é no primeiro dia.",
-    "onboarding_alt": "Fluxo de boas-vindas da Vela no Apple Watch: ecrã de boas-vindas, pedido explícito de acesso aos dados de variabilidade da frequência cardíaca, e ecrã de construção da linha de base com 7 dias restantes.",
+    "onboarding_alt": "Dois passos das boas-vindas da Vela no Apple Watch: o ecrã de boas-vindas e o pedido de acesso aos dados de saúde, que explica para que serve cada um.",
     "closing_eyebrow": "Transfira-a hoje", "closing_h2": "Sem subscrição. <em>Nunca.</em>",
     "closing_p": "A Vela é gratuita na App Store para Apple Watch, com o Vela Pro como compra única.",
     "footer_support": "Suporte", "footer_privacy": "Privacidade", "footer_contact": "Contacto",
@@ -2390,16 +2392,16 @@ L["cs"] = {
     ],
     "showcase_eyebrow": "Na vašem zápěstí", "showcase_h2": "Jedno skóre, jeden stav, jeden trend.",
     "showcase_p": "Barva a textový popisek jdou vždy spolu — navrženo i s ohledem na barvoslepost. Každé skóre je vysvětleno: který rozsah se počítá jako „Normální“, kdy se stává „Vysokým“ a proč.",
-    "showcase_alt": "Tři obrazovky Vely na Apple Watch Ultra: aktuální skóre stresu se stavem Normální, týdenní trend s denním průměrem a obrazovka vysvětlující rozsahy Normální a Vysoký.",
+    "showcase_alt": "Tři obrazovky Vela na Apple Watch Ultra: úroveň stresu 34, stav Nízký; dnešní den s průměrem 46 a jedním sloupcem za hodinu ve srovnání s vaší základní linií; a vysvětlení rozsahů Normální a Vysoký.",
     "tour_eyebrow": "Rychlá prohlídka", "tour_h2": "Tři obrazovky, každá s jediným úkolem.",
     "tour": [
-      ("Aktuální skóre", "Jedno číslo, jeden stav, spočítané kompletně na hodinkách — bez čekání na jakoukoli synchronizaci.", "Hlavní obrazovka Vely se skóre stresu 68, stav Normální, spočítáno v daném okamžiku."),
+      ("Aktuální skóre", "Jedno číslo, jeden stav, spočítané kompletně na hodinkách — bez čekání na jakoukoli synchronizaci.", "Hlavní obrazovka Vela s úrovní stresu 34, stav Nízký, spočítanou v daném okamžiku."),
       ("Trend", "Každé měření dne, porovnané s vaší vlastní přerušovanou čárou — ne s ničí jinou.", "Graf trendu s denním průměrem stresu a hodinovými měřeními, porovnanými s osobní základní linií."),
       ("Vysvětlené rozsahy", "Žádná záhadná čísla: každý rozsah říká, co znamená a co čekat.", "Obrazovka vysvětlující rozsahy stresu: Normální mezi 40 a 69, Vysoký mezi 70 a 100."),
     ],
     "onboarding_eyebrow": "Jak začít", "onboarding_h2": "Než začneme cokoli měřit, požádáme o svolení.",
     "onboarding_p": "Vela žádá o přístup k vašim zdravotním datům výslovně, ne v drobném písmu, a řekne vám, k čemu které používá. A pokud s měřením HRV začínáte, řekne vám, jak dlouho potrvá, než budete mít spolehlivou základní linii — aniž by předstírala, že vás zná už první den.",
-    "onboarding_alt": "Úvodní průvodce Vely na Apple Watch: uvítací obrazovka, výslovná žádost o přístup k datům variability srdečního tepu a obrazovka budování základní linie se zbývajícími 7 dny.",
+    "onboarding_alt": "Dva kroky úvodu Vela na Apple Watch: uvítací obrazovka a žádost o přístup ke zdravotním datům, která vysvětluje, k čemu se která používají.",
     "closing_eyebrow": "Stáhněte si ji dnes", "closing_h2": "Žádné předplatné. <em>Nikdy.</em>",
     "closing_p": "Vela je zdarma v App Store pro Apple Watch, s Vela Pro jako jednorázovým nákupem.",
     "footer_support": "Podpora", "footer_privacy": "Soukromí", "footer_contact": "Kontakt",
@@ -2493,16 +2495,16 @@ L["el"] = {
     ],
     "showcase_eyebrow": "Στον καρπό σας", "showcase_h2": "Ένα σκορ, μία κατάσταση, μία τάση.",
     "showcase_p": "Το χρώμα και η ετικέτα κειμένου πάνε πάντα μαζί — σχεδιασμένο και με γνώμονα την αχρωματοψία. Κάθε σκορ εξηγείται: ποιο εύρος θεωρείται «Φυσιολογικό», πότε γίνεται «Υψηλό» και γιατί.",
-    "showcase_alt": "Τρεις οθόνες του Vela σε Apple Watch Ultra: τρέχον σκορ άγχους με κατάσταση Φυσιολογικό, εβδομαδιαία τάση με τον μέσο όρο της ημέρας και μια οθόνη που εξηγεί τα εύρη Φυσιολογικό και Υψηλό.",
+    "showcase_alt": "Τρεις οθόνες του Vela σε Apple Watch Ultra: επίπεδο στρες 34, κατάσταση Χαμηλό· η σημερινή μέρα, με μέσο όρο 46 και μία μπάρα ανά ώρα σε σύγκριση με το baseline σας· και η εξήγηση των εύρων Κανονικό και Υψηλό.",
     "tour_eyebrow": "Γρήγορη περιήγηση", "tour_h2": "Τρεις οθόνες, καθεμία με μία μόνο δουλειά.",
     "tour": [
-      ("Τρέχον σκορ", "Ένας αριθμός, μία κατάσταση, υπολογισμένα εξ ολοκλήρου στο ρολόι — χωρίς αναμονή για κανέναν συγχρονισμό.", "Η κύρια οθόνη του Vela δείχνει σκορ άγχους 68, κατάσταση Φυσιολογικό, υπολογισμένο τη στιγμή εκείνη."),
+      ("Τρέχον σκορ", "Ένας αριθμός, μία κατάσταση, υπολογισμένα εξ ολοκλήρου στο ρολόι — χωρίς αναμονή για κανέναν συγχρονισμό.", "Η κύρια οθόνη του Vela με επίπεδο στρες 34, κατάσταση Χαμηλό, υπολογισμένο τη στιγμή εκείνη."),
       ("Τάση", "Κάθε μέτρηση της ημέρας, σε σύγκριση με τη δική σας διακεκομμένη γραμμή — όχι κανενός άλλου.", "Γράφημα τάσης με τον μέσο όρο άγχους της ημέρας και τις ωριαίες μετρήσεις, σε σύγκριση με το προσωπικό baseline."),
       ("Εξήγηση των εύρων", "Χωρίς κρυπτικούς αριθμούς: κάθε εύρος λέει τι σημαίνει και τι να περιμένετε.", "Οθόνη που εξηγεί τα εύρη άγχους: Φυσιολογικό μεταξύ 40 και 69, Υψηλό μεταξύ 70 και 100."),
     ],
     "onboarding_eyebrow": "Ξεκινώντας", "onboarding_h2": "Ζητάμε άδεια πριν μετρήσουμε οτιδήποτε.",
     "onboarding_p": "Το Vela ζητά πρόσβαση στα δεδομένα υγείας σας ρητά, όχι στα ψιλά γράμματα, και σας λέει για τι χρησιμοποιεί το καθένα. Και αν είστε νέος στη μέτρηση HRV, σας λέει πόσος χρόνος απομένει μέχρι να έχετε ένα αξιόπιστο baseline — χωρίς να προσποιείται ότι σας γνωρίζει από την πρώτη ημέρα.",
-    "onboarding_alt": "Η ροή εισαγωγής του Vela στο Apple Watch: μια οθόνη υποδοχής, ένα ρητό αίτημα πρόσβασης στα δεδομένα μεταβλητότητας καρδιακού ρυθμού και μια οθόνη δημιουργίας baseline που δείχνει 7 ημέρες να απομένουν.",
+    "onboarding_alt": "Δύο βήματα της υποδοχής του Vela στο Apple Watch: η οθόνη καλωσορίσματος και το αίτημα πρόσβασης στα δεδομένα υγείας, που εξηγεί για τι χρησιμοποιείται το καθένα.",
     "closing_eyebrow": "Κατεβάστε το σήμερα", "closing_h2": "Χωρίς συνδρομή. <em>Ποτέ.</em>",
     "closing_p": "Το Vela είναι δωρεάν στο App Store για Apple Watch, με το Vela Pro ως εφάπαξ αγορά.",
     "footer_support": "Υποστήριξη", "footer_privacy": "Απόρρητο", "footer_contact": "Επικοινωνία",
@@ -2596,16 +2598,16 @@ L["ja"] = {
     ],
     "showcase_eyebrow": "手首の上で", "showcase_h2": "1つのスコア、1つの状態、1つのトレンド。",
     "showcase_p": "色とテキストのラベルは常にセットで表示されます。色覚特性にも配慮した設計です。どのスコアにも説明があります。どの範囲が「正常」なのか、いつ「高い」になるのか、そしてその理由まで。",
-    "showcase_alt": "Apple Watch Ultra に表示された Vela の3画面：正常ステータスの現在のストレススコア、その日の平均を示す週間トレンド、正常と高いの範囲を説明する画面。",
+    "showcase_alt": "Apple Watch Ultra に表示した Vela の3つの画面：ストレスレベル 34（低い）、今日の平均 46 とベースラインと比べた1時間ごとのバー、そして「通常」と「高い」の範囲の説明。",
     "tour_eyebrow": "クイックツアー", "tour_h2": "3つの画面、それぞれに役割は1つ。",
     "tour": [
-      ("現在のスコア", "1つの数字、1つの状態。すべて時計上で計算され、同期を待つ必要はありません。", "ストレススコア68、正常ステータスを表示する Vela のメイン画面。その場で計算されたもの。"),
+      ("現在のスコア", "1つの数字、1つの状態。すべて時計上で計算され、同期を待つ必要はありません。", "ストレスレベル 34（低い）をその場で算出して表示する Vela のメイン画面。"),
       ("トレンド", "その日のすべての測定値を、他の誰でもない、あなた自身の破線と比較します。", "その日の平均ストレスと1時間ごとの測定値を、個人ベースラインと比較したトレンドチャート。"),
       ("範囲の説明", "分かりにくい数字はなし。どの範囲にも、意味と何を予期すべきかが書かれています。", "ストレスの範囲を説明する画面：正常は40〜69、高いは70〜100。"),
     ],
     "onboarding_eyebrow": "使い始める", "onboarding_h2": "何かを測定する前に、許可を求めます。",
     "onboarding_p": "Vela は細かい文字の中ではなく、はっきりと健康データへのアクセスを求め、それぞれを何に使うのかを伝えます。そして HRV の測定が初めてなら、信頼できるベースラインができるまでの日数を伝えます。初日からあなたを知っているふりはしません。",
-    "onboarding_alt": "Apple Watch での Vela のオンボーディングの流れ：ようこそ画面、心拍変動データへのアクセスを求める明示的なリクエスト、残り7日と表示されたベースライン構築中の画面。",
+    "onboarding_alt": "Apple Watch での Vela の初期設定の2つのステップ：ようこそ画面と、それぞれのデータを何に使うかを説明する健康データへのアクセスのリクエスト。",
     "closing_eyebrow": "今すぐダウンロード", "closing_h2": "サブスクなし。<em>ずっと。</em>",
     "closing_p": "Vela は Apple Watch 向けに App Store で無料、Vela Pro は買い切りで入手できます。",
     "footer_support": "サポート", "footer_privacy": "プライバシー", "footer_contact": "お問い合わせ",
