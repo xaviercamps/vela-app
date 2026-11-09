@@ -1382,27 +1382,29 @@ L["es"] = {
     ("¿Qué Apple Watch necesito?", "Vela requiere Apple Watch con watchOS 26 o superior. Funciona como app independiente — no necesita el iPhone abierto para medir."),
     ("¿Por qué tarda unos días en mostrar mi score?", "Vela necesita conocer tu HRV personal antes de calcular un score con sentido. Durante los primeros 7–14 días construye tu baseline — a partir de ahí, cada lectura refleja tu estado real."),
     ("¿Dónde se guardan mis datos?", "Tus datos se sincronizan de forma privada a través de tu propio iCloud. Vela no tiene servidores propios — nunca enviamos ni almacenamos tus datos fuera de tu cuenta."),
-    ("¿Qué permisos necesita Vela?", "Vela solicita acceso a HealthKit para leer los datos de variabilidad de frecuencia cardíaca que tu Apple Watch ya recoge automáticamente."),
+    ("¿Qué permisos necesita Vela?", "Vela solicita acceso de solo lectura a HealthKit: la variabilidad de frecuencia cardíaca para tu score de estrés, y el sueño, los pasos, la energía activa, los entrenos y la frecuencia cardíaca para tu Batería. Son datos que tu Apple Watch ya recoge automáticamente. Si quieres, también te pide permiso para enviarte notificaciones con los avisos de estrés."),
   ],
   "contact_h": "Contacto y soporte",
   "contact_p": "¿Tienes alguna pregunta, has encontrado un error o quieres compartir feedback? Escríbenos directamente.",
   "privacy": {
     "title_tag": "Vela HRV — Política de Privacidad", "title": "Política de Privacidad",
-    "updated": "Última actualización: abril 2026",
+    "updated": "Última actualización: noviembre 2026",
     "highlight": "Vela no recopila, transmite ni almacena ningún dato personal en servidores externos. Todo permanece en tu dispositivo y en tu iCloud privado.",
     "sections": [
       ("Qué datos utiliza Vela", [
-        "Vela lee datos de variabilidad de frecuencia cardíaca (HRV) de Apple HealthKit para calcular tu score de estrés personal. Estos datos ya los recoge automáticamente tu Apple Watch.",
-        "Vela también almacena las lecturas que calcula: tu historial de score de estrés, tu baseline personal de HRV y las muestras de HRV usadas para el cálculo del baseline."]),
+        "Vela lee datos de Apple HealthKit, solo en modo lectura: la variabilidad de frecuencia cardíaca (HRV) para calcular tu score de estrés personal, y el sueño, los pasos, la energía activa, los entrenos, la frecuencia cardíaca y la frecuencia cardíaca en reposo para calcular tu Batería: cuánto la carga el sueño y qué la gasta durante el día. Estos datos ya los recoge automáticamente tu Apple Watch. Vela nunca escribe en HealthKit.",
+        "Vela también almacena las lecturas que calcula: tu historial de score de estrés, tu baseline personal de HRV, las muestras de HRV usadas para el cálculo del baseline y los niveles de tu Batería."]),
       ("Dónde viven tus datos", [
         "Todos los datos se almacenan localmente en tu Apple Watch y se sincronizan de forma privada a través de tu propia cuenta de iCloud usando el framework CloudKit de Apple. Vela no tiene servidores. Ningún dato pasa nunca por sistemas propiedad de Vela.",
         "Solo tú puedes acceder a tus datos. Ni nosotros ni terceros."]),
       ("Terceros", [
         "Vela no comparte ningún dato con terceros. No utilizamos servicios de analítica, SDKs publicitarios ni herramientas de seguimiento externas."]),
       ("Datos de salud", [
-        "Vela accede a datos de salud únicamente para proporcionar su funcionalidad principal: medir y hacer seguimiento de tu nivel de estrés. Los datos de salud nunca se usan con fines publicitarios ni se venden a ninguna parte."]),
+        "Vela accede a datos de salud únicamente para proporcionar su funcionalidad principal: medir y hacer seguimiento de tu nivel de estrés y de tu Batería. Los datos de salud nunca se usan con fines publicitarios ni se venden a ninguna parte."]),
+      ("Compras", [
+        "Vela Pro es una compra única dentro de la app que gestiona Apple a través del App Store. Vela nunca recibe tus datos de pago: la app solo comprueba en tu dispositivo, mediante StoreKit de Apple, si Vela Pro está desbloqueado."]),
       ("Menores", [
-        "Vela no está dirigida a menores de 13 años y no recopila datos de ellos de forma consciente."]),
+        "Vela no está diseñada específicamente para niños. Como no recopila datos de nadie, tampoco recopila datos de menores."]),
       ("Cambios en esta política", [
         "Si esta política de privacidad cambia, la versión actualizada se publicará en esta URL con una nueva fecha. El uso continuado de la app tras los cambios implica la aceptación de la política actualizada."]),
     ],
@@ -1483,27 +1485,29 @@ L["en"] = {
     ("Which Apple Watch do I need?", "Vela requires Apple Watch with watchOS 26 or later. It works as a standalone app — your iPhone doesn't need to be nearby to take a measurement."),
     ("Why does it take a few days to show my score?", "Vela needs to learn your personal HRV before it can calculate a meaningful score. During the first 7–14 days it builds your baseline — from then on, every reading reflects your actual state."),
     ("Where is my data stored?", "Your data syncs privately through your own iCloud. Vela has no servers of its own — we never send or store your data outside your account."),
-    ("What permissions does Vela need?", "Vela requests access to HealthKit to read the heart rate variability data that your Apple Watch already collects automatically."),
+    ("What permissions does Vela need?", "Vela requests read-only access to HealthKit: heart rate variability for your stress score, and sleep, steps, active energy, workouts and heart rate for your Battery. This is data your Apple Watch already collects automatically. If you want, it also asks for permission to send you notifications for stress alerts."),
   ],
   "contact_h": "Contact & support",
   "contact_p": "Have a question, found a bug, or want to share feedback? Reach out directly.",
   "privacy": {
     "title_tag": "Vela HRV — Privacy Policy", "title": "Privacy Policy",
-    "updated": "Last updated: April 2026",
+    "updated": "Last updated: November 2026",
     "highlight": "Vela does not collect, transmit, or store any personal data on external servers. Everything stays on your device and your private iCloud.",
     "sections": [
       ("What data Vela uses", [
-        "Vela reads heart rate variability (HRV) data from Apple HealthKit to calculate your personal stress score. This data is already collected automatically by your Apple Watch.",
-        "Vela also stores the readings it calculates — your stress score history, your personal HRV baseline, and raw HRV samples used for baseline calculation."]),
+        "Vela reads data from Apple HealthKit, read-only: heart rate variability (HRV) to calculate your personal stress score, and sleep, steps, active energy, workouts, heart rate and resting heart rate to calculate your Battery — how much sleep charges it and what drains it during the day. Your Apple Watch already collects this data automatically. Vela never writes to HealthKit.",
+        "Vela also stores the readings it calculates — your stress score history, your personal HRV baseline, the raw HRV samples used to calculate it, and your Battery levels."]),
       ("Where your data lives", [
         "All data is stored locally on your Apple Watch and synced privately through your own iCloud account using Apple's CloudKit framework. Vela has no servers. No data ever passes through systems owned or operated by Vela.",
         "Only you can access your data. Not us, not third parties."]),
       ("Third parties", [
         "Vela does not share any data with third parties. We do not use analytics services, advertising SDKs, or any external tracking tools."]),
       ("Health data", [
-        "Vela accesses health data solely to provide its core functionality — measuring and tracking your stress level. Health data is never used for advertising or sold to any party."]),
+        "Vela accesses health data solely to provide its core functionality — measuring and tracking your stress level and your Battery. Health data is never used for advertising or sold to any party."]),
+      ("Purchases", [
+        "Vela Pro is a one-time in-app purchase processed by Apple through the App Store. Vela never receives your payment details: the app only checks on your device, through Apple's StoreKit, whether Vela Pro is unlocked."]),
       ("Children", [
-        "Vela is not directed at children under the age of 13 and does not knowingly collect data from them."]),
+        "Vela is not designed specifically for children. Because it does not collect data from anyone, it does not collect data from children either."]),
       ("Changes to this policy", [
         "If this privacy policy changes, the updated version will be published at this URL with a new date. Continued use of the app after changes constitutes acceptance of the updated policy."]),
     ],
@@ -1584,27 +1588,29 @@ L["ca"] = {
     ("Quin Apple Watch necessito?", "Vela requereix un Apple Watch amb watchOS 26 o superior. Funciona com a app independent — no cal tenir l'iPhone a prop per mesurar."),
     ("Per què triga uns dies a mostrar el meu score?", "Vela necessita conèixer la teva HRV personal abans de calcular un score amb sentit. Durant els primers 7–14 dies construeix la teva línia base — a partir d'aquí, cada lectura reflecteix el teu estat real."),
     ("On es guarden les meves dades?", "Les teves dades se sincronitzen de manera privada a través del teu propi iCloud. Vela no té servidors propis — mai enviem ni emmagatzemem les teves dades fora del teu compte."),
-    ("Quins permisos necessita Vela?", "Vela sol·licita accés a HealthKit per llegir les dades de variabilitat de la freqüència cardíaca que el teu Apple Watch ja recull automàticament."),
+    ("Quins permisos necessita Vela?", "Vela sol·licita accés només de lectura a HealthKit: la variabilitat de la freqüència cardíaca per al teu score d'estrès, i la son, els passos, l'energia activa, els entrenaments i la freqüència cardíaca per a la teva Bateria. Són dades que el teu Apple Watch ja recull automàticament. Si vols, també et demana permís per enviar-te notificacions amb els avisos d'estrès."),
   ],
   "contact_h": "Contacte i suport",
   "contact_p": "Tens cap pregunta, has trobat un error o vols compartir feedback? Escriu-nos directament.",
   "privacy": {
     "title_tag": "Vela HRV — Política de privadesa", "title": "Política de privadesa",
-    "updated": "Última actualització: abril 2026",
+    "updated": "Última actualització: novembre 2026",
     "highlight": "Vela no recull, transmet ni emmagatzema cap dada personal en servidors externs. Tot es queda al teu dispositiu i al teu iCloud privat.",
     "sections": [
       ("Quines dades fa servir Vela", [
-        "Vela llegeix dades de variabilitat de la freqüència cardíaca (HRV) d'Apple HealthKit per calcular el teu score d'estrès personal. Aquestes dades ja les recull automàticament el teu Apple Watch.",
-        "Vela també emmagatzema les lectures que calcula — l'historial del teu score d'estrès, la teva línia base d'HRV personal i les mostres d'HRV en brut utilitzades per calcular-la."]),
+        "Vela llegeix dades d'Apple HealthKit, només en mode lectura: la variabilitat de la freqüència cardíaca (HRV) per calcular el teu score d'estrès personal, i la son, els passos, l'energia activa, els entrenaments, la freqüència cardíaca i la freqüència cardíaca en repòs per calcular la teva Bateria — quant la carrega la son i què la gasta durant el dia. Aquestes dades ja les recull automàticament el teu Apple Watch. Vela mai no escriu a HealthKit.",
+        "Vela també emmagatzema les lectures que calcula — l'historial del teu score d'estrès, la teva línia base d'HRV personal, les mostres d'HRV en brut utilitzades per calcular-la i els nivells de la teva Bateria."]),
       ("On viuen les teves dades", [
         "Totes les dades s'emmagatzemen localment al teu Apple Watch i se sincronitzen de manera privada a través del teu propi compte d'iCloud mitjançant el framework CloudKit d'Apple. Vela no té servidors. Cap dada passa mai per sistemes propietat de Vela.",
         "Només tu pots accedir a les teves dades. Ni nosaltres, ni tercers."]),
       ("Tercers", [
         "Vela no comparteix cap dada amb tercers. No fem servir serveis d'analítica, SDK publicitaris ni cap eina de seguiment externa."]),
       ("Dades de salut", [
-        "Vela accedeix a les dades de salut únicament per oferir la seva funcionalitat principal — mesurar i fer el seguiment del teu nivell d'estrès. Les dades de salut mai no s'utilitzen per a publicitat ni es venen a ningú."]),
+        "Vela accedeix a les dades de salut únicament per oferir la seva funcionalitat principal — mesurar i fer el seguiment del teu nivell d'estrès i de la teva Bateria. Les dades de salut mai no s'utilitzen per a publicitat ni es venen a ningú."]),
+      ("Compres", [
+        "Vela Pro és una compra única dins de l'app que gestiona Apple a través de l'App Store. Vela mai no rep les teves dades de pagament: l'app només comprova al teu dispositiu, mitjançant StoreKit d'Apple, si Vela Pro està desbloquejat."]),
       ("Menors", [
-        "Vela no està dirigida a menors de 13 anys i no recull deliberadament dades seves."]),
+        "Vela no està dissenyada específicament per a infants. Com que no recull dades de ningú, tampoc no en recull de menors."]),
       ("Canvis en aquesta política", [
         "Si aquesta política de privadesa canvia, la versió actualitzada es publicarà en aquesta URL amb una data nova. L'ús continuat de l'app després dels canvis constitueix l'acceptació de la política actualitzada."]),
     ],
@@ -1685,27 +1691,29 @@ L["eu"] = {
     ("Zein Apple Watch behar dut?", "Velak Apple Watch bat behar du, watchOS 26 edo berriagoarekin. Aplikazio independente gisa dabil — ez duzu iPhonea gertu izan behar neurtzeko."),
     ("Zergatik behar ditu egun batzuk nire puntuazioa erakusteko?", "Velak zure HRV pertsonala ezagutu behar du zentzuzko puntuazio bat kalkulatu aurretik. Lehen 7–14 egunetan zure oinarri-lerroa eraikitzen du — hortik aurrera, irakurketa bakoitzak zure benetako egoera islatzen du."),
     ("Non gordetzen dira nire datuak?", "Zure datuak modu pribatuan sinkronizatzen dira zure iCloud propioaren bidez. Velak ez du zerbitzari propiorik — ez ditugu inoiz zure datuak zure kontutik kanpo bidaltzen edo gordetzen."),
-    ("Zein baimen behar ditu Velak?", "Velak HealthKit-erako sarbidea eskatzen du, zure Apple Watch-ak dagoeneko automatikoki biltzen dituen bihotz-maiztasunaren aldakortasunaren datuak irakurtzeko."),
+    ("Zein baimen behar ditu Velak?", "Velak HealthKit-erako irakurtzeko sarbidea soilik eskatzen du: bihotz-maiztasunaren aldakortasuna zure estres-puntuaziorako, eta loa, urratsak, energia aktiboa, entrenamenduak eta bihotz-maiztasuna zure Bateriarako. Zure Apple Watch-ak dagoeneko automatikoki biltzen dituen datuak dira. Nahi baduzu, estres-abisuen jakinarazpenak bidaltzeko baimena ere eskatzen dizu."),
   ],
   "contact_h": "Kontaktua eta laguntza",
   "contact_p": "Galderaren bat duzu, errore bat aurkitu duzu edo feedbacka partekatu nahi duzu? Idatzi zuzenean.",
   "privacy": {
     "title_tag": "Vela HRV — Pribatutasun-politika", "title": "Pribatutasun-politika",
-    "updated": "Azken eguneratzea: 2026ko apirila",
+    "updated": "Azken eguneratzea: 2026ko azaroa",
     "highlight": "Velak ez du datu pertsonalik biltzen, transmititzen edo kanpoko zerbitzarietan gordetzen. Dena zure gailuan eta zure iCloud pribatuan geratzen da.",
     "sections": [
       ("Zein datu erabiltzen ditu Velak", [
-        "Velak bihotz-maiztasunaren aldakortasunaren (HRV) datuak irakurtzen ditu Apple HealthKit-etik, zure estres-puntuazio pertsonala kalkulatzeko. Datu horiek zure Apple Watch-ak automatikoki biltzen ditu dagoeneko.",
-        "Velak kalkulatzen dituen irakurketak ere gordetzen ditu — zure estres-puntuazioaren historiala, zure HRV oinarri-lerro pertsonala eta hura kalkulatzeko erabilitako HRV lagin gordinak."]),
+        "Velak Apple HealthKit-eko datuak irakurtzen ditu, irakurtzeko moduan soilik: bihotz-maiztasunaren aldakortasuna (HRV) zure estres-puntuazio pertsonala kalkulatzeko, eta loa, urratsak, energia aktiboa, entrenamenduak, bihotz-maiztasuna eta atseden-egoerako bihotz-maiztasuna zure Bateria kalkulatzeko — loak zenbat kargatzen duen eta egunean zehar zerk husten duen. Datu horiek zure Apple Watch-ak automatikoki biltzen ditu dagoeneko. Velak ez du inoiz HealthKit-en idazten.",
+        "Velak kalkulatzen dituen irakurketak ere gordetzen ditu — zure estres-puntuazioaren historiala, zure HRV oinarri-lerro pertsonala, hura kalkulatzeko erabilitako HRV lagin gordinak eta zure Bateriaren mailak."]),
       ("Non bizi dira zure datuak", [
         "Datu guztiak zure Apple Watch-ean gordetzen dira lokalki, eta modu pribatuan sinkronizatzen dira zure iCloud kontuaren bidez, Apple-ren CloudKit framework-a erabiliz. Velak ez du zerbitzaririk. Daturik ez da inoiz pasatzen Velaren jabetzako sistemetatik.",
         "Zuk bakarrik atzi ditzakezu zure datuak. Ez guk, ez hirugarrenek."]),
       ("Hirugarrenak", [
         "Velak ez du daturik partekatzen hirugarrenekin. Ez dugu analitika-zerbitzurik, publizitate-SDKrik edo kanpoko jarraipen-tresnarik erabiltzen."]),
       ("Osasun-datuak", [
-        "Velak osasun-datuak bere oinarrizko funtzionaltasuna eskaintzeko bakarrik atzitzen ditu — zure estres-maila neurtzea eta jarraitzea. Osasun-datuak ez dira inoiz publizitaterako erabiltzen, ezta inori saltzen ere."]),
+        "Velak osasun-datuak bere oinarrizko funtzionaltasuna eskaintzeko bakarrik atzitzen ditu — zure estres-maila eta zure Bateria neurtzea eta jarraitzea. Osasun-datuak ez dira inoiz publizitaterako erabiltzen, ezta inori saltzen ere."]),
+      ("Erosketak", [
+        "Vela Pro aplikazio barneko erosketa bakarra da, eta Applek kudeatzen du App Store-aren bidez. Velak ez ditu inoiz zure ordainketa-datuak jasotzen: aplikazioak zure gailuan bakarrik egiaztatzen du, Appleren StoreKit-en bidez, Vela Pro desblokeatuta dagoen."]),
       ("Adingabeak", [
-        "Vela ez dago 13 urtetik beherakoei zuzenduta, eta ez du haien daturik nahita biltzen."]),
+        "Vela ez dago berariaz haurrentzat diseinatuta. Inoren daturik biltzen ez duenez, ez du adingabeen daturik biltzen ere."]),
       ("Politika honen aldaketak", [
         "Pribatutasun-politika hau aldatzen bada, bertsio eguneratua URL honetan argitaratuko da data berri batekin. Aldaketen ondoren aplikazioa erabiltzen jarraitzeak politika eguneratua onartzea dakar."]),
     ],
@@ -1786,27 +1794,29 @@ L["gl"] = {
     ("Que Apple Watch necesito?", "Vela require un Apple Watch con watchOS 26 ou superior. Funciona como app independente — non precisa o iPhone preto para medir."),
     ("Por que tarda uns días en amosar a miña puntuación?", "Vela necesita coñecer a túa HRV persoal antes de calcular unha puntuación con sentido. Durante os primeiros 7–14 días constrúe a túa liña base — a partir de aí, cada lectura reflicte o teu estado real."),
     ("Onde se gardan os meus datos?", "Os teus datos sincronízanse de forma privada a través do teu propio iCloud. Vela non ten servidores propios — nunca enviamos nin almacenamos os teus datos fóra da túa conta."),
-    ("Que permisos necesita Vela?", "Vela solicita acceso a HealthKit para ler os datos de variabilidade da frecuencia cardíaca que o teu Apple Watch xa recolle automaticamente."),
+    ("Que permisos necesita Vela?", "Vela solicita acceso só de lectura a HealthKit: a variabilidade da frecuencia cardíaca para a túa puntuación de estrés, e o sono, os pasos, a enerxía activa, os adestramentos e a frecuencia cardíaca para a túa Batería. Son datos que o teu Apple Watch xa recolle automaticamente. Se queres, tamén che pide permiso para enviarche notificacións cos avisos de estrés."),
   ],
   "contact_h": "Contacto e soporte",
   "contact_p": "Tes algunha pregunta, atopaches un erro ou queres compartir feedback? Escríbenos directamente.",
   "privacy": {
     "title_tag": "Vela HRV — Política de privacidade", "title": "Política de privacidade",
-    "updated": "Última actualización: abril 2026",
+    "updated": "Última actualización: novembro 2026",
     "highlight": "Vela non recolle, transmite nin almacena ningún dato persoal en servidores externos. Todo queda no teu dispositivo e no teu iCloud privado.",
     "sections": [
       ("Que datos usa Vela", [
-        "Vela le datos de variabilidade da frecuencia cardíaca (HRV) de Apple HealthKit para calcular a túa puntuación de estrés persoal. Estes datos xa os recolle automaticamente o teu Apple Watch.",
-        "Vela tamén almacena as lecturas que calcula — o historial da túa puntuación de estrés, a túa liña base de HRV persoal e as mostras de HRV en bruto usadas para calculala."]),
+        "Vela le datos de Apple HealthKit, só en modo lectura: a variabilidade da frecuencia cardíaca (HRV) para calcular a túa puntuación de estrés persoal, e o sono, os pasos, a enerxía activa, os adestramentos, a frecuencia cardíaca e a frecuencia cardíaca en repouso para calcular a túa Batería — canto a carga o sono e que a gasta durante o día. Estes datos xa os recolle automaticamente o teu Apple Watch. Vela nunca escribe en HealthKit.",
+        "Vela tamén almacena as lecturas que calcula — o historial da túa puntuación de estrés, a túa liña base de HRV persoal, as mostras de HRV en bruto usadas para calculala e os niveis da túa Batería."]),
       ("Onde viven os teus datos", [
         "Todos os datos almacénanse localmente no teu Apple Watch e sincronízanse de forma privada a través da túa propia conta de iCloud mediante o framework CloudKit de Apple. Vela non ten servidores. Ningún dato pasa nunca por sistemas propiedade de Vela.",
         "Só ti podes acceder aos teus datos. Nin nós, nin terceiros."]),
       ("Terceiros", [
         "Vela non comparte ningún dato con terceiros. Non usamos servizos de analítica, SDK publicitarios nin ningunha ferramenta de seguimento externa."]),
       ("Datos de saúde", [
-        "Vela accede aos datos de saúde unicamente para ofrecer a súa funcionalidade principal — medir e seguir o teu nivel de estrés. Os datos de saúde nunca se usan para publicidade nin se venden a ninguén."]),
+        "Vela accede aos datos de saúde unicamente para ofrecer a súa funcionalidade principal — medir e seguir o teu nivel de estrés e a túa Batería. Os datos de saúde nunca se usan para publicidade nin se venden a ninguén."]),
+      ("Compras", [
+        "Vela Pro é unha compra única dentro da app que xestiona Apple a través da App Store. Vela nunca recibe os teus datos de pagamento: a app só comproba no teu dispositivo, mediante StoreKit de Apple, se Vela Pro está desbloqueado."]),
       ("Menores", [
-        "Vela non está dirixida a menores de 13 anos e non recolle deliberadamente datos deles."]),
+        "Vela non está deseñada especificamente para nenos. Como non recolle datos de ninguén, tampouco recolle datos de menores."]),
       ("Cambios nesta política", [
         "Se esta política de privacidade cambia, a versión actualizada publicarase nesta URL cunha data nova. O uso continuado da app despois dos cambios constitúe a aceptación da política actualizada."]),
     ],
@@ -1887,27 +1897,29 @@ L["fr"] = {
     ("De quelle Apple Watch ai-je besoin ?", "Vela nécessite une Apple Watch sous watchOS 26 ou ultérieur. Elle fonctionne de manière autonome — votre iPhone n'a pas besoin d'être à proximité pour prendre une mesure."),
     ("Pourquoi faut-il quelques jours avant de voir mon score ?", "Vela doit apprendre votre VFC personnelle avant de pouvoir calculer un score pertinent. Pendant les 7 à 14 premiers jours, elle construit votre référence — ensuite, chaque mesure reflète votre état réel."),
     ("Où sont stockées mes données ?", "Vos données se synchronisent de manière privée via votre propre iCloud. Vela n'a aucun serveur — nous n'envoyons ni ne stockons jamais vos données en dehors de votre compte."),
-    ("Quelles autorisations Vela demande-t-elle ?", "Vela demande l'accès à HealthKit pour lire les données de variabilité de la fréquence cardiaque que votre Apple Watch collecte déjà automatiquement."),
+    ("Quelles autorisations Vela demande-t-elle ?", "Vela demande un accès en lecture seule à HealthKit : la variabilité de la fréquence cardiaque pour votre score de stress, et le sommeil, les pas, l'énergie active, les séances d'entraînement et la fréquence cardiaque pour votre Batterie. Ce sont des données que votre Apple Watch collecte déjà automatiquement. Si vous le souhaitez, elle demande aussi l'autorisation de vous envoyer des notifications pour les alertes de stress."),
   ],
   "contact_h": "Contact et assistance",
   "contact_p": "Une question, un bug ou un retour à partager ? Écrivez-nous directement.",
   "privacy": {
     "title_tag": "Vela HRV — Politique de confidentialité", "title": "Politique de confidentialité",
-    "updated": "Dernière mise à jour : avril 2026",
+    "updated": "Dernière mise à jour : novembre 2026",
     "highlight": "Vela ne collecte, ne transmet et ne stocke aucune donnée personnelle sur des serveurs externes. Tout reste sur votre appareil et dans votre iCloud privé.",
     "sections": [
       ("Quelles données Vela utilise", [
-        "Vela lit les données de variabilité de la fréquence cardiaque (VFC) d'Apple HealthKit pour calculer votre score de stress personnel. Ces données sont déjà collectées automatiquement par votre Apple Watch.",
-        "Vela stocke également les mesures qu'elle calcule — l'historique de votre score de stress, votre référence VFC personnelle et les échantillons VFC bruts utilisés pour la calculer."]),
+        "Vela lit des données d'Apple HealthKit, en lecture seule : la variabilité de la fréquence cardiaque (VFC) pour calculer votre score de stress personnel, ainsi que le sommeil, les pas, l'énergie active, les séances d'entraînement, la fréquence cardiaque et la fréquence cardiaque au repos pour calculer votre Batterie — ce que le sommeil recharge et ce qui la vide au fil de la journée. Ces données sont déjà collectées automatiquement par votre Apple Watch. Vela n'écrit jamais dans HealthKit.",
+        "Vela stocke également les mesures qu'elle calcule — l'historique de votre score de stress, votre référence VFC personnelle, les échantillons VFC bruts utilisés pour la calculer et les niveaux de votre Batterie."]),
       ("Où vivent vos données", [
         "Toutes les données sont stockées localement sur votre Apple Watch et synchronisées de manière privée via votre propre compte iCloud, grâce au framework CloudKit d'Apple. Vela n'a pas de serveurs. Aucune donnée ne transite jamais par des systèmes appartenant à Vela.",
         "Vous seul pouvez accéder à vos données. Ni nous, ni des tiers."]),
       ("Tiers", [
         "Vela ne partage aucune donnée avec des tiers. Nous n'utilisons aucun service d'analyse, aucun SDK publicitaire ni aucun outil de suivi externe."]),
       ("Données de santé", [
-        "Vela accède aux données de santé uniquement pour offrir sa fonctionnalité principale — mesurer et suivre votre niveau de stress. Les données de santé ne sont jamais utilisées à des fins publicitaires ni vendues à qui que ce soit."]),
+        "Vela accède aux données de santé uniquement pour offrir sa fonctionnalité principale — mesurer et suivre votre niveau de stress et votre Batterie. Les données de santé ne sont jamais utilisées à des fins publicitaires ni vendues à qui que ce soit."]),
+      ("Achats", [
+        "Vela Pro est un achat intégré unique, traité par Apple via l'App Store. Vela ne reçoit jamais vos données de paiement : l'app vérifie seulement sur votre appareil, via StoreKit d'Apple, si Vela Pro est débloqué."]),
       ("Enfants", [
-        "Vela ne s'adresse pas aux enfants de moins de 13 ans et ne collecte pas sciemment leurs données."]),
+        "Vela n'est pas conçue spécifiquement pour les enfants. Comme elle ne collecte les données de personne, elle ne collecte pas non plus celles des mineurs."]),
       ("Modifications de cette politique", [
         "Si cette politique de confidentialité change, la version mise à jour sera publiée à cette URL avec une nouvelle date. Continuer à utiliser l'app après les modifications vaut acceptation de la politique mise à jour."]),
     ],
@@ -1988,27 +2000,29 @@ L["de"] = {
     ("Welche Apple Watch brauche ich?", "Vela erfordert eine Apple Watch mit watchOS 26 oder neuer. Die App läuft eigenständig — dein iPhone muss für eine Messung nicht in der Nähe sein."),
     ("Warum dauert es ein paar Tage, bis mein Score erscheint?", "Vela muss zuerst deine persönliche HRV kennenlernen, um einen aussagekräftigen Score zu berechnen. In den ersten 7–14 Tagen entsteht deine Baseline — danach spiegelt jede Messung deinen tatsächlichen Zustand wider."),
     ("Wo werden meine Daten gespeichert?", "Deine Daten werden privat über deine eigene iCloud synchronisiert. Vela hat keine eigenen Server — wir senden oder speichern deine Daten niemals außerhalb deines Accounts."),
-    ("Welche Berechtigungen braucht Vela?", "Vela bittet um Zugriff auf HealthKit, um die Herzfrequenzvariabilitätsdaten zu lesen, die deine Apple Watch bereits automatisch erfasst."),
+    ("Welche Berechtigungen braucht Vela?", "Vela bittet um reinen Lesezugriff auf HealthKit: die Herzfrequenzvariabilität für deinen Stress-Score sowie Schlaf, Schritte, aktive Energie, Trainings und Herzfrequenz für deine Batterie. Das sind Daten, die deine Apple Watch bereits automatisch erfasst. Wenn du möchtest, bittet Vela außerdem um die Erlaubnis, dir Mitteilungen für Stresshinweise zu senden."),
   ],
   "contact_h": "Kontakt & Support",
   "contact_p": "Du hast eine Frage, einen Fehler gefunden oder Feedback? Schreib uns direkt.",
   "privacy": {
     "title_tag": "Vela HRV — Datenschutzerklärung", "title": "Datenschutzerklärung",
-    "updated": "Zuletzt aktualisiert: April 2026",
+    "updated": "Zuletzt aktualisiert: November 2026",
     "highlight": "Vela erhebt, überträgt und speichert keinerlei personenbezogene Daten auf externen Servern. Alles bleibt auf deinem Gerät und in deiner privaten iCloud.",
     "sections": [
       ("Welche Daten Vela nutzt", [
-        "Vela liest Herzfrequenzvariabilitätsdaten (HRV) aus Apple HealthKit, um deinen persönlichen Stress-Score zu berechnen. Diese Daten erfasst deine Apple Watch bereits automatisch.",
-        "Vela speichert außerdem die berechneten Messungen — den Verlauf deines Stress-Scores, deine persönliche HRV-Baseline und die HRV-Rohdaten, aus denen sie berechnet wird."]),
+        "Vela liest Daten aus Apple HealthKit, ausschließlich lesend: die Herzfrequenzvariabilität (HRV), um deinen persönlichen Stress-Score zu berechnen, sowie Schlaf, Schritte, aktive Energie, Trainings, Herzfrequenz und Ruheherzfrequenz, um deine Batterie zu berechnen — wie viel der Schlaf auflädt und was sie im Laufe des Tages verbraucht. Diese Daten erfasst deine Apple Watch bereits automatisch. Vela schreibt nie in HealthKit.",
+        "Vela speichert außerdem die berechneten Messungen — den Verlauf deines Stress-Scores, deine persönliche HRV-Baseline, die HRV-Rohdaten, aus denen sie berechnet wird, und die Stände deiner Batterie."]),
       ("Wo deine Daten liegen", [
         "Alle Daten werden lokal auf deiner Apple Watch gespeichert und privat über deinen eigenen iCloud-Account mit Apples CloudKit-Framework synchronisiert. Vela hat keine Server. Keine Daten laufen jemals über Systeme, die Vela gehören oder von Vela betrieben werden.",
         "Nur du kannst auf deine Daten zugreifen. Weder wir noch Dritte."]),
       ("Dritte", [
         "Vela teilt keine Daten mit Dritten. Wir verwenden keine Analysedienste, keine Werbe-SDKs und keine externen Tracking-Tools."]),
       ("Gesundheitsdaten", [
-        "Vela greift auf Gesundheitsdaten ausschließlich zu, um seine Kernfunktion zu erfüllen — dein Stressniveau zu messen und zu verfolgen. Gesundheitsdaten werden niemals für Werbung genutzt oder an Dritte verkauft."]),
+        "Vela greift auf Gesundheitsdaten ausschließlich zu, um seine Kernfunktion zu erfüllen — dein Stressniveau und deine Batterie zu messen und zu verfolgen. Gesundheitsdaten werden niemals für Werbung genutzt oder an Dritte verkauft."]),
+      ("Käufe", [
+        "Vela Pro ist ein einmaliger In-App-Kauf, den Apple über den App Store abwickelt. Vela erhält nie deine Zahlungsdaten: Die App prüft nur auf deinem Gerät über Apples StoreKit, ob Vela Pro freigeschaltet ist."]),
       ("Kinder", [
-        "Vela richtet sich nicht an Kinder unter 13 Jahren und erhebt wissentlich keine Daten von ihnen."]),
+        "Vela ist nicht speziell für Kinder gedacht. Da Vela von niemandem Daten erhebt, erhebt es auch keine Daten von Minderjährigen."]),
       ("Änderungen an dieser Erklärung", [
         "Falls sich diese Datenschutzerklärung ändert, wird die aktualisierte Version unter dieser URL mit neuem Datum veröffentlicht. Die weitere Nutzung der App nach Änderungen gilt als Zustimmung zur aktualisierten Erklärung."]),
     ],
@@ -2089,27 +2103,29 @@ L["it"] = {
     ("Quale Apple Watch mi serve?", "Vela richiede un Apple Watch con watchOS 26 o successivo. Funziona come app indipendente — l'iPhone non deve essere nelle vicinanze per effettuare una misurazione."),
     ("Perché servono alcuni giorni prima di vedere il mio punteggio?", "Vela deve conoscere la tua HRV personale prima di calcolare un punteggio significativo. Nei primi 7–14 giorni costruisce la tua baseline — da lì in poi, ogni misurazione riflette il tuo stato reale."),
     ("Dove sono conservati i miei dati?", "I tuoi dati si sincronizzano in modo privato tramite il tuo iCloud. Vela non ha server propri — non inviamo né conserviamo mai i tuoi dati al di fuori del tuo account."),
-    ("Quali permessi richiede Vela?", "Vela richiede l'accesso a HealthKit per leggere i dati di variabilità della frequenza cardiaca che il tuo Apple Watch raccoglie già automaticamente."),
+    ("Quali permessi richiede Vela?", "Vela richiede l'accesso in sola lettura a HealthKit: la variabilità della frequenza cardiaca per il tuo punteggio di stress, e il sonno, i passi, l'energia attiva, gli allenamenti e la frequenza cardiaca per la tua Batteria. Sono dati che il tuo Apple Watch raccoglie già automaticamente. Se vuoi, chiede anche il permesso di inviarti notifiche per gli avvisi di stress."),
   ],
   "contact_h": "Contatti e supporto",
   "contact_p": "Hai una domanda, hai trovato un bug o vuoi condividere un feedback? Scrivici direttamente.",
   "privacy": {
     "title_tag": "Vela HRV — Informativa sulla privacy", "title": "Informativa sulla privacy",
-    "updated": "Ultimo aggiornamento: aprile 2026",
+    "updated": "Ultimo aggiornamento: novembre 2026",
     "highlight": "Vela non raccoglie, trasmette né conserva alcun dato personale su server esterni. Tutto resta sul tuo dispositivo e nel tuo iCloud privato.",
     "sections": [
       ("Quali dati usa Vela", [
-        "Vela legge i dati di variabilità della frequenza cardiaca (HRV) da Apple HealthKit per calcolare il tuo punteggio di stress personale. Questi dati vengono già raccolti automaticamente dal tuo Apple Watch.",
-        "Vela conserva anche le misurazioni che calcola — lo storico del tuo punteggio di stress, la tua baseline HRV personale e i campioni HRV grezzi usati per calcolarla."]),
+        "Vela legge dati da Apple HealthKit, in sola lettura: la variabilità della frequenza cardiaca (HRV) per calcolare il tuo punteggio di stress personale, e il sonno, i passi, l'energia attiva, gli allenamenti, la frequenza cardiaca e la frequenza cardiaca a riposo per calcolare la tua Batteria — quanto la ricarica il sonno e cosa la consuma durante il giorno. Questi dati vengono già raccolti automaticamente dal tuo Apple Watch. Vela non scrive mai in HealthKit.",
+        "Vela conserva anche le misurazioni che calcola — lo storico del tuo punteggio di stress, la tua baseline HRV personale, i campioni HRV grezzi usati per calcolarla e i livelli della tua Batteria."]),
       ("Dove vivono i tuoi dati", [
         "Tutti i dati sono conservati localmente sul tuo Apple Watch e sincronizzati in modo privato tramite il tuo account iCloud con il framework CloudKit di Apple. Vela non ha server. Nessun dato passa mai per sistemi di proprietà di Vela.",
         "Solo tu puoi accedere ai tuoi dati. Né noi, né terze parti."]),
       ("Terze parti", [
         "Vela non condivide alcun dato con terze parti. Non usiamo servizi di analisi, SDK pubblicitari né strumenti di tracciamento esterni."]),
       ("Dati sanitari", [
-        "Vela accede ai dati sanitari esclusivamente per offrire la sua funzionalità principale — misurare e monitorare il tuo livello di stress. I dati sanitari non vengono mai usati per pubblicità né venduti a nessuno."]),
+        "Vela accede ai dati sanitari esclusivamente per offrire la sua funzionalità principale — misurare e monitorare il tuo livello di stress e la tua Batteria. I dati sanitari non vengono mai usati per pubblicità né venduti a nessuno."]),
+      ("Acquisti", [
+        "Vela Pro è un acquisto in-app unico, gestito da Apple tramite l'App Store. Vela non riceve mai i tuoi dati di pagamento: l'app verifica solo sul tuo dispositivo, tramite StoreKit di Apple, se Vela Pro è sbloccato."]),
       ("Minori", [
-        "Vela non è rivolta a minori di 13 anni e non raccoglie consapevolmente i loro dati."]),
+        "Vela non è pensata specificamente per i bambini. Poiché non raccoglie dati di nessuno, non raccoglie nemmeno quelli dei minori."]),
       ("Modifiche a questa informativa", [
         "Se questa informativa sulla privacy cambia, la versione aggiornata sarà pubblicata a questo URL con una nuova data. L'uso continuato dell'app dopo le modifiche costituisce accettazione dell'informativa aggiornata."]),
     ],
@@ -2190,27 +2206,29 @@ L["pt"] = {
     ("De que Apple Watch preciso?", "A Vela requer um Apple Watch com watchOS 26 ou posterior. Funciona como app independente — o iPhone não precisa de estar por perto para fazer uma medição."),
     ("Porque demora alguns dias a mostrar a minha pontuação?", "A Vela precisa de conhecer a sua HRV pessoal antes de calcular uma pontuação com significado. Durante os primeiros 7–14 dias constrói a sua linha de base — a partir daí, cada leitura reflete o seu estado real."),
     ("Onde são guardados os meus dados?", "Os seus dados sincronizam-se de forma privada através do seu próprio iCloud. A Vela não tem servidores próprios — nunca enviamos nem guardamos os seus dados fora da sua conta."),
-    ("Que permissões precisa a Vela?", "A Vela pede acesso ao HealthKit para ler os dados de variabilidade da frequência cardíaca que o seu Apple Watch já recolhe automaticamente."),
+    ("Que permissões precisa a Vela?", "A Vela pede acesso apenas de leitura ao HealthKit: a variabilidade da frequência cardíaca para a sua pontuação de stress, e o sono, os passos, a energia ativa, os treinos e a frequência cardíaca para a sua Bateria. São dados que o seu Apple Watch já recolhe automaticamente. Se quiser, também pede permissão para lhe enviar notificações com os avisos de stress."),
   ],
   "contact_h": "Contacto e suporte",
   "contact_p": "Tem alguma pergunta, encontrou um erro ou quer partilhar feedback? Escreva-nos diretamente.",
   "privacy": {
     "title_tag": "Vela HRV — Política de privacidade", "title": "Política de privacidade",
-    "updated": "Última atualização: abril de 2026",
+    "updated": "Última atualização: novembro de 2026",
     "highlight": "A Vela não recolhe, transmite nem armazena quaisquer dados pessoais em servidores externos. Tudo fica no seu dispositivo e no seu iCloud privado.",
     "sections": [
       ("Que dados usa a Vela", [
-        "A Vela lê dados de variabilidade da frequência cardíaca (HRV) do Apple HealthKit para calcular a sua pontuação de stress pessoal. Estes dados já são recolhidos automaticamente pelo seu Apple Watch.",
-        "A Vela também guarda as leituras que calcula — o histórico da sua pontuação de stress, a sua linha de base de HRV pessoal e as amostras de HRV em bruto usadas para a calcular."]),
+        "A Vela lê dados do Apple HealthKit, apenas em modo de leitura: a variabilidade da frequência cardíaca (HRV) para calcular a sua pontuação de stress pessoal, e o sono, os passos, a energia ativa, os treinos, a frequência cardíaca e a frequência cardíaca em repouso para calcular a sua Bateria — quanto o sono a carrega e o que a gasta ao longo do dia. Estes dados já são recolhidos automaticamente pelo seu Apple Watch. A Vela nunca escreve no HealthKit.",
+        "A Vela também guarda as leituras que calcula — o histórico da sua pontuação de stress, a sua linha de base de HRV pessoal, as amostras de HRV em bruto usadas para a calcular e os níveis da sua Bateria."]),
       ("Onde vivem os seus dados", [
         "Todos os dados são guardados localmente no seu Apple Watch e sincronizados de forma privada através da sua própria conta iCloud, com o framework CloudKit da Apple. A Vela não tem servidores. Nenhum dado passa alguma vez por sistemas detidos ou operados pela Vela.",
         "Só você pode aceder aos seus dados. Nem nós, nem terceiros."]),
       ("Terceiros", [
         "A Vela não partilha quaisquer dados com terceiros. Não usamos serviços de análise, SDK de publicidade nem ferramentas de rastreio externas."]),
       ("Dados de saúde", [
-        "A Vela acede aos dados de saúde exclusivamente para oferecer a sua funcionalidade principal — medir e acompanhar o seu nível de stress. Os dados de saúde nunca são usados para publicidade nem vendidos a ninguém."]),
+        "A Vela acede aos dados de saúde exclusivamente para oferecer a sua funcionalidade principal — medir e acompanhar o seu nível de stress e a sua Bateria. Os dados de saúde nunca são usados para publicidade nem vendidos a ninguém."]),
+      ("Compras", [
+        "O Vela Pro é uma compra única na app, processada pela Apple através da App Store. A Vela nunca recebe os seus dados de pagamento: a app apenas verifica no seu dispositivo, através do StoreKit da Apple, se o Vela Pro está desbloqueado."]),
       ("Crianças", [
-        "A Vela não se destina a crianças com menos de 13 anos e não recolhe conscientemente dados delas."]),
+        "A Vela não foi concebida especificamente para crianças. Como não recolhe dados de ninguém, também não recolhe dados de menores."]),
       ("Alterações a esta política", [
         "Se esta política de privacidade mudar, a versão atualizada será publicada neste URL com uma nova data. A utilização continuada da app após as alterações constitui aceitação da política atualizada."]),
     ],
@@ -2291,27 +2309,29 @@ L["cs"] = {
     ("Jaké Apple Watch potřebuji?", "Vela vyžaduje Apple Watch s watchOS 26 nebo novějším. Funguje jako samostatná aplikace — pro měření nemusíte mít iPhone poblíž."),
     ("Proč trvá několik dní, než se zobrazí moje skóre?", "Vela se nejdřív musí naučit vaše osobní HRV, než dokáže spočítat smysluplné skóre. Během prvních 7–14 dní si vytváří vaši základní linii — od té chvíle každé měření odráží váš skutečný stav."),
     ("Kde jsou uložena moje data?", "Vaše data se synchronizují soukromě přes váš vlastní iCloud. Vela nemá žádné vlastní servery — vaše data nikdy neodesíláme ani neukládáme mimo váš účet."),
-    ("Jaká oprávnění Vela potřebuje?", "Vela žádá o přístup k HealthKitu, aby mohla číst data o variabilitě srdečního tepu, která vaše Apple Watch už automaticky shromažďují."),
+    ("Jaká oprávnění Vela potřebuje?", "Vela žádá o přístup k HealthKitu pouze pro čtení: variabilitu srdečního tepu pro vaše skóre stresu a spánek, kroky, aktivní energii, tréninky a srdeční tep pro vaši Baterii. Jsou to data, která vaše Apple Watch už automaticky shromažďují. Pokud chcete, požádá také o povolení posílat vám oznámení s upozorněními na stres."),
   ],
   "contact_h": "Kontakt a podpora",
   "contact_p": "Máte dotaz, našli jste chybu nebo se chcete podělit o zpětnou vazbu? Napište nám přímo.",
   "privacy": {
     "title_tag": "Vela HRV — Zásady ochrany soukromí", "title": "Zásady ochrany soukromí",
-    "updated": "Poslední aktualizace: duben 2026",
+    "updated": "Poslední aktualizace: listopad 2026",
     "highlight": "Vela neshromažďuje, nepřenáší ani neukládá žádné osobní údaje na externí servery. Vše zůstává ve vašem zařízení a ve vašem soukromém iCloudu.",
     "sections": [
       ("Jaká data Vela používá", [
-        "Vela čte data o variabilitě srdečního tepu (HRV) z Apple HealthKitu, aby spočítala vaše osobní skóre stresu. Tato data už vaše Apple Watch shromažďují automaticky.",
-        "Vela také ukládá měření, která spočítá — historii vašeho skóre stresu, vaši osobní základní linii HRV a surové vzorky HRV použité k jejímu výpočtu."]),
+        "Vela čte data z Apple HealthKitu, pouze pro čtení: variabilitu srdečního tepu (HRV), aby spočítala vaše osobní skóre stresu, a spánek, kroky, aktivní energii, tréninky, srdeční tep a klidový srdeční tep, aby spočítala vaši Baterii — kolik ji nabije spánek a co ji během dne vybíjí. Tato data už vaše Apple Watch shromažďují automaticky. Vela do HealthKitu nikdy nezapisuje.",
+        "Vela také ukládá měření, která spočítá — historii vašeho skóre stresu, vaši osobní základní linii HRV, surové vzorky HRV použité k jejímu výpočtu a úrovně vaší Baterie."]),
       ("Kde vaše data žijí", [
         "Všechna data jsou uložena lokálně ve vašich Apple Watch a synchronizována soukromě přes váš vlastní účet iCloud pomocí frameworku CloudKit od Applu. Vela nemá žádné servery. Žádná data nikdy neprocházejí systémy, které vlastní nebo provozuje Vela.",
         "K vašim datům máte přístup jen vy. Ne my, ne třetí strany."]),
       ("Třetí strany", [
         "Vela nesdílí žádná data se třetími stranami. Nepoužíváme analytické služby, reklamní SDK ani žádné externí sledovací nástroje."]),
       ("Zdravotní data", [
-        "Vela přistupuje ke zdravotním datům výhradně kvůli své hlavní funkci — měření a sledování vaší úrovně stresu. Zdravotní data se nikdy nepoužívají k reklamě ani se nikomu neprodávají."]),
+        "Vela přistupuje ke zdravotním datům výhradně kvůli své hlavní funkci — měření a sledování vaší úrovně stresu a vaší Baterie. Zdravotní data se nikdy nepoužívají k reklamě ani se nikomu neprodávají."]),
+      ("Nákupy", [
+        "Vela Pro je jednorázový nákup v aplikaci, který zpracovává Apple prostřednictvím App Storu. Vela nikdy nedostává vaše platební údaje: aplikace pouze ve vašem zařízení ověří přes Apple StoreKit, zda je Vela Pro odemčená."]),
       ("Děti", [
-        "Vela není určena dětem mladším 13 let a vědomě od nich neshromažďuje žádná data."]),
+        "Vela není navržena speciálně pro děti. Protože neshromažďuje data od nikoho, neshromažďuje je ani od nezletilých."]),
       ("Změny těchto zásad", [
         "Pokud se tyto zásady ochrany soukromí změní, aktualizovaná verze bude zveřejněna na této adrese URL s novým datem. Pokračováním v používání aplikace po změnách vyjadřujete souhlas s aktualizovanými zásadami."]),
     ],
@@ -2392,27 +2412,29 @@ L["el"] = {
     ("Ποιο Apple Watch χρειάζομαι;", "Το Vela απαιτεί Apple Watch με watchOS 26 ή νεότερο. Λειτουργεί ως αυτόνομη εφαρμογή — το iPhone σας δεν χρειάζεται να είναι κοντά για να γίνει μια μέτρηση."),
     ("Γιατί χρειάζονται μερικές ημέρες για να εμφανιστεί το σκορ μου;", "Το Vela πρέπει πρώτα να μάθει το προσωπικό σας HRV για να υπολογίσει ένα ουσιαστικό σκορ. Τις πρώτες 7–14 ημέρες χτίζει το baseline σας — από εκεί και πέρα, κάθε μέτρηση αντικατοπτρίζει την πραγματική σας κατάσταση."),
     ("Πού αποθηκεύονται τα δεδομένα μου;", "Τα δεδομένα σας συγχρονίζονται ιδιωτικά μέσω του δικού σας iCloud. Το Vela δεν έχει δικούς του διακομιστές — δεν στέλνουμε ούτε αποθηκεύουμε ποτέ τα δεδομένα σας εκτός του λογαριασμού σας."),
-    ("Ποιες άδειες χρειάζεται το Vela;", "Το Vela ζητά πρόσβαση στο HealthKit για να διαβάσει τα δεδομένα μεταβλητότητας καρδιακού ρυθμού που το Apple Watch σας συλλέγει ήδη αυτόματα."),
+    ("Ποιες άδειες χρειάζεται το Vela;", "Το Vela ζητά πρόσβαση μόνο για ανάγνωση στο HealthKit: τη μεταβλητότητα καρδιακού ρυθμού για το σκορ άγχους σας, και τον ύπνο, τα βήματα, την ενεργή ενέργεια, τις προπονήσεις και τον καρδιακό ρυθμό για την Μπαταρία σας. Είναι δεδομένα που το Apple Watch σας συλλέγει ήδη αυτόματα. Αν θέλετε, ζητά επίσης άδεια να σας στέλνει ειδοποιήσεις για το άγχος."),
   ],
   "contact_h": "Επικοινωνία & υποστήριξη",
   "contact_p": "Έχετε μια ερώτηση, βρήκατε ένα σφάλμα ή θέλετε να μοιραστείτε σχόλια; Επικοινωνήστε απευθείας.",
   "privacy": {
     "title_tag": "Vela HRV — Πολιτική απορρήτου", "title": "Πολιτική απορρήτου",
-    "updated": "Τελευταία ενημέρωση: Απρίλιος 2026",
+    "updated": "Τελευταία ενημέρωση: Νοέμβριος 2026",
     "highlight": "Το Vela δεν συλλέγει, δεν μεταδίδει και δεν αποθηκεύει κανένα προσωπικό δεδομένο σε εξωτερικούς διακομιστές. Όλα παραμένουν στη συσκευή σας και στο ιδιωτικό σας iCloud.",
     "sections": [
       ("Ποια δεδομένα χρησιμοποιεί το Vela", [
-        "Το Vela διαβάζει δεδομένα μεταβλητότητας καρδιακού ρυθμού (HRV) από το Apple HealthKit για να υπολογίσει το προσωπικό σας σκορ άγχους. Αυτά τα δεδομένα συλλέγονται ήδη αυτόματα από το Apple Watch σας.",
-        "Το Vela αποθηκεύει επίσης τις μετρήσεις που υπολογίζει — το ιστορικό του σκορ άγχους σας, το προσωπικό σας baseline HRV και τα ακατέργαστα δείγματα HRV που χρησιμοποιούνται για τον υπολογισμό του."]),
+        "Το Vela διαβάζει δεδομένα από το Apple HealthKit, μόνο για ανάγνωση: τη μεταβλητότητα καρδιακού ρυθμού (HRV) για να υπολογίσει το προσωπικό σας σκορ άγχους, καθώς και τον ύπνο, τα βήματα, την ενεργή ενέργεια, τις προπονήσεις, τον καρδιακό ρυθμό και τον καρδιακό ρυθμό ηρεμίας για να υπολογίσει την Μπαταρία σας — πόσο τη φορτίζει ο ύπνος και τι την αδειάζει μέσα στη μέρα. Αυτά τα δεδομένα συλλέγονται ήδη αυτόματα από το Apple Watch σας. Το Vela δεν γράφει ποτέ στο HealthKit.",
+        "Το Vela αποθηκεύει επίσης τις μετρήσεις που υπολογίζει — το ιστορικό του σκορ άγχους σας, το προσωπικό σας baseline HRV, τα ακατέργαστα δείγματα HRV που χρησιμοποιούνται για τον υπολογισμό του και τα επίπεδα της Μπαταρίας σας."]),
       ("Πού βρίσκονται τα δεδομένα σας", [
         "Όλα τα δεδομένα αποθηκεύονται τοπικά στο Apple Watch σας και συγχρονίζονται ιδιωτικά μέσω του δικού σας λογαριασμού iCloud με το framework CloudKit της Apple. Το Vela δεν έχει διακομιστές. Κανένα δεδομένο δεν περνά ποτέ από συστήματα που ανήκουν ή λειτουργούν από το Vela.",
         "Μόνο εσείς έχετε πρόσβαση στα δεδομένα σας. Ούτε εμείς, ούτε τρίτοι."]),
       ("Τρίτα μέρη", [
         "Το Vela δεν μοιράζεται κανένα δεδομένο με τρίτους. Δεν χρησιμοποιούμε υπηρεσίες ανάλυσης, διαφημιστικά SDK ή οποιαδήποτε εξωτερικά εργαλεία παρακολούθησης."]),
       ("Δεδομένα υγείας", [
-        "Το Vela αποκτά πρόσβαση σε δεδομένα υγείας αποκλειστικά για να παρέχει τη βασική του λειτουργία — τη μέτρηση και την παρακολούθηση του επιπέδου άγχους σας. Τα δεδομένα υγείας δεν χρησιμοποιούνται ποτέ για διαφήμιση ούτε πωλούνται σε κανέναν."]),
+        "Το Vela αποκτά πρόσβαση σε δεδομένα υγείας αποκλειστικά για να παρέχει τη βασική του λειτουργία — τη μέτρηση και την παρακολούθηση του επιπέδου άγχους σας και της Μπαταρίας σας. Τα δεδομένα υγείας δεν χρησιμοποιούνται ποτέ για διαφήμιση ούτε πωλούνται σε κανέναν."]),
+      ("Αγορές", [
+        "Το Vela Pro είναι μια εφάπαξ αγορά εντός της εφαρμογής, την οποία διεκπεραιώνει η Apple μέσω του App Store. Το Vela δεν λαμβάνει ποτέ τα στοιχεία πληρωμής σας: η εφαρμογή ελέγχει μόνο στη συσκευή σας, μέσω του StoreKit της Apple, αν το Vela Pro είναι ξεκλείδωτο."]),
       ("Παιδιά", [
-        "Το Vela δεν απευθύνεται σε παιδιά κάτω των 13 ετών και δεν συλλέγει εν γνώσει του δεδομένα από αυτά."]),
+        "Το Vela δεν έχει σχεδιαστεί ειδικά για παιδιά. Αφού δεν συλλέγει δεδομένα από κανέναν, δεν συλλέγει ούτε από ανηλίκους."]),
       ("Αλλαγές σε αυτήν την πολιτική", [
         "Εάν αυτή η πολιτική απορρήτου αλλάξει, η ενημερωμένη έκδοση θα δημοσιευτεί σε αυτήν τη διεύθυνση URL με νέα ημερομηνία. Η συνεχής χρήση της εφαρμογής μετά τις αλλαγές συνιστά αποδοχή της ενημερωμένης πολιτικής."]),
     ],
@@ -2493,27 +2515,29 @@ L["ja"] = {
     ("どの Apple Watch が必要ですか？", "Vela には watchOS 26 以降の Apple Watch が必要です。単体で動作するため、測定に iPhone が近くにある必要はありません。"),
     ("スコアが表示されるまで数日かかるのはなぜですか？", "意味のあるスコアを算出するには、Vela がまずあなた個人の HRV を学習する必要があります。最初の 7〜14 日間でベースラインを構築し、それ以降は各測定値が実際の状態を反映します。"),
     ("データはどこに保存されますか？", "データはあなた自身の iCloud を通じてプライベートに同期されます。Vela は独自のサーバーを持たず、あなたのアカウントの外にデータを送信・保存することは一切ありません。"),
-    ("Vela はどの権限を必要としますか？", "Vela は、Apple Watch がすでに自動的に収集している心拍変動データを読み取るために、HealthKit へのアクセスを求めます。"),
+    ("Vela はどの権限を必要としますか？", "Vela は HealthKit への読み取り専用アクセスを求めます。ストレススコアのために心拍変動を、バッテリーのために睡眠・歩数・アクティブエネルギー・ワークアウト・心拍数を読み取ります。いずれも Apple Watch がすでに自動的に収集しているデータです。ご希望の場合は、ストレスの通知を送るための許可も求めます。"),
   ],
   "contact_h": "お問い合わせとサポート",
   "contact_p": "ご質問、不具合の報告、フィードバックの共有などがあれば、直接ご連絡ください。",
   "privacy": {
     "title_tag": "Vela HRV — プライバシーポリシー", "title": "プライバシーポリシー",
-    "updated": "最終更新：2026年4月",
+    "updated": "最終更新：2026年11月",
     "highlight": "Vela は個人データを外部サーバーで収集・送信・保存することは一切ありません。すべてはあなたのデバイスとプライベートな iCloud にとどまります。",
     "sections": [
       ("Vela が使用するデータ", [
-        "Vela は Apple HealthKit から心拍変動（HRV）データを読み取り、あなた個人のストレススコアを算出します。このデータはすでに Apple Watch によって自動的に収集されています。",
-        "Vela は算出した測定値も保存します。ストレススコアの履歴、あなた個人の HRV ベースライン、そしてベースラインの算出に使われる HRV の生サンプルです。"]),
+        "Vela は Apple HealthKit のデータを読み取り専用で利用します。心拍変動（HRV）からあなた個人のストレススコアを、睡眠・歩数・アクティブエネルギー・ワークアウト・心拍数・安静時心拍数からバッテリー（睡眠でどれだけ充電され、日中に何で消費されたか）を算出します。これらのデータはすでに Apple Watch によって自動的に収集されています。Vela が HealthKit に書き込むことはありません。",
+        "Vela は算出した測定値も保存します。ストレススコアの履歴、あなた個人の HRV ベースライン、ベースラインの算出に使われる HRV の生サンプル、そしてバッテリーのレベルです。"]),
       ("データの保存場所", [
         "すべてのデータは Apple Watch にローカルで保存され、Apple の CloudKit フレームワークを使ってあなた自身の iCloud アカウントを通じてプライベートに同期されます。Vela はサーバーを持ちません。Vela が所有・運用するシステムをデータが通過することは一切ありません。",
         "あなたのデータにアクセスできるのはあなただけです。私たちも第三者もアクセスできません。"]),
       ("第三者", [
         "Vela はいかなるデータも第三者と共有しません。分析サービス、広告 SDK、外部のトラッキングツールは一切使用していません。"]),
       ("健康データ", [
-        "Vela が健康データにアクセスするのは、中核機能であるストレスレベルの測定と記録を提供するためだけです。健康データが広告に使われたり、いかなる相手にも販売されたりすることはありません。"]),
+        "Vela が健康データにアクセスするのは、中核機能であるストレスレベルとバッテリーの測定と記録を提供するためだけです。健康データが広告に使われたり、いかなる相手にも販売されたりすることはありません。"]),
+      ("購入", [
+        "Vela Pro は買い切りのアプリ内課金で、App Store を通じて Apple が処理します。Vela があなたの支払い情報を受け取ることはありません。アプリはデバイス上で Apple の StoreKit を通じて、Vela Pro が解除されているかどうかを確認するだけです。"]),
       ("子ども", [
-        "Vela は13歳未満の子どもを対象としておらず、子どもからデータを意図的に収集することはありません。"]),
+        "Vela は子ども向けに特別に設計されたアプリではありません。誰のデータも収集しないため、未成年者のデータも収集しません。"]),
       ("本ポリシーの変更", [
         "本プライバシーポリシーが変更された場合、更新版が新しい日付とともにこの URL で公開されます。変更後もアプリを継続して使用することは、更新されたポリシーへの同意とみなされます。"]),
     ],
