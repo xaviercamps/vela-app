@@ -19,7 +19,7 @@ TOUR_IMAGES = ["watch-shot-score.png", "watch-shot-trend.png", "watch-shot-expla
 SITE_URL = "https://velahrv.com"
 DEFAULT_LOCALE = "en"  # served at the domain root; used as the x-default hreflang target
 BUILD_DATE = date.today().isoformat()
-PAGES = ["landing", "support", "privacy", "accessibility", "changelog"]
+PAGES = ["landing", "support", "privacy", "accessibility", "changelog", "legal"]
 
 # BCP47 tag Google/Bing expect for each site locale in hreflang and og:locale
 HREFLANG_TAG = {
@@ -32,7 +32,7 @@ OG_LOCALE = {
 }
 
 def path_for(code: str, page: str) -> str:
-    """page is one of: landing, support, privacy, accessibility."""
+    """page is one of: landing, support, privacy, accessibility, changelog, legal."""
     base = "/" if code == "en" else f"/{code}/"
     return base if page == "landing" else f"{base}{page}/"
 
@@ -294,6 +294,8 @@ SUPPORT_CSS = """    :root {
       border-top: 1px solid var(--border);
     }
     footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    footer p a { color: inherit; text-decoration: none; }
+    footer p a:hover { color: var(--primary-bright); }
 """ + LANG_ROW_CSS + """    .fade-in {
       opacity: 0;
       transform: translateY(16px);
@@ -440,6 +442,8 @@ SUB_CSS = """    :root {
       border-top: 1px solid var(--border);
     }
     footer p { font-size: 0.8rem; color: var(--text-tertiary); }
+    footer p a { color: inherit; text-decoration: none; }
+    footer p a:hover { color: var(--primary-bright); }
 """ + LANG_ROW_CSS + """    .fade-in {
       opacity: 0;
       transform: translateY(16px);
@@ -883,7 +887,7 @@ LANDING_HEAD = """<!DOCTYPE html>
 
 def footer(t, page, code):
     return f"""    <footer>
-      <p>© 2026 Vela HRV · {t['rights']}</p>
+      <p>© 2026 Vela HRV · {t['rights']} · <a href="{path_for(code, 'legal')}">{LEGAL[code]['footer']}</a></p>
       {lang_row(page, code, t['lang_label'])}
     </footer>"""
 
@@ -1272,6 +1276,7 @@ def render_landing(code, t):
       <a href="{path_for(code, 'support')}">{L['footer_support']}</a>
       <a href="{path_for(code, 'changelog')}">{L['footer_changelog']}</a>
       <a href="{path_for(code, 'privacy')}">{L['footer_privacy']}</a>
+      <a href="{path_for(code, 'legal')}">{LEGAL[code]['footer']}</a>
       <a href="mailto:{MAIL}">{L['footer_contact']}</a>
     </div>
   </div>
@@ -3302,6 +3307,207 @@ def write(path: Path, content: str):
     path.write_text(content, encoding="utf-8")
     print(f"  {path.relative_to(SITE)}")
 
+
+# ---------------------------------------------------------------------------
+# Aviso legal (LSSI, Ley 34/2002, art. 10). Los datos del titular son los mismos
+# que se declaran como comerciante en App Store Connect (DSA): si cambian allí,
+# cambiarlos aquí también.
+OWNER = {
+    "name": "Xavier Camps Novi",
+    "nif": "46992142Z",
+    "address": "Calle José Salarrulla, 24, 22520 Fraga (Huesca)",
+}
+
+LEGAL = {
+  "es": {
+    "footer": "Aviso legal", "title": "Aviso legal", "title_tag": "Vela HRV — Aviso legal",
+    "updated": "Última actualización: noviembre 2026",
+    "highlight": "En cumplimiento de la Ley 34/2002, de servicios de la sociedad de la información y de comercio electrónico (LSSI), estos son los datos del titular de este sitio web y de la app Vela HRV.",
+    "owner_h": "Titular", "name": "Nombre", "nif": "NIF", "address": "Dirección", "email": "Correo electrónico", "country": "España",
+    "sections": [
+      ("Objeto", ["Este sitio web presenta la app Vela HRV para Apple Watch y ofrece su soporte, su política de privacidad y su historial de versiones. La app se distribuye únicamente a través del App Store de Apple, que gestiona las descargas y la compra de Vela Pro."]),
+      ("Propiedad intelectual", ["Los textos, las imágenes, el diseño y la marca Vela de este sitio pertenecen a su titular. Apple, Apple Watch, App Store y HealthKit son marcas de Apple Inc."]),
+      ("Responsabilidad", ["Vela es una app de bienestar, no un dispositivo médico, y no ofrece diagnósticos. La información de la app y de este sitio no sustituye el consejo de un profesional sanitario."]),
+      ("Legislación aplicable", ["Este aviso legal se rige por la legislación española."]),
+    ],
+  },
+  "en": {
+    "footer": "Legal notice", "title": "Legal notice", "title_tag": "Vela HRV — Legal notice",
+    "updated": "Last updated: November 2026",
+    "highlight": "In compliance with Spanish Law 34/2002 on information society services and electronic commerce (LSSI), these are the details of the owner of this website and of the Vela HRV app.",
+    "owner_h": "Owner", "name": "Name", "nif": "Tax ID (NIF)", "address": "Address", "email": "Email", "country": "Spain",
+    "sections": [
+      ("Purpose", ["This website presents the Vela HRV app for Apple Watch and provides its support, privacy policy and version history. The app is distributed only through Apple's App Store, which handles downloads and the purchase of Vela Pro."]),
+      ("Intellectual property", ["The texts, images, design and the Vela brand on this site belong to its owner. Apple, Apple Watch, App Store and HealthKit are trademarks of Apple Inc."]),
+      ("Liability", ["Vela is a wellness app, not a medical device, and does not provide diagnoses. The information in the app and on this site is not a substitute for advice from a healthcare professional."]),
+      ("Governing law", ["This legal notice is governed by Spanish law."]),
+    ],
+  },
+  "ca": {
+    "footer": "Avís legal", "title": "Avís legal", "title_tag": "Vela HRV — Avís legal",
+    "updated": "Última actualització: novembre 2026",
+    "highlight": "En compliment de la Llei 34/2002, de serveis de la societat de la informació i de comerç electrònic (LSSI), aquestes són les dades del titular d'aquest lloc web i de l'app Vela HRV.",
+    "owner_h": "Titular", "name": "Nom", "nif": "NIF", "address": "Adreça", "email": "Correu electrònic", "country": "Espanya",
+    "sections": [
+      ("Objecte", ["Aquest lloc web presenta l'app Vela HRV per a Apple Watch i n'ofereix el suport, la política de privadesa i l'historial de versions. L'app es distribueix únicament a través de l'App Store d'Apple, que gestiona les descàrregues i la compra de Vela Pro."]),
+      ("Propietat intel·lectual", ["Els textos, les imatges, el disseny i la marca Vela d'aquest lloc pertanyen al seu titular. Apple, Apple Watch, App Store i HealthKit són marques d'Apple Inc."]),
+      ("Responsabilitat", ["Vela és una app de benestar, no un dispositiu mèdic, i no ofereix diagnòstics. La informació de l'app i d'aquest lloc no substitueix el consell d'un professional sanitari."]),
+      ("Legislació aplicable", ["Aquest avís legal es regeix per la legislació espanyola."]),
+    ],
+  },
+  "eu": {
+    "footer": "Lege-oharra", "title": "Lege-oharra", "title_tag": "Vela HRV — Lege-oharra",
+    "updated": "Azken eguneratzea: 2026ko azaroa",
+    "highlight": "Informazioaren gizartearen zerbitzuei eta merkataritza elektronikoari buruzko 34/2002 Legea (LSSI) betez, hauek dira webgune honen eta Vela HRV aplikazioaren titularraren datuak.",
+    "owner_h": "Titularra", "name": "Izena", "nif": "IFZ (NIF)", "address": "Helbidea", "email": "Helbide elektronikoa", "country": "Espainia",
+    "sections": [
+      ("Xedea", ["Webgune honek Apple Watch-erako Vela HRV aplikazioa aurkezten du, eta haren laguntza, pribatutasun-politika eta bertsioen historia eskaintzen ditu. Aplikazioa Appleren App Store-aren bidez soilik banatzen da, eta hark kudeatzen ditu deskargak eta Vela Pro-ren erosketa."]),
+      ("Jabetza intelektuala", ["Webgune honetako testuak, irudiak, diseinua eta Vela marka bere titularrarenak dira. Apple, Apple Watch, App Store eta HealthKit Apple Inc.-en markak dira."]),
+      ("Erantzukizuna", ["Vela ongizaterako aplikazio bat da, ez gailu mediko bat, eta ez du diagnostikorik ematen. Aplikazioko eta webgune honetako informazioak ez du osasun-profesional baten aholkua ordezten."]),
+      ("Legeria aplikagarria", ["Lege-ohar hau Espainiako legeriak arautzen du."]),
+    ],
+  },
+  "gl": {
+    "footer": "Aviso legal", "title": "Aviso legal", "title_tag": "Vela HRV — Aviso legal",
+    "updated": "Última actualización: novembro 2026",
+    "highlight": "En cumprimento da Lei 34/2002, de servizos da sociedade da información e de comercio electrónico (LSSI), estes son os datos do titular deste sitio web e da app Vela HRV.",
+    "owner_h": "Titular", "name": "Nome", "nif": "NIF", "address": "Enderezo", "email": "Correo electrónico", "country": "España",
+    "sections": [
+      ("Obxecto", ["Este sitio web presenta a app Vela HRV para Apple Watch e ofrece o seu soporte, a súa política de privacidade e o seu historial de versións. A app distribúese unicamente a través da App Store de Apple, que xestiona as descargas e a compra de Vela Pro."]),
+      ("Propiedade intelectual", ["Os textos, as imaxes, o deseño e a marca Vela deste sitio pertencen ao seu titular. Apple, Apple Watch, App Store e HealthKit son marcas de Apple Inc."]),
+      ("Responsabilidade", ["Vela é unha app de benestar, non un dispositivo médico, e non ofrece diagnósticos. A información da app e deste sitio non substitúe o consello dun profesional sanitario."]),
+      ("Lexislación aplicable", ["Este aviso legal réxese pola lexislación española."]),
+    ],
+  },
+  "fr": {
+    "footer": "Mentions légales", "title": "Mentions légales", "title_tag": "Vela HRV — Mentions légales",
+    "updated": "Dernière mise à jour : novembre 2026",
+    "highlight": "Conformément à la loi espagnole 34/2002 sur les services de la société de l'information et le commerce électronique (LSSI), voici les informations sur le titulaire de ce site et de l'app Vela HRV.",
+    "owner_h": "Titulaire", "name": "Nom", "nif": "Identifiant fiscal (NIF)", "address": "Adresse", "email": "E-mail", "country": "Espagne",
+    "sections": [
+      ("Objet", ["Ce site présente l'app Vela HRV pour Apple Watch et propose son assistance, sa politique de confidentialité et l'historique de ses versions. L'app est distribuée uniquement via l'App Store d'Apple, qui gère les téléchargements et l'achat de Vela Pro."]),
+      ("Propriété intellectuelle", ["Les textes, les images, le design et la marque Vela de ce site appartiennent à son titulaire. Apple, Apple Watch, App Store et HealthKit sont des marques d'Apple Inc."]),
+      ("Responsabilité", ["Vela est une app de bien-être, pas un dispositif médical, et ne pose aucun diagnostic. Les informations de l'app et de ce site ne remplacent pas l'avis d'un professionnel de santé."]),
+      ("Droit applicable", ["Les présentes mentions légales sont régies par le droit espagnol."]),
+    ],
+  },
+  "de": {
+    "footer": "Impressum", "title": "Impressum", "title_tag": "Vela HRV — Impressum",
+    "updated": "Zuletzt aktualisiert: November 2026",
+    "highlight": "Gemäß dem spanischen Gesetz 34/2002 über Dienste der Informationsgesellschaft und den elektronischen Geschäftsverkehr (LSSI) sind dies die Angaben zum Inhaber dieser Website und der App Vela HRV.",
+    "owner_h": "Inhaber", "name": "Name", "nif": "Steuernummer (NIF)", "address": "Anschrift", "email": "E-Mail", "country": "Spanien",
+    "sections": [
+      ("Zweck", ["Diese Website stellt die App Vela HRV für die Apple Watch vor und bietet Support, Datenschutzerklärung und Versionsverlauf. Die App wird ausschließlich über den App Store von Apple vertrieben, der die Downloads und den Kauf von Vela Pro abwickelt."]),
+      ("Urheberrecht", ["Die Texte, Bilder, das Design und die Marke Vela auf dieser Website gehören ihrem Inhaber. Apple, Apple Watch, App Store und HealthKit sind Marken von Apple Inc."]),
+      ("Haftung", ["Vela ist eine Wellness-App, kein Medizinprodukt, und stellt keine Diagnosen. Die Informationen in der App und auf dieser Website ersetzen nicht den Rat medizinischer Fachleute."]),
+      ("Anwendbares Recht", ["Dieses Impressum unterliegt spanischem Recht."]),
+    ],
+  },
+  "it": {
+    "footer": "Note legali", "title": "Note legali", "title_tag": "Vela HRV — Note legali",
+    "updated": "Ultimo aggiornamento: novembre 2026",
+    "highlight": "In conformità con la legge spagnola 34/2002 sui servizi della società dell'informazione e sul commercio elettronico (LSSI), questi sono i dati del titolare di questo sito e dell'app Vela HRV.",
+    "owner_h": "Titolare", "name": "Nome", "nif": "Codice fiscale (NIF)", "address": "Indirizzo", "email": "E-mail", "country": "Spagna",
+    "sections": [
+      ("Oggetto", ["Questo sito presenta l'app Vela HRV per Apple Watch e ne offre il supporto, l'informativa sulla privacy e lo storico delle versioni. L'app è distribuita esclusivamente tramite l'App Store di Apple, che gestisce i download e l'acquisto di Vela Pro."]),
+      ("Proprietà intellettuale", ["I testi, le immagini, il design e il marchio Vela di questo sito appartengono al suo titolare. Apple, Apple Watch, App Store e HealthKit sono marchi di Apple Inc."]),
+      ("Responsabilità", ["Vela è un'app per il benessere, non un dispositivo medico, e non fornisce diagnosi. Le informazioni dell'app e di questo sito non sostituiscono il parere di un professionista sanitario."]),
+      ("Legge applicabile", ["Le presenti note legali sono regolate dalla legge spagnola."]),
+    ],
+  },
+  "pt": {
+    "footer": "Aviso legal", "title": "Aviso legal", "title_tag": "Vela HRV — Aviso legal",
+    "updated": "Última atualização: novembro de 2026",
+    "highlight": "Em cumprimento da lei espanhola 34/2002, de serviços da sociedade da informação e de comércio eletrónico (LSSI), estes são os dados do titular deste site e da app Vela HRV.",
+    "owner_h": "Titular", "name": "Nome", "nif": "NIF", "address": "Morada", "email": "E-mail", "country": "Espanha",
+    "sections": [
+      ("Objeto", ["Este site apresenta a app Vela HRV para Apple Watch e oferece o seu suporte, a sua política de privacidade e o seu histórico de versões. A app é distribuída apenas através da App Store da Apple, que gere as transferências e a compra do Vela Pro."]),
+      ("Propriedade intelectual", ["Os textos, as imagens, o design e a marca Vela deste site pertencem ao seu titular. Apple, Apple Watch, App Store e HealthKit são marcas da Apple Inc."]),
+      ("Responsabilidade", ["A Vela é uma app de bem-estar, não um dispositivo médico, e não faz diagnósticos. A informação da app e deste site não substitui o conselho de um profissional de saúde."]),
+      ("Lei aplicável", ["Este aviso legal rege-se pela lei espanhola."]),
+    ],
+  },
+  "cs": {
+    "footer": "Právní informace", "title": "Právní informace", "title_tag": "Vela HRV — Právní informace",
+    "updated": "Poslední aktualizace: listopad 2026",
+    "highlight": "V souladu se španělským zákonem 34/2002 o službách informační společnosti a elektronickém obchodu (LSSI) uvádíme údaje o provozovateli tohoto webu a aplikace Vela HRV.",
+    "owner_h": "Provozovatel", "name": "Jméno", "nif": "Daňové identifikační číslo (NIF)", "address": "Adresa", "email": "E-mail", "country": "Španělsko",
+    "sections": [
+      ("Účel", ["Tento web představuje aplikaci Vela HRV pro Apple Watch a nabízí její podporu, zásady ochrany soukromí a historii verzí. Aplikace se distribuuje výhradně přes App Store společnosti Apple, který zajišťuje stahování i nákup Vela Pro."]),
+      ("Duševní vlastnictví", ["Texty, obrázky, design a značka Vela na tomto webu patří jeho provozovateli. Apple, Apple Watch, App Store a HealthKit jsou ochranné známky společnosti Apple Inc."]),
+      ("Odpovědnost", ["Vela je wellness aplikace, nikoli zdravotnický prostředek, a nestanovuje diagnózy. Informace v aplikaci a na tomto webu nenahrazují radu zdravotnického odborníka."]),
+      ("Rozhodné právo", ["Tyto právní informace se řídí španělským právem."]),
+    ],
+  },
+  "el": {
+    "footer": "Νομικές πληροφορίες", "title": "Νομικές πληροφορίες", "title_tag": "Vela HRV — Νομικές πληροφορίες",
+    "updated": "Τελευταία ενημέρωση: Νοέμβριος 2026",
+    "highlight": "Σύμφωνα με τον ισπανικό νόμο 34/2002 για τις υπηρεσίες της κοινωνίας της πληροφορίας και το ηλεκτρονικό εμπόριο (LSSI), αυτά είναι τα στοιχεία του κατόχου αυτού του ιστότοπου και της εφαρμογής Vela HRV.",
+    "owner_h": "Κάτοχος", "name": "Όνομα", "nif": "Αριθμός φορολογικού μητρώου (NIF)", "address": "Διεύθυνση", "email": "Email", "country": "Ισπανία",
+    "sections": [
+      ("Σκοπός", ["Αυτός ο ιστότοπος παρουσιάζει την εφαρμογή Vela HRV για Apple Watch και προσφέρει την υποστήριξή της, την πολιτική απορρήτου και το ιστορικό εκδόσεων. Η εφαρμογή διανέμεται αποκλειστικά μέσω του App Store της Apple, που διαχειρίζεται τις λήψεις και την αγορά του Vela Pro."]),
+      ("Πνευματική ιδιοκτησία", ["Τα κείμενα, οι εικόνες, ο σχεδιασμός και το σήμα Vela αυτού του ιστότοπου ανήκουν στον κάτοχό του. Τα Apple, Apple Watch, App Store και HealthKit είναι εμπορικά σήματα της Apple Inc."]),
+      ("Ευθύνη", ["Το Vela είναι εφαρμογή ευεξίας, όχι ιατροτεχνολογικό προϊόν, και δεν κάνει διαγνώσεις. Οι πληροφορίες της εφαρμογής και αυτού του ιστότοπου δεν αντικαθιστούν τη συμβουλή επαγγελματία υγείας."]),
+      ("Εφαρμοστέο δίκαιο", ["Οι παρούσες νομικές πληροφορίες διέπονται από το ισπανικό δίκαιο."]),
+    ],
+  },
+  "ja": {
+    "footer": "法的情報", "title": "法的情報", "title_tag": "Vela HRV — 法的情報",
+    "updated": "最終更新：2026年11月",
+    "highlight": "スペインの情報社会サービスおよび電子商取引に関する法律（Ley 34/2002、LSSI）に基づき、本サイトおよびアプリ Vela HRV の運営者情報を記載します。",
+    "owner_h": "運営者", "name": "氏名", "nif": "納税者番号（NIF）", "address": "住所", "email": "メール", "country": "スペイン",
+    "sections": [
+      ("目的", ["本サイトは Apple Watch 用アプリ Vela HRV を紹介し、サポート、プライバシーポリシー、バージョン履歴を提供します。アプリは Apple の App Store のみで配信され、ダウンロードと Vela Pro の購入は App Store が処理します。"]),
+      ("知的財産", ["本サイトの文章、画像、デザイン、および Vela のブランドは運営者に帰属します。Apple、Apple Watch、App Store、HealthKit は Apple Inc. の商標です。"]),
+      ("免責", ["Vela はウェルネスアプリであり、医療機器ではなく、診断を行うものではありません。アプリおよび本サイトの情報は、医療専門家の助言に代わるものではありません。"]),
+      ("準拠法", ["本法的情報はスペイン法に準拠します。"]),
+    ],
+  },
+}
+
+def render_legal(code, t):
+    g = LEGAL[code]
+    rows = [(g["name"], OWNER["name"]), (g["nif"], OWNER["nif"]),
+            (g["address"], f'{OWNER["address"]}, {g["country"]}'),
+            (g["email"], f'<a class="contact-link" href="mailto:{MAIL}">{MAIL}</a>')]
+    owner = "".join(f"<p><strong>{k}:</strong> {v}</p>" for k, v in rows)
+    sections = "\n".join(
+        f"""    <div class="fade-in">
+      <section>
+        <h2>{h}</h2>
+        {"".join(f'<p>{x}</p>' for x in ps)}
+      </section>
+    </div>"""
+        for h, ps in g["sections"])
+    return HEAD.format(lang=code, title=g["title_tag"], css=SUB_CSS,
+                       seo=seo_head(code, "legal", g["title_tag"], g["highlight"])) + f"""<body>
+  <div class="container">
+    <header>
+      <a class="back-link" href="{path_for(code, 'landing')}">{t['back_home']}</a>
+      <h1 class="page-title">{g['title']}</h1>
+      <p class="page-meta">{g['updated']}</p>
+    </header>
+
+    <div class="highlight-card fade-in">
+      <p>{g['highlight']}</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="fade-in">
+      <section>
+        <h2>{g['owner_h']}</h2>
+        {owner}
+      </section>
+    </div>
+{sections}
+
+{footer(t, 'legal', code)}
+  </div>
+</body>
+</html>
+"""
+
 def render_sitemap() -> str:
     """One <url> per locale x page, each carrying the full hreflang alternate
     cluster (+ x-default) so crawlers can resolve the whole translation set
@@ -3334,7 +3540,7 @@ Sitemap: {SITE_URL}/sitemap.xml
 """
 
 def main():
-    print("Generando páginas del sitio (12 idiomas x 5 páginas):")
+    print("Generando páginas del sitio (12 idiomas x 6 páginas):")
     for code in ORDER:
         t = L[code]
         write(out_path(code, "landing"), render_landing(code, t))
@@ -3342,6 +3548,7 @@ def main():
         write(out_path(code, "privacy"), render_privacy(code, t))
         write(out_path(code, "accessibility"), render_a11y(code, t))
         write(out_path(code, "changelog"), render_changelog(code, t))
+        write(out_path(code, "legal"), render_legal(code, t))
     write(SITE / "sitemap.xml", render_sitemap())
     write(SITE / "robots.txt", render_robots())
 
