@@ -166,6 +166,8 @@
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -271,6 +273,16 @@
         <div class="faq-item">
           <h3>Quelles autorisations Vela demande-t-elle ?</h3>
           <p>Vela demande un accès en lecture seule à HealthKit : la variabilité de la fréquence cardiaque pour votre score de stress, et le sommeil, les pas, l'énergie active, les séances d'entraînement et la fréquence cardiaque pour votre Batterie. Ce sont des données que votre Apple Watch collecte déjà automatiquement. Si vous le souhaitez, elle demande aussi l'autorisation de vous envoyer des notifications pour les alertes de stress.</p>
+        </div>
+
+        <div class="faq-item" id="medical">
+          <h3>Vela est-elle un dispositif médical ? Pourquoi n'a-t-elle ni marquage CE ni certification de santé ?</h3>
+          <p>Non, et c'est voulu. Vela est une app de bien-être : elle compare votre stress et votre énergie avec votre propre moyenne, mais elle ne diagnostique, ne traite, ne prévient ni ne surveille aucune maladie. Dans l'Union européenne, le marquage CE médical est réservé aux dispositifs médicaux (règlement (UE) 2017/745) : une app de bien-être ne peut donc pas le porter sans tromper ceux qui l'utilisent. Si quelque chose vous inquiète, parlez-en à un professionnel de santé.</p>
+        </div>
+
+        <div class="faq-item" id="privacy-seal">
+          <h3>Pourquoi n'a-t-elle pas de label de confidentialité ? Comment savoir ce que deviennent mes données ?</h3>
+          <p>Un label de confidentialité certifie la façon dont une entreprise traite les données qu'elle collecte, et Vela n'en collecte aucune : pas de compte, pas de serveurs, pas d'analytique, pas de SDK tiers. Vos données restent sur votre montre et dans votre propre iCloud, auquel vous seul avez accès, et c'est ce que déclare l'étiquette de confidentialité de la <a href="https://apps.apple.com/app/vela-hrv/id6762096428">fiche App Store</a>. Vous pouvez retirer à Vela l'accès à vos données de santé à tout moment, depuis l'app Santé ou les Réglages de la montre. Derrière Vela, il y a une personne, dont le nom et l'adresse figurent dans les <a href="/fr/legal/">mentions légales</a>.</p>
         </div>
       </section>
     </div>

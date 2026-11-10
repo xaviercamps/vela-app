@@ -15,7 +15,11 @@ SITE = Path(__file__).parent.parent
 MAIL = "xaviercampsnovi@gmail.com"
 ORDER = ["es", "en", "ca", "eu", "gl", "fr", "de", "it", "pt", "cs", "el", "ja"]
 APPSTORE_URL = "https://apps.apple.com/app/vela-hrv/id6762096428"
-TOUR_IMAGES = ["watch-shot-score.png", "watch-shot-trend.png", "watch-shot-explain.png"]
+# Per-language images made by vela-store/2.0.0/scripts/web_images.py (Apple Watch Ultra,
+# Ocean band, the app in that language). 1920x1920 JPEG.
+# Single watches on a transparent background (WebP), made by vela-store/2.0.0/scripts/web_images.py.
+STRESS_TOUR = ["tour-score", "tour-trend", "tour-ranges"]
+BATTERY_TOUR = ["tour-charge", "tour-curve", "tour-spent"]
 SITE_URL = "https://velahrv.com"
 DEFAULT_LOCALE = "en"  # served at the domain root; used as the x-default hreflang target
 BUILD_DATE = date.today().isoformat()
@@ -269,6 +273,8 @@ SUPPORT_CSS = """    :root {
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -563,6 +569,13 @@ LANDING_CSS = """  :root{
     text-decoration:none;
   }
   .brand img{ width:26px; height:26px; border-radius:7px; }
+  .nav-links{ display:flex; gap:28px; margin-left:auto; margin-right:28px; }
+  .nav-links a{
+    font-family:var(--mono); font-size:13px; color:var(--text-2);
+    text-decoration:none; transition:color .16s ease;
+  }
+  .nav-links a:hover{ color:var(--teal); }
+  section[id]{ scroll-margin-top:72px; }
   .pulse-dot{
     width:6px; height:6px; border-radius:50%;
     background:var(--teal);
@@ -627,12 +640,9 @@ LANDING_CSS = """  :root{
     padding:88px 0 64px;
     position:relative;
   }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:56px;
-    align-items:center;
-  }
+  .hero-text{ max-width:720px; }
+  .hero-shot{ max-width:1040px; margin:56px auto 0; }
+  .hero .v2-hint{ max-width:none; margin:12px 0 0; font-size:13px; }
   .hero h1{
     font-size:clamp(34px, 5vw, 58px);
     line-height:1.06;
@@ -687,29 +697,6 @@ LANDING_CSS = """  :root{
     box-shadow:0 8px 24px rgba(0,0,0,0.4);
   }
 
-  .wave-panel{
-    background:var(--bg-deep);
-    border:1px solid var(--hairline);
-    border-radius:20px;
-    padding:22px 20px 18px;
-  }
-  .wave-panel-head{
-    display:flex; justify-content:space-between; align-items:baseline;
-    font-family:var(--mono); font-size:11px; color:var(--text-3);
-    letter-spacing:0.06em; margin-bottom:10px;
-  }
-  .wave-panel-head span:last-child{ color:var(--teal); }
-  canvas#hero-wave{
-    width:100%; height:180px; display:block;
-  }
-  .wave-readout{
-    display:flex; justify-content:space-between;
-    margin-top:14px;
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--text-3);
-  }
-  .wave-readout b{ color:var(--text-1); font-weight:500; }
 
   /* ---------- SECTION SHELL ---------- */
   section{ padding:96px 0; }
@@ -773,12 +760,19 @@ LANDING_CSS = """  :root{
     font-size:15px;
   }
   .principle strong{ color:var(--text-1); font-weight:500; }
+  .principle.wide{ grid-column:1 / -1; }
+  .principle a{ color:var(--teal); text-decoration:underline; text-underline-offset:3px; }
 
   /* ---------- WATCH SHOWCASE ---------- */
-  .shot-card{
+  /* Montages of several watches keep the app's background, framed as a card like the
+     rest of the page's panels. Single watches (the tours) are transparent and sit on the page. */
+  .frame{
     display:block;
+    border:1px solid var(--hairline);
+    border-radius:20px;
+    overflow:hidden;
   }
-  .shot-card img{ width:100%; height:auto; display:block; }
+  .frame img{ width:100%; height:auto; display:block; }
 
   .watch-showcase{ max-width:720px; margin:0 auto; }
 
@@ -787,7 +781,7 @@ LANDING_CSS = """  :root{
     grid-template-columns:repeat(3, 1fr);
     gap:28px;
   }
-  .tour-item .shot-card{ margin-bottom:20px; }
+  .tour-item img{ width:100%; height:auto; display:block; margin-bottom:12px; }
   .tour-item .tag{
     font-family:var(--mono);
     font-size:11px;
@@ -801,6 +795,31 @@ LANDING_CSS = """  :root{
     color:var(--text-2);
     font-size:14.5px;
   }
+  .tier{
+    display:inline-block; margin-left:10px; padding:2px 8px;
+    border:1px solid var(--hairline); border-radius:100px;
+    font-size:10px; letter-spacing:0.08em; color:var(--text-3); vertical-align:1px;
+  }
+  .tier-pro{ border-color:rgba(61,207,207,0.45); color:var(--teal); }
+
+  /* ---------- PRICING ---------- */
+  .plans{ display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; }
+  .plan{
+    border:1px solid var(--hairline); border-radius:20px;
+    padding:32px 28px; background:var(--bg);
+  }
+  .plan-pro{ border-color:rgba(61,207,207,0.45); box-shadow:0 0 40px rgba(61,207,207,0.08); }
+  .plan .tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+    color:var(--teal); text-transform:uppercase; display:block;
+  }
+  .plan-sub{ color:var(--text-1); font-size:20px; margin:10px 0 20px; }
+  .plan ul{ list-style:none; padding:0; margin:0; }
+  .plan li{
+    color:var(--text-2); font-size:15px; padding:9px 0 9px 22px; position:relative;
+    border-top:1px solid var(--hairline);
+  }
+  .plan li::before{ content:""; position:absolute; left:2px; top:17px; width:8px; height:8px; border-radius:50%; background:var(--teal); opacity:0.7; }
 
   /* ---------- CLOSING ---------- */
   .closing{
@@ -840,7 +859,8 @@ LANDING_CSS = """  :root{
   .lang-row span{ color:var(--teal); }
 
   @media (max-width:820px){
-    .hero-grid{ grid-template-columns:1fr; }
+    .plans{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
     .principles-grid{ grid-template-columns:1fr; }
     .tour-grid{ grid-template-columns:1fr; gap:40px; }
     .hero{ padding-top:56px; }
@@ -892,12 +912,16 @@ def footer(t, page, code):
     </footer>"""
 
 def render_support(code, t):
-    faqs = "\n\n".join(
-        f'''        <div class="faq-item">
+    # An entry can carry a third element, its anchor id, so other pages can link to it.
+    # Answers may hold {legal} and {appstore}, filled in here.
+    def faq_item(q, a, anchor=None):
+        a = a.replace("{legal}", path_for(code, "legal")).replace("{appstore}", APPSTORE_URL)
+        attr = f' id="{anchor}"' if anchor else ""
+        return f'''        <div class="faq-item"{attr}>
           <h3>{q}</h3>
           <p>{a}</p>
         </div>'''
-        for q, a in t["faq"])
+    faqs = "\n\n".join(faq_item(*item) for item in t["faq"])
     return HEAD.format(lang=code, title=t["support_title"], css=SUPPORT_CSS,
                        seo=seo_head(code, "support", t["support_title"], t["about_p1"])) + f"""<body>
   <div class="container">
@@ -1086,21 +1110,39 @@ def render_changelog(code, t):
 def render_landing(code, t):
     L = t["landing"]
     V = L["v2"]
+    # The fifth principle (wellness, not medicine) spans the whole grid and links to the FAQ
+    # entry that explains why there's no health certification.
+    faq_link = path_for(code, "support") + "#medical"
     principles = "\n".join(
-        f'''        <div class="principle">
+        f'''        <div class="principle{' wide' if i == 4 else ''}">
           <span class="tag">{tag}</span>
-          <p><strong>{strong}</strong> {rest}</p>
+          <p><strong>{strong}</strong> {rest.replace("{faq}", faq_link)}</p>
         </div>'''
-        for tag, strong, rest in L["principles"])
-    tour = "\n".join(
-        f'''        <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/{img}" alt="{alt}" width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
-          <span class="tag">{tag}</span>
+        for i, (tag, strong, rest) in enumerate(L["principles"]))
+
+    def tour(items, images, tier=None):
+        # tier: one entry per item, "free" / "pro" / None, shown as a small badge next to the tag.
+        tier = tier or [None] * len(items)
+        badge = {"free": f'<span class="tier">{L["tier_free"]}</span>',
+                 "pro": f'<span class="tier tier-pro">{L["tier_pro"]}</span>', None: ""}
+        return "\n".join(
+            f'''        <div class="tour-item">
+          <img src="/assets/{img}-{code}.webp" alt="{alt}" width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">{tag}{badge[tr]}</span>
           <p>{p}</p>
         </div>'''
-        for (tag, p, alt), img in zip(L["tour"], TOUR_IMAGES))
+            for (tag, p, alt), img, tr in zip(items, images, tier))
+
+    def plan(title, sub, items, cls):
+        lis = "\n".join(f"            <li>{i}</li>" for i in items)
+        return f'''        <div class="plan {cls}">
+          <span class="tag">{title}</span>
+          <p class="plan-sub">{sub}</p>
+          <ul>
+{lis}
+          </ul>
+        </div>'''
+
     return LANDING_HEAD.format(lang=code, title=L["title_tag"], css=LANDING_CSS,
                                seo=seo_head(code, "landing", L["title_tag"], L["meta_desc"]),
                                jsonld=app_json_ld(code, t)) + f"""<body>
@@ -1111,6 +1153,11 @@ def render_landing(code, t):
       <img src="/assets/icon-1024.png" alt="">
       vela
     </a>
+    <div class="nav-links">
+      <a href="#battery">{L['nav_battery']}</a>
+      <a href="#stress">{L['nav_stress']}</a>
+      <a href="#pricing">{L['nav_pricing']}</a>
+    </div>
     <a class="nav-cta" href="{APPSTORE_URL}" target="_blank" rel="noopener">{L['nav_cta']}</a>
   </nav>
 </header>
@@ -1118,8 +1165,8 @@ def render_landing(code, t):
 <main id="top">
 
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
+    <div class="wrap">
+      <div class="hero-text">
         <p class="eyebrow">{L['eyebrow1']}</p>
         <h1>{L['h1']}</h1>
         <p>{L['hero_p']}</p>
@@ -1129,38 +1176,16 @@ def render_landing(code, t):
           </a>
         </div>
       </div>
-      <div class="wave-panel">
-        <div class="wave-panel-head">
-          <span>{L['wave_kicker']}</span>
-          <span>{L['wave_state']}</span>
-        </div>
-        <canvas id="hero-wave" width="480" height="180"></canvas>
-        <div class="wave-readout">
-          <span>{L['wave_left']}</span>
-          <span>{L['wave_right_html']}</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="v2">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">{V['eyebrow']}</p>
-        <h2>{V['h2']}</h2>
-        <p>{V['p']}</p>
-        <a class="beta-cta" href="{TESTFLIGHT_URL}" target="_blank" rel="noopener">{V['cta']}</a>
-      </div>
-      <div class="watch-showcase v2-showcase">
-        <a class="shot-card v2-zoom" href="/assets/{V2_IMAGE}" aria-haspopup="dialog">
-          <img src="/assets/{V2_IMAGE}" alt="{V['alt']}" width="3840" height="2160" loading="lazy" decoding="async">
+      <div class="hero-shot">
+        <a class="frame v2-zoom" href="/assets/{V2_IMAGE[code]}" aria-haspopup="dialog">
+          <img src="/assets/{V2_IMAGE[code]}" alt="{V['alt']}" width="2400" height="1600" decoding="async">
         </a>
         <p class="v2-hint">{V['zoom']}</p>
       </div>
-      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="{V['h2']}">
+      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="{L['h1_plain']}">
         <button class="v2-close" type="button" aria-label="{V['close']}">×</button>
         <div class="v2-lightbox-scroll">
-          <img src="/assets/{V2_IMAGE}" alt="{V['alt']}" width="3840" height="2160" loading="lazy" decoding="async">
+          <img src="/assets/{V2_IMAGE[code]}" alt="{V['alt']}" width="2400" height="1600" loading="lazy" decoding="async">
         </div>
       </dialog>
     </div>
@@ -1200,6 +1225,32 @@ def render_landing(code, t):
     </div>
   </section>
 
+  <section id="battery">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">{L['battery_eyebrow']}</p>
+        <h2>{V['h2']}</h2>
+        <p>{L['battery_p']}</p>
+      </div>
+      <div class="tour-grid">
+{tour(L['battery_tour'], BATTERY_TOUR, ["free", "pro", "pro"])}
+      </div>
+    </div>
+  </section>
+
+  <section id="stress">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">{L['stress_eyebrow']}</p>
+        <h2>{L['stress_h2']}</h2>
+        <p>{L['stress_p']}</p>
+      </div>
+      <div class="tour-grid">
+{tour(L['tour'], STRESS_TOUR)}
+      </div>
+    </div>
+  </section>
+
   <section>
     <div class="wrap">
       <div class="section-head">
@@ -1212,29 +1263,16 @@ def render_landing(code, t):
     </div>
   </section>
 
-  <section>
+  <section id="pricing" class="baseline">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">{L['showcase_eyebrow']}</p>
-        <h2>{L['showcase_h2']}</h2>
-        <p>{L['showcase_p']}</p>
+        <p class="eyebrow">{L['pricing_eyebrow']}</p>
+        <h2>{L['pricing_h2']}</h2>
+        <p>{L['pricing_p']}</p>
       </div>
-      <div class="watch-showcase">
-        <div class="shot-card">
-          <img src="/assets/watch-mockup-combined.png" alt="{L['showcase_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">{L['tour_eyebrow']}</p>
-        <h2>{L['tour_h2']}</h2>
-      </div>
-      <div class="tour-grid">
-{tour}
+      <div class="plans">
+{plan(L['tier_free'], L['free_sub'], L['free_items'], "plan-free")}
+{plan("Vela Pro", L['pro_sub'], L['pro_items'], "plan-pro")}
       </div>
     </div>
   </section>
@@ -1247,8 +1285,8 @@ def render_landing(code, t):
         <p>{L['onboarding_p']}</p>
       </div>
       <div class="watch-showcase">
-        <div class="shot-card">
-          <img src="/assets/watch-onboarding.png" alt="{L['onboarding_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
+        <div class="frame">
+          <img src="/assets/onboarding-{code}.jpg" alt="{L['onboarding_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -1297,74 +1335,6 @@ def render_landing(code, t):
     if(e.target === box || e.target.classList.contains('v2-lightbox-scroll') || window.innerWidth > 700) box.close();
   }});
   box.addEventListener('close', function(){{ zoom.focus(); }});
-}})();
-</script>
-
-<script>
-(function(){{
-  var canvas = document.getElementById('hero-wave');
-  var ctx = canvas.getContext('2d');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W, H, dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  function resize(){{
-    var rect = canvas.getBoundingClientRect();
-    W = rect.width; H = rect.height;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }}
-  window.addEventListener('resize', resize);
-  resize();
-
-  var t = 0;
-  var noise = 1;
-
-  function drawWave(offsetY, amp, freq, phase, color, glow, lineWidth){{
-    ctx.beginPath();
-    for(var x=0; x<=W; x+=4){{
-      var n = reduceMotion ? 0 : (Math.random()-0.5) * noise * 6;
-      var y = offsetY + Math.sin((x*freq) + phase) * amp + n;
-      if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }}
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    if(glow){{
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
-    }} else {{
-      ctx.shadowBlur = 0;
-    }}
-    ctx.stroke();
-  }}
-
-  function frame(){{
-    ctx.clearRect(0,0,W,H);
-    t += 0.02;
-    if(!reduceMotion && noise > 0){{ noise = Math.max(0, noise - 0.0018); }}
-
-    ctx.beginPath();
-    ctx.setLineDash([6,7]);
-    ctx.moveTo(0, H*0.5);
-    ctx.lineTo(W, H*0.5);
-    ctx.strokeStyle = 'rgba(245,248,252,0.18)';
-    ctx.lineWidth = 1;
-    ctx.shadowBlur = 0;
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    drawWave(H*0.5, H*0.22, 0.045, t, '#3DCFCF', true, 2.4);
-
-    if(!reduceMotion){{
-      requestAnimationFrame(frame);
-    }}
-  }}
-
-  if(reduceMotion){{
-    noise = 0;
-    frame();
-  }} else {{
-    requestAnimationFrame(frame);
-  }}
 }})();
 </script>
 
@@ -1440,41 +1410,66 @@ L["es"] = {
   },
   "landing": {
     "nav_cta": "Descargar",
-    "title_tag": "Vela — HRV para Apple Watch. Sin suscripción. Nunca.",
-    "meta_desc": "Vela mide tu variabilidad de ritmo cardíaco (HRV/SDNN) en Apple Watch y construye tu propia línea base personal. Todo se procesa en el reloj. Sincroniza con tu iCloud. Sin suscripción, nunca.",
-    "eyebrow1": "HRV para Apple Watch",
-    "h1": "Tu calma no es <em>la media</em> de nadie.",
-    "hero_p": "Vela mide tu variabilidad de ritmo cardíaco (SDNN) directamente en tu Apple Watch y construye una línea base propia — no un umbral genérico de población. Todo el cálculo ocurre en el reloj. Nada pasa por nuestros servidores, porque no los tenemos.",
+    "nav_battery": "Batería", "nav_stress": "Estrés", "nav_pricing": "Precio",
+    "title_tag": "Vela — Estrés y Batería para Apple Watch. Sin suscripción. Nunca.",
+    "meta_desc": "Vela mide tu estrés y tu Batería en el Apple Watch contra tu propia línea base de HRV: cómo estás ahora, cuánto te ha cargado el sueño y en qué se te va la energía durante el día. Todo se calcula en el reloj. Sin suscripción, nunca.",
+    "eyebrow1": "Estrés y Batería para Apple Watch",
+    "h1": "Tu energía y tu calma no son <em>la media</em> de nadie.",
+    "h1_plain": "Tu energía y tu calma no son la media de nadie.",
+    "hero_p": "Vela lee tu variabilidad de ritmo cardíaco (SDNN) en el Apple Watch y la compara con tu propia línea base, no con un umbral de población. Con eso te dice cuánta energía te queda hoy, tu Batería, y cómo estás ahora, tu estrés. Todo el cálculo ocurre en el reloj. Nada pasa por nuestros servidores, porque no los tenemos.",
     "badge_alt": "Descargar en el App Store",
-    "wave_kicker": "SDNN · TIEMPO REAL", "wave_state": "EN REPOSO",
-    "wave_left": "ruido de población", "wave_right_html": "<b>tu línea base</b> se asienta",
     "story_eyebrow": "Sobre el nombre", "story_h2": "Por qué “Vela”",
-    "story_p": "“Vela” también es la vela de un barco — del latín velum. Un velero no lucha contra el viento: lo lee y ajusta el rumbo. Esa es la idea detrás de la app. En lugar de compararte con un estándar externo, Vela lee tu propia línea base personal y te ayuda a entender tus propios patrones. El estrés no se combate, se lee y se ajusta.",
+    "story_p": "“Vela” también es la vela de un barco — del latín velum. Un velero no lucha contra el viento: lo lee y ajusta el rumbo. Esa es la idea detrás de la app. En lugar de compararte con un estándar externo, Vela lee tu propia línea base personal y te ayuda a entender tus propios patrones. El estrés y el cansancio no se combaten: se leen, y se ajusta el rumbo.",
     "baseline_eyebrow": "Por qué el promedio no sirve",
     "baseline_h2": "25&nbsp;ms de HRV puede ser alto para ti y bajo para otra persona.",
-    "baseline_p": "El HRV varía enormemente entre personas. Un umbral de población trata a todo el mundo igual — y por eso casi siempre se equivoca. Vela construye tu propia línea base a partir de tu historial real: si ya tienes datos de HRV en tu Apple Watch, puede empezar desde el primer día; si eres nuevo, tarda entre 7 y 14 días en asentarse.",
+    "baseline_p": "El HRV varía enormemente entre personas. Un umbral de población trata a todo el mundo igual — y por eso casi siempre se equivoca. Vela construye tu propia línea base a partir de tu historial real: si ya tienes datos de HRV en tu Apple Watch, puede empezar desde el primer día; si eres nuevo, tarda entre 7 y 14 días en asentarse. Y vale para las dos cosas: tu estrés se mide contra tu HRV de siempre, y lo que te carga una noche también.",
     "legend1": "Umbral genérico de población", "legend2": "Muestras individuales", "legend3": "Tu línea base personal",
     "principles_eyebrow": "Cómo funciona", "principles_h2": "Cuatro decisiones, tomadas para no cambiar de idea.",
     "principles": [
-      ("On-device", "Todo el cálculo ocurre en tu Watch.", "HealthKit entrega los datos, el reloj hace el resto. Ningún dato de HRV sale de tu dispositivo hacia un servidor de Vela."),
+      ("On-device", "Todo el cálculo ocurre en tu Watch.", "HealthKit entrega los datos, el reloj hace el resto. Ni tu HRV, ni tu sueño, ni tu actividad salen de tu dispositivo hacia un servidor de Vela."),
       ("Tu iCloud, no el nuestro", "La sincronización usa tu propia cuenta de iCloud", "vía CloudKit. Vela no aloja tus datos en ningún sitio — no puede, porque no tiene dónde."),
-      ("Sin suscripción. Nunca.", "Sin cuotas mensuales ni anuales.", "Vela es gratis hoy. En el futuro habrá una versión Pro de pago único — nunca una suscripción."),
+      ("Sin rastreo", "Sin analítica, sin anuncios, sin SDK de terceros.", "Vela no sabe quién eres ni cuándo abres la app: lo único que sale del reloj va a tu propio iCloud."),
       ("Accesible de serie", "VoiceOver, Dynamic Type, Reduce Motion", "y 12 idiomas: castellano, català, euskara, galego, English, français, Deutsch, italiano, português, čeština, ελληνικά y 日本語."),
     ],
-    "showcase_eyebrow": "En tu muñeca", "showcase_h2": "Un score, un estado, una tendencia.",
-    "showcase_p": "El color y la etiqueta de texto siempre van juntos — también pensado para quienes no distinguen bien los colores. Cada score se explica: qué rango es “Normal”, cuándo pasa a “Alto” y por qué.",
-    "showcase_alt": "Tres pantallas de Vela en Apple Watch Ultra: score de estrés actual con estado Normal, tendencia semanal con la media del día, y pantalla de explicación de los rangos Normal y Alto.",
+    "battery_eyebrow": "Batería · Nuevo en Vela 2.0",
+    "battery_p": "Se carga solo mientras duermes, también con una siesta o con el sueño de día tras un turno de noche, y se gasta con el estrés, la actividad, los entrenos y las horas despierto. Si un día se te ha hecho largo, la Batería te enseña por qué.",
+    "battery_tour": [
+      ("Tu carga", "Cuánto te ha cargado la noche y de dónde sale: lo que has dormido y tu HRV durante el sueño frente a tu media.", "Pantalla de Vela con la carga de la noche: hasta 80, 27 puntos más durmiendo, 7 h 15 min de sueño y el HRV del sueño un 9 % por encima de la media."),
+      ("La curva del día", "Cómo ha subido mientras dormías y cómo baja desde que te levantas, con cada entreno marcado a su hora.", "Curva de batería del día: recarga en verde durante la noche hasta 80 y descarga en azul durante el día hasta 47, con dos entrenos marcados."),
+      ("En qué se ha ido", "Lo gastado desde que te despertaste, separado en estrés y actividad, entrenos y horas despierto. Describe lo que ha pasado, sin darte consejos.", "Desglose del gasto de hoy: 33 puntos desde que te despertaste, 7 por estrés y actividad, 12 por una hora de entreno y 14 por las horas de vigilia."),
+    ],
+    "tier_free": "Gratis", "tier_pro": "Pro",
+    "stress_eyebrow": "Estrés", "stress_h2": "Un score, un estado, una tendencia.",
+    "stress_p": "Tu nivel de estrés de ahora, el día hora a hora y qué significa cada rango. El color y la etiqueta de texto siempre van juntos, también pensado para quienes no distinguen bien los colores. Todo el estrés es gratis.",
+    "pricing_eyebrow": "Precio", "pricing_h2": "Gratis para empezar. Pro, una sola vez.",
+    "pricing_p": "Sin cuotas mensuales ni anuales. Vela Pro se paga una vez y es tuyo.",
+    "free_sub": "Para todos",
+    "free_items": [
+      "Tu nivel de estrés en tiempo real, con su estado y su explicación",
+      "El día de hoy hora a hora y el histórico de estrés",
+      "Análisis semanales y avisos de estrés alto",
+      "La carga de cada noche y de dónde sale",
+      "Complicaciones de estrés y de la carga de la noche",
+    ],
+    "pro_sub": "Compra única",
+    "pro_items": [
+      "La Batería en directo, a lo largo del día",
+      "La curva del día, con la recarga de la noche y cada entreno",
+      "En qué se ha ido: estrés y actividad, entrenos y horas despierto",
+      "Histórico de batería por mes, semana y día",
+      "Complicaciones con la Batería en directo y las barras por hora de hoy",
+    ],
     "tour_eyebrow": "Recorrido rápido", "tour_h2": "Tres pantallas, cada una con un único trabajo.",
     "tour": [
-      ("Score actual", "Un número, un estado, calculado enteramente en el reloj — sin esperar a que nada sincronice.", "Pantalla principal de Vela mostrando un score de estrés de 68, estado Normal, calculado en el momento."),
+      ("Score actual", "Un número, un estado, calculado enteramente en el reloj — sin esperar a que nada sincronice.", "Pantalla principal de Vela mostrando un nivel de estrés de 34, estado Bajo, calculado en el momento."),
       ("Tendencia", "Cada lectura del día, comparada contra tu propia línea discontinua — no contra la de nadie más.", "Gráfico de tendencia con la media de estrés del día y las lecturas de cada hora, comparadas contra la línea base personal."),
       ("Rangos explicados", "Nada de cifras crípticas: cada rango dice qué significa y qué esperar de él.", "Pantalla de explicación de los rangos de estrés: Normal entre 40 y 69, Alto entre 70 y 100."),
     ],
     "onboarding_eyebrow": "Así empiezas", "onboarding_h2": "Te pedimos permiso antes de medir nada.",
-    "onboarding_p": "Vela pide acceso a tu HRV de forma explícita, no en la letra pequeña. Y si eres nuevo midiendo HRV, te dice cuánto falta para tener una línea base fiable — sin fingir que el primer día ya sabe quién eres.",
-    "onboarding_alt": "Flujo de bienvenida de Vela en Apple Watch: pantalla de bienvenida, solicitud explícita de acceso a los datos de variabilidad cardíaca, y pantalla de construcción de la línea base con 7 días restantes.",
+    "onboarding_p": "Vela te pide acceso a tus datos de salud de forma explícita, no en la letra pequeña, y te dice para qué usa cada uno. Y si eres nuevo midiendo HRV, te dice cuánto falta para tener una línea base fiable — sin fingir que el primer día ya sabe quién eres.",
+    "onboarding_alt": "Dos pasos de la bienvenida de Vela en Apple Watch: la pantalla de bienvenida y la petición de acceso a los datos de salud, que explica para qué se usa cada uno.",
     "closing_eyebrow": "Descárgala hoy", "closing_h2": "Sin suscripción. <em>Nunca.</em>",
-    "closing_p": "Vela está disponible gratis en el App Store para Apple Watch.",
+    "closing_p": "Vela es gratis en el App Store para Apple Watch, con Vela Pro como compra única.",
     "footer_support": "Soporte", "footer_privacy": "Privacidad", "footer_contact": "Contacto",
   },
 }
@@ -1549,8 +1544,6 @@ L["en"] = {
     "h1": "Your calm isn't <em>anyone else's average</em>.",
     "hero_p": "Vela measures your heart rate variability (SDNN) directly on your Apple Watch and builds a baseline that's yours — not a generic population threshold. All the computation happens on the watch. Nothing ever passes through our servers, because we don't have any.",
     "badge_alt": "Download on the App Store",
-    "wave_kicker": "SDNN · LIVE", "wave_state": "AT REST",
-    "wave_left": "population noise", "wave_right_html": "<b>your baseline</b> settles",
     "story_eyebrow": "About the name", "story_h2": "Why “Vela”",
     "story_p": "“Vela” is also the Spanish word for a boat's sail — from the Latin velum. A sailboat doesn't fight the wind: it reads it and adjusts course. That's the idea behind the app. Instead of comparing you to an external standard, Vela reads your own personal baseline and helps you understand your own patterns. Stress isn't something to fight — it's something to read and adjust to.",
     "baseline_eyebrow": "Why the average doesn't work",
@@ -1561,23 +1554,21 @@ L["en"] = {
     "principles": [
       ("On-device", "All the computation happens on your Watch.", "HealthKit provides the data, the watch does the rest. No HRV data ever leaves your device toward a Vela server."),
       ("Your iCloud, not ours", "Syncing uses your own iCloud account", "via CloudKit. Vela doesn't host your data anywhere — it can't, because it has nowhere to."),
-      ("No subscription. Ever.", "No monthly or yearly fees.", "Vela is free today. In the future there will be a paid Pro version — never a subscription."),
+      ("No subscription. Ever.", "No monthly or yearly fees.", "Vela is free. Vela Pro is a one-time purchase: you pay once and it's yours — never a subscription."),
       ("Accessible by default", "VoiceOver, Dynamic Type, Reduce Motion", "and 12 languages: Spanish, Catalan, Basque, Galician, English, French, German, Italian, Portuguese, Czech, Greek, and Japanese."),
     ],
-    "showcase_eyebrow": "On your wrist", "showcase_h2": "One score, one state, one trend.",
-    "showcase_p": "Color and text label always go together — designed with color blindness in mind too. Every score is explained: which range counts as “Normal”, when it becomes “High”, and why.",
-    "showcase_alt": "Three Vela screens on Apple Watch Ultra: current stress score with Normal status, weekly trend with the day's average, and a screen explaining the Normal and High ranges.",
+    "stress_h2": "One score, one state, one trend.",
     "tour_eyebrow": "Quick tour", "tour_h2": "Three screens, each with a single job.",
     "tour": [
-      ("Current score", "One number, one state, computed entirely on the watch — no waiting for anything to sync.", "Vela's main screen showing a stress score of 68, Normal status, calculated in the moment."),
+      ("Current score", "One number, one state, computed entirely on the watch — no waiting for anything to sync.", "Vela's main screen showing a stress level of 34, Low status, calculated in the moment."),
       ("Trend", "Every reading of the day, compared against your own dashed line — not anyone else's.", "Trend chart with the day's average stress and hourly readings, compared against the personal baseline."),
       ("Ranges explained", "No cryptic numbers: every range says what it means and what to expect.", "Screen explaining the stress ranges: Normal between 40 and 69, High between 70 and 100."),
     ],
     "onboarding_eyebrow": "Getting started", "onboarding_h2": "We ask permission before measuring anything.",
-    "onboarding_p": "Vela asks for access to your HRV explicitly, not in the fine print. And if you're new to measuring HRV, it tells you how long until you have a reliable baseline — without pretending it knows who you are on day one.",
-    "onboarding_alt": "Vela's onboarding flow on Apple Watch: a welcome screen, an explicit request for access to heart rate variability data, and a baseline-building screen showing 7 days remaining.",
+    "onboarding_p": "Vela asks for access to your health data explicitly, not in the fine print, and tells you what it uses each piece for. And if you're new to measuring HRV, it tells you how long until you have a reliable baseline — without pretending it knows who you are on day one.",
+    "onboarding_alt": "Two steps of Vela's onboarding on Apple Watch: the welcome screen and the request for access to health data, which explains what each one is used for.",
     "closing_eyebrow": "Download it today", "closing_h2": "No subscription. <em>Ever.</em>",
-    "closing_p": "Vela is available for free on the App Store for Apple Watch.",
+    "closing_p": "Vela is free on the App Store for Apple Watch, with Vela Pro as a one-time purchase.",
     "footer_support": "Support", "footer_privacy": "Privacy", "footer_contact": "Contact",
   },
 }
@@ -1652,8 +1643,6 @@ L["ca"] = {
     "h1": "La teva calma no és <em>la mitjana</em> de ningú.",
     "hero_p": "Vela mesura la teva variabilitat de la freqüència cardíaca (SDNN) directament al teu Apple Watch i construeix una línia base pròpia — no un llindar genèric de població. Tot el càlcul passa al rellotge. Res no passa pels nostres servidors, perquè no en tenim.",
     "badge_alt": "Descarrega-la a l'App Store",
-    "wave_kicker": "SDNN · EN TEMPS REAL", "wave_state": "EN REPÒS",
-    "wave_left": "soroll de població", "wave_right_html": "<b>la teva línia base</b> s'assenta",
     "story_eyebrow": "Sobre el nom", "story_h2": "Per què «Vela»",
     "story_p": "«Vela» també és la vela d'un vaixell — del llatí velum. Un veler no lluita contra el vent: el llegeix i ajusta el rumb. Aquesta és la idea darrere de l'aplicació. En lloc de comparar-te amb un estàndard extern, Vela llegeix la teva pròpia línia base personal i t'ajuda a entendre els teus propis patrons. L'estrès no es combat: es llegeix i s'ajusta.",
     "baseline_eyebrow": "Per què el promig no serveix",
@@ -1664,23 +1653,21 @@ L["ca"] = {
     "principles": [
       ("On-device", "Tot el càlcul passa al teu Watch.", "HealthKit lliura les dades, el rellotge fa la resta. Cap dada d'HRV surt del teu dispositiu cap a un servidor de Vela."),
       ("El teu iCloud, no el nostre", "La sincronització fa servir el teu propi compte d'iCloud", "via CloudKit. Vela no allotja les teves dades enlloc — no pot, perquè no té on."),
-      ("Sense subscripció. Mai.", "Sense quotes mensuals ni anuals.", "Vela és gratuïta avui. En el futur hi haurà una versió Pro de pagament únic — mai una subscripció."),
+      ("Sense subscripció. Mai.", "Sense quotes mensuals ni anuals.", "Vela és gratuïta. Vela Pro és una compra única: la pagues una vegada i és teva — mai una subscripció."),
       ("Accessible de sèrie", "VoiceOver, Dynamic Type, Reduce Motion", "i 12 idiomes: castellà, català, èuscar, gallec, English, français, Deutsch, italiano, português, čeština, ελληνικά i 日本語."),
     ],
-    "showcase_eyebrow": "Al teu canell", "showcase_h2": "Un score, un estat, una tendència.",
-    "showcase_p": "El color i l'etiqueta de text sempre van junts — pensat també per a qui no distingeix bé els colors. Cada score s'explica: quin rang és «Normal», quan passa a «Alt» i per què.",
-    "showcase_alt": "Tres pantalles de Vela a l'Apple Watch Ultra: score d'estrès actual amb estat Normal, tendència setmanal amb la mitjana del dia, i pantalla d'explicació dels rangs Normal i Alt.",
+    "stress_h2": "Un score, un estat, una tendència.",
     "tour_eyebrow": "Recorregut ràpid", "tour_h2": "Tres pantalles, cadascuna amb una única feina.",
     "tour": [
-      ("Score actual", "Un número, un estat, calculat íntegrament al rellotge — sense esperar que res se sincronitzi.", "Pantalla principal de Vela mostrant un score d'estrès de 68, estat Normal, calculat en el moment."),
+      ("Score actual", "Un número, un estat, calculat íntegrament al rellotge — sense esperar que res se sincronitzi.", "Pantalla principal de Vela mostrant un nivell d'estrès de 34, estat Baix, calculat en el moment."),
       ("Tendència", "Cada lectura del dia, comparada amb la teva pròpia línia discontínua — no amb la de ningú més.", "Gràfic de tendència amb la mitjana d'estrès del dia i les lectures de cada hora, comparades amb la línia base personal."),
       ("Rangs explicats", "Res de xifres críptiques: cada rang diu què significa i què esperar-ne.", "Pantalla d'explicació dels rangs d'estrès: Normal entre 40 i 69, Alt entre 70 i 100."),
     ],
     "onboarding_eyebrow": "Així comences", "onboarding_h2": "Et demanem permís abans de mesurar res.",
-    "onboarding_p": "Vela demana accés al teu HRV de manera explícita, no en la lletra petita. I si ets nou mesurant HRV, et diu quant falta per tenir una línia base fiable — sense fingir que el primer dia ja sap qui ets.",
-    "onboarding_alt": "Flux de benvinguda de Vela a l'Apple Watch: pantalla de benvinguda, sol·licitud explícita d'accés a les dades de variabilitat cardíaca, i pantalla de construcció de la línia base amb 7 dies restants.",
+    "onboarding_p": "Vela et demana accés a les teves dades de salut de manera explícita, no en la lletra petita, i et diu per a què fa servir cadascuna. I si ets nou mesurant HRV, et diu quant falta per tenir una línia base fiable — sense fingir que el primer dia ja sap qui ets.",
+    "onboarding_alt": "Dos passos de la benvinguda de Vela a l'Apple Watch: la pantalla de benvinguda i la petició d'accés a les dades de salut, que explica per a què es fa servir cadascuna.",
     "closing_eyebrow": "Descarrega-la avui", "closing_h2": "Sense subscripció. <em>Mai.</em>",
-    "closing_p": "Vela està disponible gratis a l'App Store per a l'Apple Watch.",
+    "closing_p": "Vela és gratuïta a l'App Store per a l'Apple Watch, amb Vela Pro com a compra única.",
     "footer_support": "Suport", "footer_privacy": "Privadesa", "footer_contact": "Contacte",
   },
 }
@@ -1755,8 +1742,6 @@ L["eu"] = {
     "h1": "Zure lasaitasuna ez da <em>inoren batez bestekoa</em>.",
     "hero_p": "Velak zure bihotz-maiztasunaren aldakortasuna (SDNN) neurtzen du zuzenean zure Apple Watch-en, eta zure oinarri-lerro propioa eraikitzen du — ez populazioaren atalase generiko bat. Kalkulu guztia erlojuan gertatzen da. Ezer ez da gure zerbitzarietatik pasatzen, ez baititugu.",
     "badge_alt": "Deskargatu App Store-n",
-    "wave_kicker": "SDNN · ZUZENEAN", "wave_state": "ATSEDENEAN",
-    "wave_left": "populazioaren zarata", "wave_right_html": "<b>zure oinarri-lerroa</b> finkatzen",
     "story_eyebrow": "Izenari buruz", "story_h2": "Zergatik «Vela»",
     "story_p": "«Vela» gaztelaniazko hitza da itsasontzi baten belarako — latinezko velum hitzetik dator. Belaontzi bat ez da haizearen aurka borrokatzen: irakurri egiten du eta norabidea doitzen du. Hori da aplikazioaren atzean dagoen ideia. Kanpoko estandar batekin alderatu beharrean, Velak zure oinarri-lerro pertsonala irakurtzen du eta zeure patroiak ulertzen laguntzen dizu. Estresa ez da borrokatzen: irakurri eta doitu egiten da.",
     "baseline_eyebrow": "Zergatik ez duen batez bestekoak balio",
@@ -1767,23 +1752,21 @@ L["eu"] = {
     "principles": [
       ("On-device", "Kalkulu guztia zure Watch-ean gertatzen da.", "HealthKitek datuak ematen ditu, erlojuak gainerakoa egiten du. HRV daturik ez da inoiz zure gailutik ateratzen Velaren zerbitzari batera."),
       ("Zure iCloud, ez gurea", "Sinkronizazioak zure iCloud kontu propioa erabiltzen du", "CloudKit bidez. Velak ez ditu zure datuak inon gordetzen — ezin du, ez baitu non."),
-      ("Harpidetzarik gabe. Inoiz ez.", "Hileroko edo urteroko kuotarik gabe.", "Vela gaur doakoa da. Etorkizunean ordainpeko Pro bertsio bat egongo da — inoiz ez harpidetza bat."),
+      ("Harpidetzarik gabe. Inoiz ez.", "Hileroko edo urteroko kuotarik gabe.", "Vela doakoa da. Vela Pro erosketa bakarra da: behin ordaintzen duzu eta zurea da — inoiz ez harpidetza bat."),
       ("Berez irisgarria", "VoiceOver, Dynamic Type, Reduce Motion", "eta 12 hizkuntza: gaztelania, katalana, euskara, galiziera, English, français, Deutsch, italiano, português, čeština, ελληνικά eta 日本語."),
     ],
-    "showcase_eyebrow": "Zure eskumuturrean", "showcase_h2": "Puntuazio bat, egoera bat, joera bat.",
-    "showcase_p": "Kolorea eta testu-etiketa beti batera doaz — kolore-itsutasuna kontuan hartuta ere. Puntuazio bakoitza azaltzen da: zein tarte den «Normal», noiz bihurtzen den «Altu» eta zergatik.",
-    "showcase_alt": "Velaren hiru pantaila Apple Watch Ultran: uneko estres-puntuazioa Normal egoerarekin, asteko joera egunaren batez bestekoarekin, eta Normal eta Altu tarteak azaltzen dituen pantaila.",
+    "stress_h2": "Puntuazio bat, egoera bat, joera bat.",
     "tour_eyebrow": "Bira azkarra", "tour_h2": "Hiru pantaila, bakoitza lan bakar batekin.",
     "tour": [
-      ("Uneko puntuazioa", "Zenbaki bat, egoera bat, erlojuan bertan kalkulatua — ezer sinkronizatzeko itxaron gabe.", "Velaren pantaila nagusia, 68ko estres-puntuazioa eta Normal egoera erakusten, unean kalkulatua."),
+      ("Uneko puntuazioa", "Zenbaki bat, egoera bat, erlojuan bertan kalkulatua — ezer sinkronizatzeko itxaron gabe.", "Velaren pantaila nagusia, 34ko estres-maila erakusten duena, Baxua egoera, unean bertan kalkulatua."),
       ("Joera", "Eguneko irakurketa bakoitza, zure marra etenarekin alderatuta — ez beste inorenarekin.", "Joera-grafikoa eguneko estres-batez bestekoarekin eta orduroko irakurketekin, oinarri-lerro pertsonalarekin alderatuta."),
       ("Tarteak azalduta", "Zifra kriptikorik ez: tarte bakoitzak esan nahi duena eta zer espero eskaintzen du.", "Estres-tarteak azaltzen dituen pantaila: Normal 40 eta 69 artean, Altu 70 eta 100 artean."),
     ],
     "onboarding_eyebrow": "Horrela hasten zara", "onboarding_h2": "Baimena eskatzen dizugu ezer neurtu aurretik.",
-    "onboarding_p": "Velak zure HRVrako sarbidea modu esplizituan eskatzen du, ez letra txikian. Eta HRV neurtzen berria bazara, oinarri-lerro fidagarri bat izateko zenbat falta den esaten dizu — lehen egunetik nor zaren jakingo balu bezala itxuratu gabe.",
-    "onboarding_alt": "Velaren ongietorri-fluxua Apple Watch-en: ongietorri-pantaila, bihotz-maiztasunaren aldakortasun-datuetarako sarbidearen eskaera esplizitua, eta 7 egun falta direla erakusten duen oinarri-lerroa eraikitzeko pantaila.",
+    "onboarding_p": "Velak zure osasun-datuetarako sarbidea modu esplizituan eskatzen du, ez letra txikian, eta bakoitza zertarako erabiltzen duen esaten dizu. Eta HRV neurtzen berria bazara, oinarri-lerro fidagarri bat izateko zenbat falta den esaten dizu — lehen egunetik nor zaren jakingo balu bezala itxuratu gabe.",
+    "onboarding_alt": "Velaren ongietorriko bi urrats Apple Watch-ean: ongietorri-pantaila eta osasun-datuetarako sarbide-eskaera, bakoitza zertarako erabiltzen den azaltzen duena.",
     "closing_eyebrow": "Deskargatu gaur", "closing_h2": "Harpidetzarik gabe. <em>Inoiz ez.</em>",
-    "closing_p": "Vela doan dago eskuragarri App Store-n, Apple Watch-erako.",
+    "closing_p": "Vela doakoa da App Store-n Apple Watch-erako, eta Vela Pro erosketa bakarra da.",
     "footer_support": "Laguntza", "footer_privacy": "Pribatutasuna", "footer_contact": "Kontaktua",
   },
 }
@@ -1858,8 +1841,6 @@ L["gl"] = {
     "h1": "A túa calma non é <em>a media</em> de ninguén.",
     "hero_p": "Vela mide a túa variabilidade da frecuencia cardíaca (SDNN) directamente no teu Apple Watch e constrúe unha liña base propia — non un limiar xenérico de poboación. Todo o cálculo ocorre no reloxo. Nada pasa polos nosos servidores, porque non os temos.",
     "badge_alt": "Descárgao na App Store",
-    "wave_kicker": "SDNN · EN TEMPO REAL", "wave_state": "EN REPOUSO",
-    "wave_left": "ruído de poboación", "wave_right_html": "<b>a túa liña base</b> aséntase",
     "story_eyebrow": "Sobre o nome", "story_h2": "Por que «Vela»",
     "story_p": "«Vela» tamén é a vela dun barco — do latín velum. Un veleiro non loita contra o vento: lee o vento e axusta o rumbo. Esa é a idea detrás da aplicación. No canto de compararte cun estándar externo, Vela le a túa propia liña base persoal e axúdache a comprender os teus propios patróns. O estrés non se combate: lese e axústase.",
     "baseline_eyebrow": "Por que a media non serve",
@@ -1870,23 +1851,21 @@ L["gl"] = {
     "principles": [
       ("On-device", "Todo o cálculo ocorre no teu Watch.", "HealthKit entrega os datos, o reloxo fai o resto. Ningún dato de HRV sae do teu dispositivo cara a un servidor de Vela."),
       ("O teu iCloud, non o noso", "A sincronización usa a túa propia conta de iCloud", "vía CloudKit. Vela non aloxa os teus datos en ningures — non pode, porque non ten onde."),
-      ("Sen subscrición. Nunca.", "Sen cotas mensuais nin anuais.", "Vela é gratis hoxe. No futuro haberá unha versión Pro de pago único — nunca unha subscrición."),
+      ("Sen subscrición. Nunca.", "Sen cotas mensuais nin anuais.", "Vela é gratis. Vela Pro é unha compra única: págala unha vez e é túa — nunca unha subscrición."),
       ("Accesible de serie", "VoiceOver, Dynamic Type, Reduce Motion", "e 12 idiomas: castelán, catalán, éuscaro, galego, English, français, Deutsch, italiano, português, čeština, ελληνικά e 日本語."),
     ],
-    "showcase_eyebrow": "No teu pulso", "showcase_h2": "Unha puntuación, un estado, unha tendencia.",
-    "showcase_p": "A cor e a etiqueta de texto van sempre xuntas — pensado tamén para quen non distingue ben as cores. Cada puntuación explícase: que rango é «Normal», cando pasa a «Alto» e por que.",
-    "showcase_alt": "Tres pantallas de Vela no Apple Watch Ultra: puntuación de estrés actual con estado Normal, tendencia semanal coa media do día, e pantalla de explicación dos rangos Normal e Alto.",
+    "stress_h2": "Unha puntuación, un estado, unha tendencia.",
     "tour_eyebrow": "Percorrido rápido", "tour_h2": "Tres pantallas, cada unha cun único traballo.",
     "tour": [
-      ("Puntuación actual", "Un número, un estado, calculado enteiramente no reloxo — sen esperar a que nada sincronice.", "Pantalla principal de Vela amosando unha puntuación de estrés de 68, estado Normal, calculado no momento."),
+      ("Puntuación actual", "Un número, un estado, calculado enteiramente no reloxo — sen esperar a que nada sincronice.", "Pantalla principal de Vela mostrando un nivel de estrés de 34, estado Baixo, calculado no momento."),
       ("Tendencia", "Cada lectura do día, comparada coa túa propia liña discontinua — non coa de ninguén máis.", "Gráfico de tendencia coa media de estrés do día e as lecturas de cada hora, comparadas coa liña base persoal."),
       ("Rangos explicados", "Nada de cifras crípticas: cada rango di que significa e que esperar del.", "Pantalla de explicación dos rangos de estrés: Normal entre 40 e 69, Alto entre 70 e 100."),
     ],
     "onboarding_eyebrow": "Así comezas", "onboarding_h2": "Pedímosche permiso antes de medir nada.",
-    "onboarding_p": "Vela pide acceso á túa HRV de forma explícita, non na letra pequena. E se es novo medindo HRV, dicheche canto falta para ter unha liña base fiable — sen finxir que o primeiro día xa sabe quen es.",
-    "onboarding_alt": "Fluxo de benvida de Vela no Apple Watch: pantalla de benvida, solicitude explícita de acceso aos datos de variabilidade cardíaca, e pantalla de construción da liña base con 7 días restantes.",
+    "onboarding_p": "Vela pídeche acceso aos teus datos de saúde de forma explícita, non na letra pequena, e dille para que usa cada un. E se es novo medindo HRV, dicheche canto falta para ter unha liña base fiable — sen finxir que o primeiro día xa sabe quen es.",
+    "onboarding_alt": "Dous pasos da benvida de Vela no Apple Watch: a pantalla de benvida e a petición de acceso aos datos de saúde, que explica para que se usa cada un.",
     "closing_eyebrow": "Descárgaa hoxe", "closing_h2": "Sen subscrición. <em>Nunca.</em>",
-    "closing_p": "Vela está dispoñible gratis na App Store para Apple Watch.",
+    "closing_p": "Vela é gratis na App Store para Apple Watch, con Vela Pro como compra única.",
     "footer_support": "Soporte", "footer_privacy": "Privacidade", "footer_contact": "Contacto",
   },
 }
@@ -1961,8 +1940,6 @@ L["fr"] = {
     "h1": "Votre calme n'est <em>la moyenne</em> de personne.",
     "hero_p": "Vela mesure votre variabilité de la fréquence cardiaque (SDNN) directement sur votre Apple Watch et construit une référence qui vous est propre — pas un seuil générique de population. Tout le calcul se fait sur la montre. Rien ne transite par nos serveurs, car nous n'en avons pas.",
     "badge_alt": "Télécharger dans l'App Store",
-    "wave_kicker": "VFC · EN DIRECT", "wave_state": "AU REPOS",
-    "wave_left": "bruit de population", "wave_right_html": "<b>votre référence</b> se stabilise",
     "story_eyebrow": "À propos du nom", "story_h2": "Pourquoi « Vela »",
     "story_p": "« Vela » est le mot espagnol pour désigner la voile d'un bateau — du latin velum. Un voilier ne lutte pas contre le vent : il le lit et ajuste son cap. C'est l'idée qui sous-tend l'application. Plutôt que de vous comparer à une norme extérieure, Vela lit votre propre référence personnelle et vous aide à comprendre vos propres schémas. Le stress ne se combat pas : il se lit et s'ajuste.",
     "baseline_eyebrow": "Pourquoi la moyenne ne fonctionne pas",
@@ -1973,23 +1950,21 @@ L["fr"] = {
     "principles": [
       ("On-device", "Tout le calcul se fait sur votre Watch.", "HealthKit fournit les données, la montre fait le reste. Aucune donnée VFC ne quitte jamais votre appareil vers un serveur Vela."),
       ("Votre iCloud, pas le nôtre", "La synchronisation utilise votre propre compte iCloud", "via CloudKit. Vela n'héberge vos données nulle part — elle ne peut pas, faute d'endroit où les mettre."),
-      ("Sans abonnement. Jamais.", "Aucun frais mensuel ni annuel.", "Vela est gratuite aujourd'hui. Une version Pro à paiement unique arrivera plus tard — jamais un abonnement."),
+      ("Sans abonnement. Jamais.", "Aucun frais mensuel ni annuel.", "Vela est gratuite. Vela Pro est un achat unique : vous le payez une fois et il est à vous — jamais un abonnement."),
       ("Accessible par défaut", "VoiceOver, Dynamic Type, Reduce Motion", "et 12 langues : espagnol, catalan, basque, galicien, anglais, français, allemand, italien, portugais, tchèque, grec et japonais."),
     ],
-    "showcase_eyebrow": "À votre poignet", "showcase_h2": "Un score, un état, une tendance.",
-    "showcase_p": "La couleur et l'étiquette textuelle vont toujours ensemble — pensé aussi pour les personnes daltoniennes. Chaque score est expliqué : quelle plage est « Normale », quand elle devient « Élevée », et pourquoi.",
-    "showcase_alt": "Trois écrans de Vela sur Apple Watch Ultra : score de stress actuel avec statut Normal, tendance hebdomadaire avec la moyenne du jour, et un écran expliquant les plages Normale et Élevée.",
+    "stress_h2": "Un score, un état, une tendance.",
     "tour_eyebrow": "Visite rapide", "tour_h2": "Trois écrans, chacun avec un seul rôle.",
     "tour": [
-      ("Score actuel", "Un chiffre, un état, calculé entièrement sur la montre — sans attendre la moindre synchronisation.", "Écran principal de Vela affichant un score de stress de 68, statut Normal, calculé à l'instant."),
+      ("Score actuel", "Un chiffre, un état, calculé entièrement sur la montre — sans attendre la moindre synchronisation.", "Écran principal de Vela affichant un niveau de stress de 34, état Faible, calculé sur le moment."),
       ("Tendance", "Chaque mesure de la journée, comparée à votre propre ligne pointillée — pas à celle de quelqu'un d'autre.", "Graphique de tendance avec la moyenne de stress du jour et les mesures horaires, comparées à la référence personnelle."),
       ("Plages expliquées", "Fini les chiffres cryptiques : chaque plage indique ce qu'elle signifie et ce à quoi s'attendre.", "Écran expliquant les plages de stress : Normale entre 40 et 69, Élevée entre 70 et 100."),
     ],
     "onboarding_eyebrow": "Comment ça démarre", "onboarding_h2": "Nous demandons la permission avant de mesurer quoi que ce soit.",
-    "onboarding_p": "Vela demande l'accès à votre VFC de façon explicite, pas dans les petits caractères. Et si vous débutez avec la mesure de la VFC, elle vous indique combien de temps il reste avant d'avoir une référence fiable — sans prétendre savoir qui vous êtes dès le premier jour.",
-    "onboarding_alt": "Parcours d'accueil de Vela sur Apple Watch : écran de bienvenue, demande explicite d'accès aux données de variabilité de la fréquence cardiaque, et écran de construction de la référence indiquant 7 jours restants.",
+    "onboarding_p": "Vela demande l'accès à vos données de santé de façon explicite, pas dans les petits caractères, et vous dit à quoi sert chacune. Et si vous débutez avec la mesure de la VFC, elle vous indique combien de temps il reste avant d'avoir une référence fiable — sans prétendre savoir qui vous êtes dès le premier jour.",
+    "onboarding_alt": "Deux étapes de l'accueil de Vela sur Apple Watch : l'écran de bienvenue et la demande d'accès aux données de santé, qui explique à quoi sert chacune.",
     "closing_eyebrow": "Téléchargez-la aujourd'hui", "closing_h2": "Sans abonnement. <em>Jamais.</em>",
-    "closing_p": "Vela est disponible gratuitement sur l'App Store pour Apple Watch.",
+    "closing_p": "Vela est gratuite sur l'App Store pour Apple Watch, avec Vela Pro en achat unique.",
     "footer_support": "Assistance", "footer_privacy": "Confidentialité", "footer_contact": "Contact",
   },
 }
@@ -2064,8 +2039,6 @@ L["de"] = {
     "h1": "Deine Ruhe ist <em>niemandes Durchschnitt</em>.",
     "hero_p": "Vela misst deine Herzfrequenzvariabilität (SDNN) direkt auf deiner Apple Watch und erstellt eine Baseline, die wirklich dir gehört — kein generischer Bevölkerungsschwellenwert. Die gesamte Berechnung läuft auf der Uhr. Nichts läuft über unsere Server, weil wir keine haben.",
     "badge_alt": "Laden im App Store",
-    "wave_kicker": "SDNN · LIVE", "wave_state": "IN RUHE",
-    "wave_left": "Bevölkerungsrauschen", "wave_right_html": "<b>deine Baseline</b> stabilisiert sich",
     "story_eyebrow": "Über den Namen", "story_h2": "Warum „Vela“",
     "story_p": "„Vela“ ist das spanische Wort für das Segel eines Bootes — vom lateinischen velum. Ein Segelboot kämpft nicht gegen den Wind: Es liest ihn und passt den Kurs an. Das ist die Idee hinter der App. Statt dich mit einem externen Standard zu vergleichen, liest Vela deine eigene persönliche Baseline und hilft dir, deine eigenen Muster zu verstehen. Stress wird nicht bekämpft, sondern gelesen und angepasst.",
     "baseline_eyebrow": "Warum der Durchschnitt nicht funktioniert",
@@ -2076,23 +2049,21 @@ L["de"] = {
     "principles": [
       ("On-device", "Die gesamte Berechnung läuft auf deiner Watch.", "HealthKit liefert die Daten, die Uhr erledigt den Rest. Keine HRV-Daten verlassen jemals dein Gerät in Richtung eines Vela-Servers."),
       ("Deine iCloud, nicht unsere", "Die Synchronisierung nutzt dein eigenes iCloud-Konto", "über CloudKit. Vela speichert deine Daten nirgendwo — das kann es gar nicht, weil es keinen Ort dafür hat."),
-      ("Kein Abo. Niemals.", "Keine monatlichen oder jährlichen Gebühren.", "Vela ist heute kostenlos. In Zukunft wird es eine kostenpflichtige Pro-Version mit Einmalzahlung geben — niemals ein Abo."),
+      ("Kein Abo. Niemals.", "Keine monatlichen oder jährlichen Gebühren.", "Vela ist kostenlos. Vela Pro ist ein Einmalkauf: Du zahlst einmal, und es gehört dir — niemals ein Abo."),
       ("Barrierefrei von Haus aus", "VoiceOver, Dynamic Type, Reduce Motion", "und 12 Sprachen: Spanisch, Katalanisch, Baskisch, Galicisch, Englisch, Französisch, Deutsch, Italienisch, Portugiesisch, Tschechisch, Griechisch und Japanisch."),
     ],
-    "showcase_eyebrow": "An deinem Handgelenk", "showcase_h2": "Ein Score, ein Zustand, ein Trend.",
-    "showcase_p": "Farbe und Textlabel gehören immer zusammen — auch für Menschen mit Farbsehschwäche gedacht. Jeder Score wird erklärt: welcher Bereich „Normal“ ist, wann er zu „Hoch“ wird, und warum.",
-    "showcase_alt": "Drei Vela-Bildschirme auf der Apple Watch Ultra: aktueller Stress-Score mit Status Normal, Wochentrend mit Tagesdurchschnitt, und ein Bildschirm, der die Bereiche Normal und Hoch erklärt.",
+    "stress_h2": "Ein Score, ein Zustand, ein Trend.",
     "tour_eyebrow": "Kurzer Rundgang", "tour_h2": "Drei Bildschirme, jeder mit genau einer Aufgabe.",
     "tour": [
-      ("Aktueller Score", "Eine Zahl, ein Zustand, vollständig auf der Uhr berechnet — ohne auf eine Synchronisierung zu warten.", "Velas Hauptbildschirm mit einem Stress-Score von 68, Status Normal, im Moment berechnet."),
+      ("Aktueller Score", "Eine Zahl, ein Zustand, vollständig auf der Uhr berechnet — ohne auf eine Synchronisierung zu warten.", "Hauptbildschirm von Vela mit einem Stresslevel von 34, Status Niedrig, im Moment berechnet."),
       ("Trend", "Jede Messung des Tages, verglichen mit deiner eigenen gestrichelten Linie — mit niemand anderem.", "Trenddiagramm mit dem Tagesdurchschnitt des Stresses und stündlichen Messwerten, verglichen mit der persönlichen Baseline."),
       ("Bereiche erklärt", "Keine kryptischen Zahlen: Jeder Bereich sagt, was er bedeutet und was zu erwarten ist.", "Bildschirm, der die Stressbereiche erklärt: Normal zwischen 40 und 69, Hoch zwischen 70 und 100."),
     ],
     "onboarding_eyebrow": "So startest du", "onboarding_h2": "Wir fragen um Erlaubnis, bevor wir irgendetwas messen.",
-    "onboarding_p": "Vela bittet ausdrücklich um Zugriff auf deine HRV — nicht im Kleingedruckten. Und wenn du neu im Messen von HRV bist, sagt dir Vela, wie lange es noch dauert, bis du eine verlässliche Baseline hast — ohne so zu tun, als würde es dich schon am ersten Tag kennen.",
-    "onboarding_alt": "Velas Onboarding-Ablauf auf der Apple Watch: ein Willkommensbildschirm, eine ausdrückliche Zugriffsanfrage für Herzfrequenzvariabilitätsdaten und ein Bildschirm zum Aufbau der Baseline mit noch 7 verbleibenden Tagen.",
+    "onboarding_p": "Vela bittet ausdrücklich um Zugriff auf deine Gesundheitsdaten — nicht im Kleingedruckten — und sagt dir, wofür es welche Daten nutzt. Und wenn du neu im Messen von HRV bist, sagt dir Vela, wie lange es noch dauert, bis du eine verlässliche Baseline hast — ohne so zu tun, als würde es dich schon am ersten Tag kennen.",
+    "onboarding_alt": "Zwei Schritte der Begrüßung von Vela auf der Apple Watch: der Willkommensbildschirm und die Anfrage nach Zugriff auf Gesundheitsdaten, die erklärt, wofür welche Daten genutzt werden.",
     "closing_eyebrow": "Heute herunterladen", "closing_h2": "Kein Abo. <em>Niemals.</em>",
-    "closing_p": "Vela ist kostenlos im App Store für Apple Watch erhältlich.",
+    "closing_p": "Vela ist kostenlos im App Store für Apple Watch erhältlich, mit Vela Pro als Einmalkauf.",
     "footer_support": "Support", "footer_privacy": "Datenschutz", "footer_contact": "Kontakt",
   },
 }
@@ -2167,8 +2138,6 @@ L["it"] = {
     "h1": "La tua calma non è <em>la media</em> di nessuno.",
     "hero_p": "Vela misura la tua variabilità della frequenza cardiaca (SDNN) direttamente sul tuo Apple Watch e costruisce una baseline tutta tua — non una soglia generica di popolazione. Tutto il calcolo avviene sull'orologio. Nulla passa dai nostri server, perché non ne abbiamo.",
     "badge_alt": "Scarica su App Store",
-    "wave_kicker": "SDNN · IN TEMPO REALE", "wave_state": "A RIPOSO",
-    "wave_left": "rumore di popolazione", "wave_right_html": "<b>la tua baseline</b> si assesta",
     "story_eyebrow": "Sul nome", "story_h2": "Perché «Vela»",
     "story_p": "«Vela» è anche la vela di una barca — dal latino velum. Una barca a vela non lotta contro il vento: lo legge e regola la rotta. È l'idea alla base dell'app. Invece di confrontarti con uno standard esterno, Vela legge la tua baseline personale e ti aiuta a capire i tuoi schemi. Lo stress non si combatte: si legge e si regola.",
     "baseline_eyebrow": "Perché la media non funziona",
@@ -2179,23 +2148,21 @@ L["it"] = {
     "principles": [
       ("On-device", "Tutto il calcolo avviene sul tuo Watch.", "HealthKit fornisce i dati, l'orologio fa il resto. Nessun dato HRV lascia mai il tuo dispositivo verso un server Vela."),
       ("Il tuo iCloud, non il nostro", "La sincronizzazione usa il tuo account iCloud", "tramite CloudKit. Vela non ospita i tuoi dati da nessuna parte — non può, perché non ha dove."),
-      ("Senza abbonamento. Mai.", "Nessuna quota mensile o annuale.", "Vela è gratis oggi. In futuro ci sarà una versione Pro a pagamento unico — mai un abbonamento."),
+      ("Senza abbonamento. Mai.", "Nessuna quota mensile o annuale.", "Vela è gratis. Vela Pro è un acquisto unico: lo paghi una volta ed è tuo — mai un abbonamento."),
       ("Accessibile di serie", "VoiceOver, Dynamic Type, Reduce Motion", "e 12 lingue: spagnolo, catalano, basco, galiziano, inglese, francese, tedesco, italiano, portoghese, ceco, greco e giapponese."),
     ],
-    "showcase_eyebrow": "Al tuo polso", "showcase_h2": "Un punteggio, uno stato, una tendenza.",
-    "showcase_p": "Colore ed etichetta testuale vanno sempre insieme — pensato anche per chi non distingue bene i colori. Ogni punteggio è spiegato: quale intervallo è «Normale», quando diventa «Alto» e perché.",
-    "showcase_alt": "Tre schermate di Vela su Apple Watch Ultra: punteggio di stress attuale con stato Normale, tendenza settimanale con la media del giorno, e una schermata che spiega gli intervalli Normale e Alto.",
+    "stress_h2": "Un punteggio, uno stato, una tendenza.",
     "tour_eyebrow": "Tour rapido", "tour_h2": "Tre schermate, ognuna con un solo compito.",
     "tour": [
-      ("Punteggio attuale", "Un numero, uno stato, calcolato interamente sull'orologio — senza aspettare alcuna sincronizzazione.", "Schermata principale di Vela con un punteggio di stress di 68, stato Normale, calcolato al momento."),
+      ("Punteggio attuale", "Un numero, uno stato, calcolato interamente sull'orologio — senza aspettare alcuna sincronizzazione.", "Schermata principale di Vela con un livello di stress di 34, stato Basso, calcolato sul momento."),
       ("Tendenza", "Ogni rilevazione del giorno, confrontata con la tua linea tratteggiata — non con quella di nessun altro.", "Grafico della tendenza con la media di stress del giorno e le rilevazioni orarie, confrontate con la baseline personale."),
       ("Intervalli spiegati", "Niente numeri criptici: ogni intervallo dice cosa significa e cosa aspettarsi.", "Schermata che spiega gli intervalli di stress: Normale tra 40 e 69, Alto tra 70 e 100."),
     ],
     "onboarding_eyebrow": "Così inizi", "onboarding_h2": "Ti chiediamo il permesso prima di misurare qualsiasi cosa.",
-    "onboarding_p": "Vela chiede l'accesso alla tua HRV in modo esplicito, non nelle note in piccolo. E se sei nuovo nella misurazione dell'HRV, ti dice quanto manca per avere una baseline affidabile — senza fingere di sapere già chi sei il primo giorno.",
-    "onboarding_alt": "Flusso di benvenuto di Vela su Apple Watch: schermata di benvenuto, richiesta esplicita di accesso ai dati di variabilità della frequenza cardiaca, e schermata di costruzione della baseline con 7 giorni rimanenti.",
+    "onboarding_p": "Vela chiede l'accesso ai tuoi dati sanitari in modo esplicito, non nelle note in piccolo, e ti dice a cosa serve ciascuno. E se sei nuovo nella misurazione dell'HRV, ti dice quanto manca per avere una baseline affidabile — senza fingere di sapere già chi sei il primo giorno.",
+    "onboarding_alt": "Due passaggi del benvenuto di Vela su Apple Watch: la schermata di benvenuto e la richiesta di accesso ai dati sanitari, che spiega a cosa serve ciascuno.",
     "closing_eyebrow": "Scaricala oggi", "closing_h2": "Senza abbonamento. <em>Mai.</em>",
-    "closing_p": "Vela è disponibile gratuitamente su App Store per Apple Watch.",
+    "closing_p": "Vela è gratis su App Store per Apple Watch, con Vela Pro come acquisto unico.",
     "footer_support": "Supporto", "footer_privacy": "Privacy", "footer_contact": "Contatti",
   },
 }
@@ -2270,8 +2237,6 @@ L["pt"] = {
     "h1": "A sua calma não é <em>a média</em> de ninguém.",
     "hero_p": "A Vela mede a sua variabilidade da frequência cardíaca (SDNN) diretamente no seu Apple Watch e constrói uma linha de base própria — não um limiar genérico de população. Todo o cálculo acontece no relógio. Nada passa pelos nossos servidores, porque não os temos.",
     "badge_alt": "Transferir da App Store",
-    "wave_kicker": "SDNN · EM TEMPO REAL", "wave_state": "EM REPOUSO",
-    "wave_left": "ruído de população", "wave_right_html": "<b>a sua linha de base</b> assenta",
     "story_eyebrow": "Sobre o nome", "story_h2": "Porquê «Vela»",
     "story_p": "«Vela» também é a vela de um barco — do latim velum. Um veleiro não luta contra o vento: lê-o e ajusta o rumo. Essa é a ideia por trás da aplicação. Em vez de impor um padrão externo, a Vela lê a sua própria linha de base pessoal e ajuda a perceber os seus próprios padrões. O stress não se combate: lê-se e ajusta-se.",
     "baseline_eyebrow": "Porque é que a média não serve",
@@ -2282,23 +2247,21 @@ L["pt"] = {
     "principles": [
       ("On-device", "Todo o cálculo acontece no seu Watch.", "O HealthKit fornece os dados, o relógio faz o resto. Nenhum dado de HRV sai do seu dispositivo em direção a um servidor da Vela."),
       ("O seu iCloud, não o nosso", "A sincronização usa a sua própria conta iCloud", "via CloudKit. A Vela não aloja os seus dados em lado nenhum — não pode, porque não tem onde."),
-      ("Sem subscrição. Nunca.", "Sem quotas mensais nem anuais.", "A Vela é gratuita hoje. No futuro haverá uma versão Pro de pagamento único — nunca uma subscrição."),
+      ("Sem subscrição. Nunca.", "Sem quotas mensais nem anuais.", "A Vela é gratuita. O Vela Pro é uma compra única: paga uma vez e é seu — nunca uma subscrição."),
       ("Acessível por predefinição", "VoiceOver, Dynamic Type, Reduce Motion", "e 12 idiomas: castelhano, catalão, basco, galego, inglês, francês, alemão, italiano, português, checo, grego e japonês."),
     ],
-    "showcase_eyebrow": "No seu pulso", "showcase_h2": "Uma pontuação, um estado, uma tendência.",
-    "showcase_p": "A cor e a etiqueta de texto andam sempre juntas — pensado também para quem não distingue bem as cores. Cada pontuação é explicada: que intervalo é «Normal», quando passa a «Alto» e porquê.",
-    "showcase_alt": "Três ecrãs da Vela no Apple Watch Ultra: pontuação de stress atual com estado Normal, tendência semanal com a média do dia, e um ecrã a explicar os intervalos Normal e Alto.",
+    "stress_h2": "Uma pontuação, um estado, uma tendência.",
     "tour_eyebrow": "Percurso rápido", "tour_h2": "Três ecrãs, cada um com uma única função.",
     "tour": [
-      ("Pontuação atual", "Um número, um estado, calculado inteiramente no relógio — sem esperar que nada sincronize.", "Ecrã principal da Vela a mostrar uma pontuação de stress de 68, estado Normal, calculado no momento."),
+      ("Pontuação atual", "Um número, um estado, calculado inteiramente no relógio — sem esperar que nada sincronize.", "Ecrã principal da Vela a mostrar um nível de stress de 34, estado Baixo, calculado no momento."),
       ("Tendência", "Cada leitura do dia, comparada com a sua própria linha tracejada — não com a de mais ninguém.", "Gráfico de tendência com a média de stress do dia e as leituras de cada hora, comparadas com a linha de base pessoal."),
       ("Intervalos explicados", "Nada de números crípticos: cada intervalo diz o que significa e o que esperar.", "Ecrã a explicar os intervalos de stress: Normal entre 40 e 69, Alto entre 70 e 100."),
     ],
     "onboarding_eyebrow": "Assim começa", "onboarding_h2": "Pedimos permissão antes de medir seja o que for.",
-    "onboarding_p": "A Vela pede acesso à sua HRV de forma explícita, não na letra pequena. E se é novo a medir HRV, diz-lhe quanto falta para ter uma linha de base fiável — sem fingir que já sabe quem é no primeiro dia.",
-    "onboarding_alt": "Fluxo de boas-vindas da Vela no Apple Watch: ecrã de boas-vindas, pedido explícito de acesso aos dados de variabilidade da frequência cardíaca, e ecrã de construção da linha de base com 7 dias restantes.",
+    "onboarding_p": "A Vela pede acesso aos seus dados de saúde de forma explícita, não na letra pequena, e diz-lhe para que usa cada um. E se é novo a medir HRV, diz-lhe quanto falta para ter uma linha de base fiável — sem fingir que já sabe quem é no primeiro dia.",
+    "onboarding_alt": "Dois passos das boas-vindas da Vela no Apple Watch: o ecrã de boas-vindas e o pedido de acesso aos dados de saúde, que explica para que serve cada um.",
     "closing_eyebrow": "Transfira-a hoje", "closing_h2": "Sem subscrição. <em>Nunca.</em>",
-    "closing_p": "A Vela está disponível gratuitamente na App Store para Apple Watch.",
+    "closing_p": "A Vela é gratuita na App Store para Apple Watch, com o Vela Pro como compra única.",
     "footer_support": "Suporte", "footer_privacy": "Privacidade", "footer_contact": "Contacto",
   },
 }
@@ -2373,8 +2336,6 @@ L["cs"] = {
     "h1": "Váš klid není <em>ničí průměr</em>.",
     "hero_p": "Vela měří vaši variabilitu srdečního tepu (SDNN) přímo na vašich Apple Watch a vytváří základní linii, která patří vám — ne obecný populační práh. Veškerý výpočet probíhá na hodinkách. Nic nikdy neprochází našimi servery, protože žádné nemáme.",
     "badge_alt": "Stáhnout v App Store",
-    "wave_kicker": "SDNN · ŽIVĚ", "wave_state": "V KLIDU",
-    "wave_left": "populační šum", "wave_right_html": "<b>vaše základní linie</b> se ustálí",
     "story_eyebrow": "O názvu", "story_h2": "Proč „Vela“",
     "story_p": "„Vela“ je španělsky také plachta lodi — z latinského velum. Plachetnice s větrem nebojuje: čte ho a upravuje kurz. To je myšlenka celé aplikace. Místo aby vás srovnávala s vnějším standardem, Vela čte vaši vlastní osobní základní linii a pomáhá vám pochopit vaše vlastní vzorce. Se stresem se nebojuje — čte se a přizpůsobuje.",
     "baseline_eyebrow": "Proč průměr nefunguje",
@@ -2385,23 +2346,21 @@ L["cs"] = {
     "principles": [
       ("On-device", "Veškerý výpočet probíhá na vašich Watch.", "HealthKit poskytuje data, hodinky udělají zbytek. Žádná data HRV nikdy neopustí vaše zařízení směrem k serveru Vely."),
       ("Váš iCloud, ne náš", "Synchronizace používá váš vlastní účet iCloud", "přes CloudKit. Vela vaše data nikde nehostuje — nemůže, protože nemá kde."),
-      ("Žádné předplatné. Nikdy.", "Žádné měsíční ani roční poplatky.", "Vela je dnes zdarma. V budoucnu bude placená verze Pro s jednorázovou platbou — nikdy ne předplatné."),
+      ("Žádné předplatné. Nikdy.", "Žádné měsíční ani roční poplatky.", "Vela je zdarma. Vela Pro je jednorázový nákup: zaplatíte jednou a je vaše — nikdy ne předplatné."),
       ("Přístupná ve výchozím stavu", "VoiceOver, Dynamic Type, Reduce Motion", "a 12 jazyků: španělština, katalánština, baskičtina, galicijština, angličtina, francouzština, němčina, italština, portugalština, čeština, řečtina a japonština."),
     ],
-    "showcase_eyebrow": "Na vašem zápěstí", "showcase_h2": "Jedno skóre, jeden stav, jeden trend.",
-    "showcase_p": "Barva a textový popisek jdou vždy spolu — navrženo i s ohledem na barvoslepost. Každé skóre je vysvětleno: který rozsah se počítá jako „Normální“, kdy se stává „Vysokým“ a proč.",
-    "showcase_alt": "Tři obrazovky Vely na Apple Watch Ultra: aktuální skóre stresu se stavem Normální, týdenní trend s denním průměrem a obrazovka vysvětlující rozsahy Normální a Vysoký.",
+    "stress_h2": "Jedno skóre, jeden stav, jeden trend.",
     "tour_eyebrow": "Rychlá prohlídka", "tour_h2": "Tři obrazovky, každá s jediným úkolem.",
     "tour": [
-      ("Aktuální skóre", "Jedno číslo, jeden stav, spočítané kompletně na hodinkách — bez čekání na jakoukoli synchronizaci.", "Hlavní obrazovka Vely se skóre stresu 68, stav Normální, spočítáno v daném okamžiku."),
+      ("Aktuální skóre", "Jedno číslo, jeden stav, spočítané kompletně na hodinkách — bez čekání na jakoukoli synchronizaci.", "Hlavní obrazovka Vela s úrovní stresu 34, stav Nízký, spočítanou v daném okamžiku."),
       ("Trend", "Každé měření dne, porovnané s vaší vlastní přerušovanou čárou — ne s ničí jinou.", "Graf trendu s denním průměrem stresu a hodinovými měřeními, porovnanými s osobní základní linií."),
       ("Vysvětlené rozsahy", "Žádná záhadná čísla: každý rozsah říká, co znamená a co čekat.", "Obrazovka vysvětlující rozsahy stresu: Normální mezi 40 a 69, Vysoký mezi 70 a 100."),
     ],
     "onboarding_eyebrow": "Jak začít", "onboarding_h2": "Než začneme cokoli měřit, požádáme o svolení.",
-    "onboarding_p": "Vela žádá o přístup k vaší HRV výslovně, ne v drobném písmu. A pokud s měřením HRV začínáte, řekne vám, jak dlouho potrvá, než budete mít spolehlivou základní linii — aniž by předstírala, že vás zná už první den.",
-    "onboarding_alt": "Úvodní průvodce Vely na Apple Watch: uvítací obrazovka, výslovná žádost o přístup k datům variability srdečního tepu a obrazovka budování základní linie se zbývajícími 7 dny.",
+    "onboarding_p": "Vela žádá o přístup k vašim zdravotním datům výslovně, ne v drobném písmu, a řekne vám, k čemu které používá. A pokud s měřením HRV začínáte, řekne vám, jak dlouho potrvá, než budete mít spolehlivou základní linii — aniž by předstírala, že vás zná už první den.",
+    "onboarding_alt": "Dva kroky úvodu Vela na Apple Watch: uvítací obrazovka a žádost o přístup ke zdravotním datům, která vysvětluje, k čemu se která používají.",
     "closing_eyebrow": "Stáhněte si ji dnes", "closing_h2": "Žádné předplatné. <em>Nikdy.</em>",
-    "closing_p": "Vela je k dispozici zdarma v App Store pro Apple Watch.",
+    "closing_p": "Vela je zdarma v App Store pro Apple Watch, s Vela Pro jako jednorázovým nákupem.",
     "footer_support": "Podpora", "footer_privacy": "Soukromí", "footer_contact": "Kontakt",
   },
 }
@@ -2476,8 +2435,6 @@ L["el"] = {
     "h1": "Η ηρεμία σας δεν είναι <em>ο μέσος όρος κανενός</em>.",
     "hero_p": "Το Vela μετρά τη μεταβλητότητα του καρδιακού σας ρυθμού (SDNN) απευθείας στο Apple Watch σας και χτίζει ένα baseline που είναι δικό σας — όχι ένα γενικό όριο πληθυσμού. Όλος ο υπολογισμός γίνεται στο ρολόι. Τίποτα δεν περνά ποτέ από τους διακομιστές μας, γιατί δεν έχουμε.",
     "badge_alt": "Λήψη από το App Store",
-    "wave_kicker": "SDNN · ΖΩΝΤΑΝΑ", "wave_state": "ΣΕ ΗΡΕΜΙΑ",
-    "wave_left": "θόρυβος πληθυσμού", "wave_right_html": "<b>το baseline σας</b> σταθεροποιείται",
     "story_eyebrow": "Σχετικά με το όνομα", "story_h2": "Γιατί «Vela»",
     "story_p": "«Vela» είναι επίσης η ισπανική λέξη για το πανί ενός σκάφους — από το λατινικό velum. Ένα ιστιοφόρο δεν παλεύει με τον άνεμο: τον διαβάζει και προσαρμόζει την πορεία του. Αυτή είναι η ιδέα πίσω από την εφαρμογή. Αντί να σας συγκρίνει με ένα εξωτερικό πρότυπο, το Vela διαβάζει το δικό σας προσωπικό baseline και σας βοηθά να κατανοήσετε τα δικά σας μοτίβα. Το άγχος δεν το πολεμάς — το διαβάζεις και προσαρμόζεσαι.",
     "baseline_eyebrow": "Γιατί ο μέσος όρος δεν λειτουργεί",
@@ -2488,23 +2445,21 @@ L["el"] = {
     "principles": [
       ("On-device", "Όλος ο υπολογισμός γίνεται στο Watch σας.", "Το HealthKit παρέχει τα δεδομένα, το ρολόι κάνει τα υπόλοιπα. Κανένα δεδομένο HRV δεν φεύγει ποτέ από τη συσκευή σας προς διακομιστή του Vela."),
       ("Το iCloud σας, όχι το δικό μας", "Ο συγχρονισμός χρησιμοποιεί τον δικό σας λογαριασμό iCloud", "μέσω CloudKit. Το Vela δεν φιλοξενεί τα δεδομένα σας πουθενά — δεν μπορεί, γιατί δεν έχει πού."),
-      ("Χωρίς συνδρομή. Ποτέ.", "Χωρίς μηνιαίες ή ετήσιες χρεώσεις.", "Το Vela είναι δωρεάν σήμερα. Στο μέλλον θα υπάρξει μια πληρωμένη έκδοση Pro με εφάπαξ πληρωμή — ποτέ συνδρομή."),
+      ("Χωρίς συνδρομή. Ποτέ.", "Χωρίς μηνιαίες ή ετήσιες χρεώσεις.", "Το Vela είναι δωρεάν. Το Vela Pro είναι εφάπαξ αγορά: το πληρώνετε μία φορά και είναι δικό σας — ποτέ συνδρομή."),
       ("Προσβάσιμο από προεπιλογή", "VoiceOver, Dynamic Type, Reduce Motion", "και 12 γλώσσες: ισπανικά, καταλανικά, βασκικά, γαλικιανά, αγγλικά, γαλλικά, γερμανικά, ιταλικά, πορτογαλικά, τσέχικα, ελληνικά και ιαπωνικά."),
     ],
-    "showcase_eyebrow": "Στον καρπό σας", "showcase_h2": "Ένα σκορ, μία κατάσταση, μία τάση.",
-    "showcase_p": "Το χρώμα και η ετικέτα κειμένου πάνε πάντα μαζί — σχεδιασμένο και με γνώμονα την αχρωματοψία. Κάθε σκορ εξηγείται: ποιο εύρος θεωρείται «Φυσιολογικό», πότε γίνεται «Υψηλό» και γιατί.",
-    "showcase_alt": "Τρεις οθόνες του Vela σε Apple Watch Ultra: τρέχον σκορ άγχους με κατάσταση Φυσιολογικό, εβδομαδιαία τάση με τον μέσο όρο της ημέρας και μια οθόνη που εξηγεί τα εύρη Φυσιολογικό και Υψηλό.",
+    "stress_h2": "Ένα σκορ, μία κατάσταση, μία τάση.",
     "tour_eyebrow": "Γρήγορη περιήγηση", "tour_h2": "Τρεις οθόνες, καθεμία με μία μόνο δουλειά.",
     "tour": [
-      ("Τρέχον σκορ", "Ένας αριθμός, μία κατάσταση, υπολογισμένα εξ ολοκλήρου στο ρολόι — χωρίς αναμονή για κανέναν συγχρονισμό.", "Η κύρια οθόνη του Vela δείχνει σκορ άγχους 68, κατάσταση Φυσιολογικό, υπολογισμένο τη στιγμή εκείνη."),
+      ("Τρέχον σκορ", "Ένας αριθμός, μία κατάσταση, υπολογισμένα εξ ολοκλήρου στο ρολόι — χωρίς αναμονή για κανέναν συγχρονισμό.", "Η κύρια οθόνη του Vela με επίπεδο στρες 34, κατάσταση Χαμηλό, υπολογισμένο τη στιγμή εκείνη."),
       ("Τάση", "Κάθε μέτρηση της ημέρας, σε σύγκριση με τη δική σας διακεκομμένη γραμμή — όχι κανενός άλλου.", "Γράφημα τάσης με τον μέσο όρο άγχους της ημέρας και τις ωριαίες μετρήσεις, σε σύγκριση με το προσωπικό baseline."),
       ("Εξήγηση των εύρων", "Χωρίς κρυπτικούς αριθμούς: κάθε εύρος λέει τι σημαίνει και τι να περιμένετε.", "Οθόνη που εξηγεί τα εύρη άγχους: Φυσιολογικό μεταξύ 40 και 69, Υψηλό μεταξύ 70 και 100."),
     ],
     "onboarding_eyebrow": "Ξεκινώντας", "onboarding_h2": "Ζητάμε άδεια πριν μετρήσουμε οτιδήποτε.",
-    "onboarding_p": "Το Vela ζητά πρόσβαση στο HRV σας ρητά, όχι στα ψιλά γράμματα. Και αν είστε νέος στη μέτρηση HRV, σας λέει πόσος χρόνος απομένει μέχρι να έχετε ένα αξιόπιστο baseline — χωρίς να προσποιείται ότι σας γνωρίζει από την πρώτη ημέρα.",
-    "onboarding_alt": "Η ροή εισαγωγής του Vela στο Apple Watch: μια οθόνη υποδοχής, ένα ρητό αίτημα πρόσβασης στα δεδομένα μεταβλητότητας καρδιακού ρυθμού και μια οθόνη δημιουργίας baseline που δείχνει 7 ημέρες να απομένουν.",
+    "onboarding_p": "Το Vela ζητά πρόσβαση στα δεδομένα υγείας σας ρητά, όχι στα ψιλά γράμματα, και σας λέει για τι χρησιμοποιεί το καθένα. Και αν είστε νέος στη μέτρηση HRV, σας λέει πόσος χρόνος απομένει μέχρι να έχετε ένα αξιόπιστο baseline — χωρίς να προσποιείται ότι σας γνωρίζει από την πρώτη ημέρα.",
+    "onboarding_alt": "Δύο βήματα της υποδοχής του Vela στο Apple Watch: η οθόνη καλωσορίσματος και το αίτημα πρόσβασης στα δεδομένα υγείας, που εξηγεί για τι χρησιμοποιείται το καθένα.",
     "closing_eyebrow": "Κατεβάστε το σήμερα", "closing_h2": "Χωρίς συνδρομή. <em>Ποτέ.</em>",
-    "closing_p": "Το Vela διατίθεται δωρεάν στο App Store για Apple Watch.",
+    "closing_p": "Το Vela είναι δωρεάν στο App Store για Apple Watch, με το Vela Pro ως εφάπαξ αγορά.",
     "footer_support": "Υποστήριξη", "footer_privacy": "Απόρρητο", "footer_contact": "Επικοινωνία",
   },
 }
@@ -2579,8 +2534,6 @@ L["ja"] = {
     "h1": "あなたの穏やかさは、<em>誰かの平均</em>ではない。",
     "hero_p": "Vela は Apple Watch 上で直接あなたの心拍変動（SDNN）を測定し、一般的な集団のしきい値ではなく、あなただけのベースラインを構築します。すべての計算は時計上で行われます。私たちのサーバーを経由するものは何もありません。サーバーがないからです。",
     "badge_alt": "App Store でダウンロード",
-    "wave_kicker": "SDNN · ライブ", "wave_state": "安静時",
-    "wave_left": "集団のノイズ", "wave_right_html": "<b>あなたのベースライン</b>が定まる",
     "story_eyebrow": "名前について", "story_h2": "なぜ「Vela」なのか",
     "story_p": "「Vela」はスペイン語で船の帆のことでもあり、ラテン語の velum に由来します。ヨットは風と戦いません。風を読み、針路を調整します。それがこのアプリの考え方です。外部の基準と比べるのではなく、Vela はあなた自身の個人ベースラインを読み取り、あなた自身のパターンを理解する手助けをします。ストレスは戦うものではなく、読み取って合わせていくものです。",
     "baseline_eyebrow": "なぜ平均では不十分なのか",
@@ -2591,23 +2544,21 @@ L["ja"] = {
     "principles": [
       ("On-device", "すべての計算は Watch 上で行われます。", "HealthKit がデータを提供し、残りは時計が処理します。HRV データが Vela のサーバーへ向けてデバイスの外に出ることはありません。"),
       ("私たちのではなく、あなたの iCloud", "同期にはあなた自身の iCloud アカウントを使います。", "CloudKit 経由です。Vela はあなたのデータをどこにも保管しません。保管する場所がないため、できないのです。"),
-      ("サブスクなし。ずっと。", "月額も年額もありません。", "Vela は今は無料です。将来的には買い切りの Pro 版が登場します。サブスクリプションにはしません。"),
+      ("サブスクなし。ずっと。", "月額も年額もありません。", "Vela は無料です。Vela Pro は買い切り：一度支払えばずっと使えます。サブスクリプションにはしません。"),
       ("はじめからアクセシブル", "VoiceOver、Dynamic Type、視差効果を減らす。", "対応言語は12：スペイン語、カタルーニャ語、バスク語、ガリシア語、英語、フランス語、ドイツ語、イタリア語、ポルトガル語、チェコ語、ギリシャ語、日本語。"),
     ],
-    "showcase_eyebrow": "手首の上で", "showcase_h2": "1つのスコア、1つの状態、1つのトレンド。",
-    "showcase_p": "色とテキストのラベルは常にセットで表示されます。色覚特性にも配慮した設計です。どのスコアにも説明があります。どの範囲が「正常」なのか、いつ「高い」になるのか、そしてその理由まで。",
-    "showcase_alt": "Apple Watch Ultra に表示された Vela の3画面：正常ステータスの現在のストレススコア、その日の平均を示す週間トレンド、正常と高いの範囲を説明する画面。",
+    "stress_h2": "1つのスコア、1つの状態、1つのトレンド。",
     "tour_eyebrow": "クイックツアー", "tour_h2": "3つの画面、それぞれに役割は1つ。",
     "tour": [
-      ("現在のスコア", "1つの数字、1つの状態。すべて時計上で計算され、同期を待つ必要はありません。", "ストレススコア68、正常ステータスを表示する Vela のメイン画面。その場で計算されたもの。"),
+      ("現在のスコア", "1つの数字、1つの状態。すべて時計上で計算され、同期を待つ必要はありません。", "ストレスレベル 34（低い）をその場で算出して表示する Vela のメイン画面。"),
       ("トレンド", "その日のすべての測定値を、他の誰でもない、あなた自身の破線と比較します。", "その日の平均ストレスと1時間ごとの測定値を、個人ベースラインと比較したトレンドチャート。"),
       ("範囲の説明", "分かりにくい数字はなし。どの範囲にも、意味と何を予期すべきかが書かれています。", "ストレスの範囲を説明する画面：正常は40〜69、高いは70〜100。"),
     ],
     "onboarding_eyebrow": "使い始める", "onboarding_h2": "何かを測定する前に、許可を求めます。",
-    "onboarding_p": "Vela は細かい文字の中ではなく、はっきりと HRV へのアクセスを求めます。そして HRV の測定が初めてなら、信頼できるベースラインができるまでの日数を伝えます。初日からあなたを知っているふりはしません。",
-    "onboarding_alt": "Apple Watch での Vela のオンボーディングの流れ：ようこそ画面、心拍変動データへのアクセスを求める明示的なリクエスト、残り7日と表示されたベースライン構築中の画面。",
+    "onboarding_p": "Vela は細かい文字の中ではなく、はっきりと健康データへのアクセスを求め、それぞれを何に使うのかを伝えます。そして HRV の測定が初めてなら、信頼できるベースラインができるまでの日数を伝えます。初日からあなたを知っているふりはしません。",
+    "onboarding_alt": "Apple Watch での Vela の初期設定の2つのステップ：ようこそ画面と、それぞれのデータを何に使うかを説明する健康データへのアクセスのリクエスト。",
     "closing_eyebrow": "今すぐダウンロード", "closing_h2": "サブスクなし。<em>ずっと。</em>",
-    "closing_p": "Vela は Apple Watch 向けに App Store で無料で入手できます。",
+    "closing_p": "Vela は Apple Watch 向けに App Store で無料、Vela Pro は買い切りで入手できます。",
     "footer_support": "サポート", "footer_privacy": "プライバシー", "footer_contact": "お問い合わせ",
   },
 }
@@ -3098,19 +3049,20 @@ for _code, _cl in CHANGELOG.items():
     L[_code]["changelog"] = _cl
     L[_code]["landing"]["footer_changelog"] = _FOOTER_CHANGELOG[_code]
 
-# ---------------------------------------------------------------- vela 2.0 (public beta)
-# Vela 2.0 is in public beta on TestFlight ahead of the 1 December 2026 release. Its
-# changelog entry carries a "beta" status (badge + join link) and the landing shows a
-# "New in 2.0" section right after the hero. On release: set the entry's status to
-# "released", give it the real date and drop the landing section or point it at the
-# App Store.
+# ---------------------------------------------------------------- vela 2.0
+# Vela 2.0 was released on 1 December 2026. Its changelog entry is "released" and the
+# landing keeps a "New in 2.0" section right after the hero, pointing at the App Store,
+# with the store's search banner for each language (eu and gl use the Spanish one: the
+# store has no listing in those languages). The "beta" status, its badge and the
+# TestFlight join note are no longer used by any entry but still work for a future beta.
 
 TESTFLIGHT_URL = "https://testflight.apple.com/join/pJ3esgGy"
-V2_IMAGE = "vela-2-beta.png"
+# Same banner as the App Store search asset, 2400x1600 JPEG. eu/gl fall back to es.
+V2_IMAGE = {c: f"vela-2-battery-{'es' if c in ('eu', 'gl') else c}.jpg" for c in ORDER}
 
 _V2 = {
   "en": {
-    "date": "Expected 1 December 2026",
+    "date": "1 December 2026",
     "changes": [
       "Battery: an estimate of the energy you have left today, built on your own HRV baseline. Only sleep charges it, naps and daytime sleep after a night shift included.",
       "Free: your charge after each sleep, and what went into it: how long you slept and your HRV that night.",
@@ -3118,16 +3070,16 @@ _V2 = {
       "Three new complications: last night's charge for everyone, plus the live battery and today's hourly bars with Pro."],
     "status_beta": "Public beta · TestFlight",
     "beta_note": "This version is in public beta and not on the App Store yet. {link}Join the beta on TestFlight{end} to try it and help calibrate the battery.",
-    "eyebrow": "New in Vela 2.0 · Public beta",
+    "eyebrow": "New in Vela 2.0",
     "h2": "A battery for you, not for your watch.",
-    "p": "Vela 2.0 adds Battery: it charges only while you sleep and drains with stress, activity and workouts, measured against your own HRV baseline. It's in public beta on TestFlight now, ahead of the December release.",
-    "cta": "Join the beta on TestFlight",
+    "p": "Vela 2.0 adds Battery: it charges only while you sleep and drains with stress, activity and workouts, measured against your own HRV baseline. Each night's charge is free; Vela Pro, a one-time purchase, adds the day's curve, what drained your battery and the history.",
+    "cta": "Download on the App Store",
     "zoom": "Tap the image to see it full size",
     "close": "Close",
-    "alt": "Vela 2.0 overview: Battery at 78 with the day's curve; only sleep recharges it; naps and night shifts count; based on SDNN; what drained you most today, a 45-minute workout at −18; a free morning snapshot; Vela Pro as a one-time purchase; on-device processing and no Vela servers; and an invitation to join the public beta on TestFlight.",
+    "alt": "Three Apple Watch Ultra running Vela: in the middle, the day's battery curve, at 44 now after charging to 80 overnight; on the sides, the stress level (34, low) and the battery level (44, medium).",
   },
   "es": {
-    "date": "Prevista: 1 de diciembre de 2026",
+    "date": "1 de diciembre de 2026",
     "changes": [
       "Batería: una estimación de la energía que te queda hoy, construida sobre tu propia línea base de HRV. Solo la carga el sueño, incluidas las siestas y el sueño de día tras un turno de noche.",
       "Gratis: tu carga después de cada sueño y de dónde sale: cuánto dormiste y tu HRV de esa noche.",
@@ -3135,16 +3087,16 @@ _V2 = {
       "Tres complicaciones nuevas: la carga de la noche para todos, y con Pro la batería en directo y las barras por hora de hoy."],
     "status_beta": "Beta pública · TestFlight",
     "beta_note": "Esta versión está en beta pública y todavía no está en la App Store. {link}Únete a la beta en TestFlight{end} para probarla y ayudar a calibrar la batería.",
-    "eyebrow": "Nuevo en Vela 2.0 · Beta pública",
+    "eyebrow": "Nuevo en Vela 2.0",
     "h2": "Una batería para ti, no para tu reloj.",
-    "p": "Vela 2.0 añade la Batería: se carga solo mientras duermes y se gasta con el estrés, la actividad y los entrenos, medida contra tu propia línea base de HRV. Ya está en beta pública en TestFlight, antes del lanzamiento de diciembre.",
-    "cta": "Únete a la beta en TestFlight",
+    "p": "Vela 2.0 añade la Batería: se carga solo mientras duermes y se gasta con el estrés, la actividad y los entrenos, medida contra tu propia línea base de HRV. La carga de cada noche es gratis; con Vela Pro, una compra única, ves la curva del día, en qué se ha ido la batería y el histórico.",
+    "cta": "Descargar en el App Store",
     "zoom": "Toca la imagen para verla a tamaño completo",
     "close": "Cerrar",
-    "alt": "Resumen de Vela 2.0: la Batería a 78 con la curva del día; solo se recarga durmiendo; cuentan las siestas y los turnos de noche; basada en SDNN; lo que más te ha gastado hoy, un entreno de 45 minutos con −18; resumen de la mañana gratis; Vela Pro como compra única; procesamiento en el dispositivo y sin servidores de Vela; e invitación a la beta pública en TestFlight.",
+    "alt": "Tres Apple Watch Ultra con Vela: en el centro, la curva de batería del día, a 44 ahora tras cargar hasta 80 por la noche; a los lados, el nivel de estrés (34, bajo) y la batería (44, media).",
   },
   "ca": {
-    "date": "Prevista: 1 de desembre de 2026",
+    "date": "1 de desembre de 2026",
     "changes": [
       "Bateria: una estimació de l'energia que et queda avui, construïda sobre la teva pròpia línia base d'HRV. Només la carrega el son, incloses les migdiades i el son de dia després d'un torn de nit.",
       "Gratis: la teva càrrega després de cada son i d'on surt: quant vas dormir i la teva HRV d'aquella nit.",
@@ -3152,16 +3104,16 @@ _V2 = {
       "Tres complicacions noves: la càrrega de la nit per a tothom, i amb Pro la bateria en directe i les barres per hores d'avui."],
     "status_beta": "Beta pública · TestFlight",
     "beta_note": "Aquesta versió és en beta pública i encara no és a l'App Store. {link}Uneix-te a la beta a TestFlight{end} per provar-la i ajudar a calibrar la bateria.",
-    "eyebrow": "Novetat a Vela 2.0 · Beta pública",
+    "eyebrow": "Novetat a Vela 2.0",
     "h2": "Una bateria per a tu, no per al teu rellotge.",
-    "p": "Vela 2.0 afegeix la Bateria: només es carrega mentre dorms i es gasta amb l'estrès, l'activitat i els entrenaments, mesurada contra la teva pròpia línia base d'HRV. Ja és en beta pública a TestFlight, abans del llançament de desembre.",
-    "cta": "Uneix-te a la beta a TestFlight",
+    "p": "Vela 2.0 afegeix la Bateria: es carrega només mentre dorms i es gasta amb l'estrès, l'activitat i els entrenaments, mesurada contra la teva pròpia línia base d'HRV. La càrrega de cada nit és gratuïta; amb Vela Pro, una compra única, veus la corba del dia, en què s'ha gastat la bateria i l'historial.",
+    "cta": "Descarrega a l'App Store",
     "zoom": "Toca la imatge per veure-la a mida completa",
     "close": "Tanca",
-    "alt": "Resum de Vela 2.0: la Bateria a 78 amb la corba del dia; només es recarrega dormint; compten les migdiades i els torns de nit; basada en SDNN; el que més t'ha gastat avui, un entrenament de 45 minuts amb −18; resum del matí gratis; Vela Pro com a compra única; processament al dispositiu i sense servidors de Vela; i invitació a la beta pública a TestFlight.",
+    "alt": "Tres Apple Watch Ultra amb Vela: al centre, la corba de bateria del dia, a 44 ara després de carregar fins a 80 a la nit; als costats, el nivell d'estrès (34, baix) i el de bateria (44, mitjà).",
   },
   "eu": {
-    "date": "Aurreikusia: 2026ko abenduaren 1a",
+    "date": "2026ko abenduaren 1a",
     "changes": [
       "Bateria: gaur geratzen zaizun energiaren estimazioa, zure HRV oinarri-lerro pertsonalaren gainean eraikia. Loak bakarrik kargatzen du, siestak eta gaueko txandaren ondorengo eguneko loa barne.",
       "Doan: lo bakoitzaren ondorengo karga eta nondik datorren: zenbat lo egin zenuen eta gau horretako zure HRV.",
@@ -3169,16 +3121,16 @@ _V2 = {
       "Hiru konplikazio berri: gaueko karga guztientzat, eta Pro-rekin bateria zuzenean eta gaurko orduko barrak."],
     "status_beta": "Beta publikoa · TestFlight",
     "beta_note": "Bertsio hau beta publikoan dago eta oraindik ez dago App Store-n. {link}Batu beta-ra TestFlight-en{end} probatzeko eta bateria kalibratzen laguntzeko.",
-    "eyebrow": "Berria Vela 2.0-n · Beta publikoa",
+    "eyebrow": "Berria Vela 2.0n",
     "h2": "Zuretzako bateria bat, ez zure erlojuarentzat.",
-    "p": "Vela 2.0-k Bateria gehitzen du: lo egiten duzun bitartean bakarrik kargatzen da eta estresarekin, jarduerarekin eta entrenamenduekin gastatzen da, zure HRV oinarri-lerroaren arabera neurtuta. Beta publikoan dago dagoeneko TestFlight-en, abenduko argitalpenaren aurretik.",
-    "cta": "Batu beta-ra TestFlight-en",
+    "p": "Vela 2.0k Bateria gehitzen du: lo zauden bitartean bakarrik kargatzen da, eta estresarekin, jarduerarekin eta entrenamenduekin husten da, zure HRV oinarri-lerroaren aurka neurtuta. Gau bakoitzeko karga doakoa da; Vela Pro-rekin, erosketa bakarra, eguneko kurba, bateria zertan joan den eta historia ikusten dituzu.",
+    "cta": "Deskargatu App Store-n",
     "zoom": "Ukitu irudia tamaina osoan ikusteko",
     "close": "Itxi",
-    "alt": "Vela 2.0-ren laburpena: Bateria 78an eguneko kurbarekin; loak bakarrik kargatzen du; siestak eta gaueko txandak kontatzen dira; SDNN-n oinarritua; gaur gehien gastatu dizuna, 45 minutuko entrenamendua −18rekin; goizeko laburpena doan; Vela Pro behin ordaintzekoa; gailuan prozesatua eta Velaren zerbitzaririk gabe; eta TestFlight-eko beta publikora batzeko gonbidapena.",
+    "alt": "Hiru Apple Watch Ultra Velarekin: erdian, eguneko bateria-kurba, orain 44an, gauean 80ra kargatu ondoren; alboetan, estres-maila (34, baxua) eta bateria-maila (44, ertaina).",
   },
   "gl": {
-    "date": "Prevista: 1 de decembro de 2026",
+    "date": "1 de decembro de 2026",
     "changes": [
       "Batería: unha estimación da enerxía que che queda hoxe, construída sobre a túa propia liña base de HRV. Só a carga o sono, incluídas as sestas e o sono de día despois dunha quenda de noite.",
       "De balde: a túa carga despois de cada sono e de onde sae: canto durmiches e a túa HRV desa noite.",
@@ -3186,16 +3138,16 @@ _V2 = {
       "Tres complicacións novas: a carga da noite para todos, e con Pro a batería en directo e as barras por hora de hoxe."],
     "status_beta": "Beta pública · TestFlight",
     "beta_note": "Esta versión está en beta pública e aínda non está na App Store. {link}Únete á beta en TestFlight{end} para probala e axudar a calibrar a batería.",
-    "eyebrow": "Novo en Vela 2.0 · Beta pública",
+    "eyebrow": "Novo en Vela 2.0",
     "h2": "Unha batería para ti, non para o teu reloxo.",
-    "p": "Vela 2.0 engade a Batería: só se carga mentres dormes e gástase co estrés, a actividade e os adestramentos, medida contra a túa propia liña base de HRV. Xa está en beta pública en TestFlight, antes do lanzamento de decembro.",
-    "cta": "Únete á beta en TestFlight",
+    "p": "Vela 2.0 engade a Batería: cárgase só mentres dormes e gástase co estrés, a actividade e os adestramentos, medida contra a túa propia liña base de HRV. A carga de cada noite é gratis; con Vela Pro, unha compra única, ves a curva do día, en que se foi a batería e o historial.",
+    "cta": "Descargar na App Store",
     "zoom": "Toca a imaxe para vela a tamaño completo",
     "close": "Pechar",
-    "alt": "Resumo de Vela 2.0: a Batería a 78 coa curva do día; só se recarga durmindo; contan as sestas e as quendas de noite; baseada en SDNN; o que máis che gastou hoxe, un adestramento de 45 minutos con −18; resumo da mañá de balde; Vela Pro como compra única; procesamento no dispositivo e sen servidores de Vela; e invitación á beta pública en TestFlight.",
+    "alt": "Tres Apple Watch Ultra con Vela: no centro, a curva de batería do día, a 44 agora tras cargar ata 80 pola noite; aos lados, o nivel de estrés (34, baixo) e o de batería (44, medio).",
   },
   "fr": {
-    "date": "Prévue : 1er décembre 2026",
+    "date": "1er décembre 2026",
     "changes": [
       "Batterie : une estimation de l'énergie qu'il vous reste aujourd'hui, calculée à partir de votre propre référence de VFC. Seul le sommeil la recharge, siestes et sommeil de jour après un poste de nuit compris.",
       "Gratuit : votre charge après chaque sommeil, et ce qui l'explique : combien de temps vous avez dormi et votre VFC cette nuit-là.",
@@ -3203,16 +3155,16 @@ _V2 = {
       "Trois nouvelles complications : la charge de la nuit pour tous, et avec Pro la batterie en direct et les barres horaires du jour."],
     "status_beta": "Bêta publique · TestFlight",
     "beta_note": "Cette version est en bêta publique et n'est pas encore sur l'App Store. {link}Rejoignez la bêta sur TestFlight{end} pour l'essayer et aider à calibrer la batterie.",
-    "eyebrow": "Nouveau dans Vela 2.0 · Bêta publique",
+    "eyebrow": "Nouveau dans Vela 2.0",
     "h2": "Une batterie pour vous, pas pour votre montre.",
-    "p": "Vela 2.0 ajoute la Batterie : elle ne se recharge que pendant votre sommeil et se vide avec le stress, l'activité et les entraînements, mesurée par rapport à votre propre référence de VFC. Elle est déjà en bêta publique sur TestFlight, avant la sortie de décembre.",
-    "cta": "Rejoindre la bêta sur TestFlight",
+    "p": "Vela 2.0 ajoute la Batterie : elle se recharge uniquement pendant votre sommeil et se vide avec le stress, l'activité et les séances, mesurée par rapport à votre propre référence VFC. La recharge de chaque nuit est gratuite ; avec Vela Pro, un achat unique, vous voyez la courbe de la journée, ce qui a vidé la batterie et l'historique.",
+    "cta": "Télécharger dans l'App Store",
     "zoom": "Touchez l'image pour l'afficher en grand",
     "close": "Fermer",
-    "alt": "Aperçu de Vela 2.0 : la Batterie à 78 avec la courbe de la journée ; seul le sommeil la recharge ; les siestes et les postes de nuit comptent ; basée sur le SDNN ; ce qui vous a le plus fatigué aujourd'hui, un entraînement de 45 minutes à −18 ; le résumé du matin gratuit ; Vela Pro en achat unique ; traitement sur l'appareil et aucun serveur Vela ; et une invitation à rejoindre la bêta publique sur TestFlight.",
+    "alt": "Trois Apple Watch Ultra avec Vela : au centre, la courbe de batterie de la journée, à 44 maintenant après une recharge à 80 pendant la nuit ; sur les côtés, le niveau de stress (34, faible) et le niveau de batterie (44, moyen).",
   },
   "de": {
-    "date": "Geplant: 1. Dezember 2026",
+    "date": "1. Dezember 2026",
     "changes": [
       "Batterie: eine Schätzung, wie viel Energie dir heute noch bleibt, aufgebaut auf deiner eigenen HRV-Baseline. Nur Schlaf lädt sie auf, auch Nickerchen und Tagschlaf nach einer Nachtschicht.",
       "Kostenlos: deine Ladung nach jedem Schlaf und woraus sie sich ergibt: wie lange du geschlafen hast und deine HRV in dieser Nacht.",
@@ -3220,16 +3172,16 @@ _V2 = {
       "Drei neue Komplikationen: die Ladung der Nacht für alle, dazu mit Pro die Live-Batterie und die Stundenbalken von heute."],
     "status_beta": "Öffentliche Beta · TestFlight",
     "beta_note": "Diese Version ist in der öffentlichen Beta und noch nicht im App Store. {link}Mach bei der Beta auf TestFlight mit{end}, um sie auszuprobieren und die Batterie mitzukalibrieren.",
-    "eyebrow": "Neu in Vela 2.0 · Öffentliche Beta",
+    "eyebrow": "Neu in Vela 2.0",
     "h2": "Eine Batterie für dich, nicht für deine Uhr.",
-    "p": "Vela 2.0 bringt die Batterie: Sie lädt sich nur im Schlaf auf und leert sich durch Stress, Aktivität und Trainings, gemessen an deiner eigenen HRV-Baseline. Schon jetzt gibt es sie als öffentliche Beta auf TestFlight, vor dem Start im Dezember.",
-    "cta": "Zur Beta auf TestFlight",
+    "p": "Vela 2.0 bringt die Batterie: Sie lädt sich nur im Schlaf auf und sinkt durch Stress, Aktivität und Trainings, gemessen an deiner eigenen HRV-Baseline. Die Ladung jeder Nacht ist kostenlos; mit Vela Pro, einem Einmalkauf, siehst du die Tageskurve, was die Batterie verbraucht hat, und den Verlauf.",
+    "cta": "Im App Store laden",
     "zoom": "Tippe auf das Bild, um es in voller Größe zu sehen",
     "close": "Schließen",
-    "alt": "Überblick über Vela 2.0: die Batterie bei 78 mit der Tageskurve; nur Schlaf lädt sie auf; Nickerchen und Nachtschichten zählen; auf Basis von SDNN; was dich heute am meisten Energie gekostet hat, ein 45-minütiges Training mit −18; der Morgen-Überblick kostenlos; Vela Pro als Einmalkauf; Verarbeitung auf dem Gerät und keine Vela-Server; und eine Einladung zur öffentlichen Beta auf TestFlight.",
+    "alt": "Drei Apple Watch Ultra mit Vela: in der Mitte die Batteriekurve des Tages, jetzt bei 44 nach einer Ladung auf 80 über Nacht; an den Seiten das Stresslevel (34, niedrig) und der Batteriestand (44, mittel).",
   },
   "it": {
-    "date": "Prevista: 1 dicembre 2026",
+    "date": "1 dicembre 2026",
     "changes": [
       "Batteria: una stima dell'energia che ti resta oggi, costruita sulla tua baseline di HRV. Solo il sonno la ricarica, compresi i pisolini e il sonno diurno dopo un turno di notte.",
       "Gratis: la tua carica dopo ogni sonno e da cosa dipende: quanto hai dormito e la tua HRV di quella notte.",
@@ -3237,16 +3189,16 @@ _V2 = {
       "Tre nuove complicazioni: la carica della notte per tutti, e con Pro la batteria in tempo reale e le barre orarie di oggi."],
     "status_beta": "Beta pubblica · TestFlight",
     "beta_note": "Questa versione è in beta pubblica e non è ancora sull'App Store. {link}Unisciti alla beta su TestFlight{end} per provarla e aiutare a calibrare la batteria.",
-    "eyebrow": "Novità in Vela 2.0 · Beta pubblica",
+    "eyebrow": "Novità di Vela 2.0",
     "h2": "Una batteria per te, non per il tuo orologio.",
-    "p": "Vela 2.0 aggiunge la Batteria: si ricarica solo mentre dormi e si consuma con lo stress, l'attività e gli allenamenti, misurata rispetto alla tua baseline di HRV. È già in beta pubblica su TestFlight, prima del lancio di dicembre.",
-    "cta": "Unisciti alla beta su TestFlight",
+    "p": "Vela 2.0 aggiunge la Batteria: si ricarica solo mentre dormi e si consuma con lo stress, l'attività e gli allenamenti, misurata rispetto alla tua baseline HRV. La ricarica di ogni notte è gratis; con Vela Pro, un acquisto unico, vedi la curva della giornata, cosa ha consumato la batteria e lo storico.",
+    "cta": "Scarica su App Store",
     "zoom": "Tocca l'immagine per vederla a grandezza intera",
     "close": "Chiudi",
-    "alt": "Panoramica di Vela 2.0: la Batteria a 78 con la curva della giornata; solo il sonno la ricarica; contano i pisolini e i turni di notte; basata sull'SDNN; cosa ti ha consumato di più oggi, un allenamento di 45 minuti a −18; il riepilogo del mattino gratis; Vela Pro come acquisto unico; elaborazione sul dispositivo e nessun server Vela; e un invito alla beta pubblica su TestFlight.",
+    "alt": "Tre Apple Watch Ultra con Vela: al centro, la curva della batteria della giornata, ora a 44 dopo una ricarica fino a 80 durante la notte; ai lati, il livello di stress (34, basso) e il livello della batteria (44, medio).",
   },
   "pt": {
-    "date": "Prevista: 1 de dezembro de 2026",
+    "date": "1 de dezembro de 2026",
     "changes": [
       "Bateria: uma estimativa da energia que lhe resta hoje, construída sobre a sua própria linha de base de HRV. Só o sono a carrega, incluindo as sestas e o sono de dia depois de um turno da noite.",
       "Grátis: a sua carga depois de cada sono e de onde vem: quanto tempo dormiu e a sua HRV nessa noite.",
@@ -3254,16 +3206,16 @@ _V2 = {
       "Três novas complicações: a carga da noite para todos e, com o Pro, a bateria em direto e as barras por hora de hoje."],
     "status_beta": "Beta pública · TestFlight",
     "beta_note": "Esta versão está em beta pública e ainda não está na App Store. {link}Junte-se à beta no TestFlight{end} para a experimentar e ajudar a calibrar a bateria.",
-    "eyebrow": "Novo no Vela 2.0 · Beta pública",
+    "eyebrow": "Novo na Vela 2.0",
     "h2": "Uma bateria para si, não para o seu relógio.",
-    "p": "O Vela 2.0 acrescenta a Bateria: só carrega enquanto dorme e gasta-se com o stress, a atividade e os treinos, medida face à sua própria linha de base de HRV. Já está em beta pública no TestFlight, antes do lançamento de dezembro.",
-    "cta": "Junte-se à beta no TestFlight",
+    "p": "A Vela 2.0 acrescenta a Bateria: carrega só enquanto dorme e gasta-se com o stress, a atividade e os treinos, medida contra a sua própria linha de base de HRV. A carga de cada noite é gratuita; com o Vela Pro, uma compra única, vê a curva do dia, o que gastou a bateria e o histórico.",
+    "cta": "Descarregar na App Store",
     "zoom": "Toque na imagem para a ver em tamanho real",
     "close": "Fechar",
-    "alt": "Resumo do Vela 2.0: a Bateria a 78 com a curva do dia; só o sono a recarrega; as sestas e os turnos da noite contam; baseada no SDNN; o que mais lhe gastou energia hoje, um treino de 45 minutos com −18; o resumo da manhã grátis; Vela Pro como compra única; processamento no dispositivo e sem servidores do Vela; e um convite para a beta pública no TestFlight.",
+    "alt": "Três Apple Watch Ultra com a Vela: ao centro, a curva da bateria do dia, agora a 44 depois de carregar até 80 durante a noite; dos lados, o nível de stress (34, baixo) e o nível da bateria (44, médio).",
   },
   "cs": {
-    "date": "Očekáváno: 1. prosince 2026",
+    "date": "1. prosince 2026",
     "changes": [
       "Baterie: odhad, kolik energie vám dnes zbývá, postavený na vaší vlastní základní linii HRV. Nabíjí ji jen spánek, včetně zdřímnutí a denního spánku po noční směně.",
       "Zdarma: vaše nabití po každém spánku a z čeho vychází: jak dlouho jste spali a vaše HRV té noci.",
@@ -3271,16 +3223,16 @@ _V2 = {
       "Tři nové komplikace: noční nabití pro všechny, s Pro navíc baterie v reálném čase a dnešní hodinové sloupce."],
     "status_beta": "Veřejná beta · TestFlight",
     "beta_note": "Tato verze je ve veřejné betě a zatím není v App Storu. {link}Připojte se k betě v TestFlightu{end}, vyzkoušejte ji a pomozte kalibrovat baterii.",
-    "eyebrow": "Novinka ve Vela 2.0 · Veřejná beta",
+    "eyebrow": "Novinka ve Vela 2.0",
     "h2": "Baterie pro vás, ne pro vaše hodinky.",
-    "p": "Vela 2.0 přidává Baterii: nabíjí se jen ve spánku a vybíjí se stresem, aktivitou a tréninky, měřeno vůči vaší vlastní základní linii HRV. Už teď je ve veřejné betě v TestFlightu, před vydáním v prosinci.",
-    "cta": "Připojit se k betě v TestFlightu",
+    "p": "Vela 2.0 přidává Baterii: nabíjí se jen ve spánku a vybíjí se stresem, aktivitou a tréninky, měřeno vůči vaší vlastní základní linii HRV. Nabití za každou noc je zdarma; s Vela Pro, jednorázovým nákupem, uvidíte křivku dne, co baterii vybilo, a historii.",
+    "cta": "Stáhnout v App Store",
     "zoom": "Klepnutím na obrázek ho zobrazíte v plné velikosti",
     "close": "Zavřít",
-    "alt": "Přehled Vela 2.0: Baterie na 78 s křivkou dne; nabíjí ji jen spánek; počítají se zdřímnutí i noční směny; založeno na SDNN; co vás dnes vyčerpalo nejvíc, 45minutový trénink za −18; ranní přehled zdarma; Vela Pro jako jednorázový nákup; zpracování v zařízení a žádné servery Vely; a pozvánka do veřejné bety v TestFlightu.",
+    "alt": "Tři Apple Watch Ultra s Velou: uprostřed křivka baterie za den, teď na 44 po nočním nabití na 80; po stranách úroveň stresu (34, nízká) a stav baterie (44, střední).",
   },
   "el": {
-    "date": "Αναμένεται: 1 Δεκεμβρίου 2026",
+    "date": "1 Δεκεμβρίου 2026",
     "changes": [
       "Μπαταρία: μια εκτίμηση της ενέργειας που σας απομένει σήμερα, με βάση το προσωπικό σας baseline HRV. Μόνο ο ύπνος τη φορτίζει, μαζί με τους υπνάκους και τον ημερήσιο ύπνο μετά από νυχτερινή βάρδια.",
       "Δωρεάν: η φόρτισή σας μετά από κάθε ύπνο και από τι προκύπτει: πόσο κοιμηθήκατε και το HRV σας εκείνη τη νύχτα.",
@@ -3288,16 +3240,16 @@ _V2 = {
       "Τρεις νέες επιπλοκές (complications): η φόρτιση της νύχτας για όλους, και με το Pro η μπαταρία σε πραγματικό χρόνο και οι ωριαίες μπάρες της ημέρας."],
     "status_beta": "Δημόσια beta · TestFlight",
     "beta_note": "Αυτή η έκδοση βρίσκεται σε δημόσια beta και δεν είναι ακόμη στο App Store. {link}Μπείτε στη beta στο TestFlight{end} για να τη δοκιμάσετε και να βοηθήσετε στη βαθμονόμηση της μπαταρίας.",
-    "eyebrow": "Νέο στο Vela 2.0 · Δημόσια beta",
+    "eyebrow": "Νέο στο Vela 2.0",
     "h2": "Μια μπαταρία για εσάς, όχι για το ρολόι σας.",
-    "p": "Το Vela 2.0 προσθέτει την Μπαταρία: φορτίζει μόνο όσο κοιμάστε και αδειάζει με το άγχος, τη δραστηριότητα και τις προπονήσεις, με μέτρο το δικό σας baseline HRV. Είναι ήδη σε δημόσια beta στο TestFlight, πριν από την κυκλοφορία του Δεκεμβρίου.",
-    "cta": "Μπείτε στη beta στο TestFlight",
+    "p": "Το Vela 2.0 προσθέτει την Μπαταρία: φορτίζει μόνο όσο κοιμάστε και αδειάζει με το στρες, τη δραστηριότητα και τις προπονήσεις, μετρημένη με βάση το δικό σας baseline HRV. Η φόρτιση κάθε νύχτας είναι δωρεάν· με το Vela Pro, μια εφάπαξ αγορά, βλέπετε την καμπύλη της ημέρας, τι άδειασε την μπαταρία και το ιστορικό.",
+    "cta": "Λήψη από το App Store",
     "zoom": "Πατήστε την εικόνα για να τη δείτε σε πλήρες μέγεθος",
     "close": "Κλείσιμο",
-    "alt": "Επισκόπηση του Vela 2.0: η Μπαταρία στο 78 με την καμπύλη της ημέρας· μόνο ο ύπνος τη φορτίζει· μετράνε οι υπνάκοι και οι νυχτερινές βάρδιες· βασισμένη στο SDNN· τι σας κούρασε περισσότερο σήμερα, μια προπόνηση 45 λεπτών με −18· η πρωινή σύνοψη δωρεάν· το Vela Pro ως εφάπαξ αγορά· επεξεργασία στη συσκευή και χωρίς διακομιστές του Vela· και πρόσκληση στη δημόσια beta στο TestFlight.",
+    "alt": "Τρία Apple Watch Ultra με το Vela: στο κέντρο, η καμπύλη μπαταρίας της ημέρας, τώρα στο 44 μετά από φόρτιση έως το 80 τη νύχτα· στα πλάγια, το επίπεδο στρες (34, χαμηλό) και το επίπεδο μπαταρίας (44, μέτριο).",
   },
   "ja": {
-    "date": "公開予定：2026年12月1日",
+    "date": "2026年12月1日",
     "changes": [
       "バッテリー：あなた自身の HRV ベースラインをもとに、今日残っているエネルギーを推定します。充電されるのは睡眠中だけで、昼寝や夜勤明けの日中の睡眠も含みます。",
       "無料：睡眠ごとの充電量と、その内訳（睡眠時間とその夜の HRV）を表示します。",
@@ -3305,13 +3257,13 @@ _V2 = {
       "3つの新しいコンプリケーション：夜間の充電はすべての方に、リアルタイムのバッテリーと今日の時間別バーは Pro で。"],
     "status_beta": "パブリックベータ · TestFlight",
     "beta_note": "このバージョンはパブリックベータ中で、まだ App Store では配信されていません。{link}TestFlight でベータに参加{end}して、バッテリーの調整にご協力ください。",
-    "eyebrow": "Vela 2.0 の新機能 · パブリックベータ",
+    "eyebrow": "Vela 2.0 の新機能",
     "h2": "時計のためではなく、あなたのためのバッテリー。",
-    "p": "Vela 2.0 にはバッテリーが加わりました。充電されるのは眠っている間だけで、ストレス、活動量、ワークアウトで減っていきます。基準になるのは、あなた自身の HRV ベースラインです。12月の公開に先立ち、TestFlight でパブリックベータを公開中です。",
-    "cta": "TestFlight でベータに参加",
+    "p": "Vela 2.0 にはバッテリーが加わりました。充電されるのは眠っている間だけで、ストレス、活動量、ワークアウトで減っていきます。基準になるのは、あなた自身の HRV ベースラインです。毎晩の充電は無料、買い切りの Vela Pro では1日のカーブ、何がバッテリーを消費したか、履歴を確認できます。",
+    "cta": "App Store でダウンロード",
     "zoom": "画像をタップすると拡大表示されます",
     "close": "閉じる",
-    "alt": "Vela 2.0 の概要：1日のカーブとともに 78 を示すバッテリー、充電は睡眠中だけ、昼寝や夜勤も対象、SDNN に基づく計算、今日いちばん消耗した原因（45分のワークアウトで −18）、無料の朝のスナップショット、買い切りの Vela Pro、デバイス上での処理と Vela のサーバーなし、そして TestFlight のパブリックベータへの招待。",
+    "alt": "Vela を表示した3台の Apple Watch Ultra：中央は1日のバッテリーカーブで、夜に80まで充電されて現在は44。左右はストレスレベル（34、低い）とバッテリー残量（44、中程度）。",
   },
 }
 
@@ -3321,8 +3273,508 @@ for _code, _v in _V2.items():
     _cl = CHANGELOG[_code]
     _cl["status_beta"] = _v["status_beta"]
     _cl["beta_note"] = _v["beta_note"].format(link=_V2_LINK, end="</a>")
-    _cl["entries"].insert(0, {"version": "2.0.0", "date": _v["date"], "status": "beta", "changes": _v["changes"]})
+    _cl["entries"].insert(0, {"version": "2.0.0", "date": _v["date"], "status": "released", "changes": _v["changes"]})
     L[_code]["landing"]["v2"] = {k: _v[k] for k in ("eyebrow", "h2", "p", "cta", "alt", "zoom", "close")}
+
+# Landing 2.0 (Battery, Stress, Pricing) for every language but Spanish, which lives inline in L["es"].
+# "story" and "principles" replace one sentence / two cards of the 1.x copy; "baseline_extra" is appended.
+_LANDING_2 = {
+  "en": {
+    "nav_battery": "Battery", "nav_stress": "Stress", "nav_pricing": "Pricing",
+    "title_tag": "Vela — Stress and Battery for Apple Watch. No subscription. Ever.",
+    "meta_desc": "Vela measures your stress and your Battery on Apple Watch against your own HRV baseline: how you are right now, how much sleep charged you and where your energy goes during the day. Everything is computed on the watch. No subscription, ever.",
+    "eyebrow1": "Stress and Battery for Apple Watch",
+    "h1": "Your energy and your calm aren't <em>anyone else's average</em>.",
+    "hero_p": "Vela reads your heart rate variability (SDNN) on Apple Watch and compares it with your own baseline, not a population threshold. From that it tells you how much energy you have left today, your Battery, and how you are right now, your stress. All the computation happens on the watch. Nothing goes through our servers, because we don't have any.",
+    "story": ("Stress isn't something to fight — it's something to read and adjust to.", "Stress and tiredness aren't something to fight: you read them and adjust course."),
+    "baseline_extra": "And it works for both: your stress is measured against your usual HRV, and so is what a night charges you.",
+    "p0_rest": "HealthKit provides the data, the watch does the rest. Neither your HRV, nor your sleep, nor your activity ever leaves your device toward a Vela server.",
+    "p2": ("No tracking", "No analytics, no ads, no third-party SDKs.", "Vela doesn't know who you are or when you open the app: the only thing that leaves the watch goes to your own iCloud."),
+    "battery_eyebrow": "Battery · New in Vela 2.0",
+    "battery_p": "It charges only while you sleep, naps and daytime sleep after a night shift included, and drains with stress, activity, workouts and the hours you're awake. If a day has felt long, Battery shows you why.",
+    "battery_tour": [
+      ("Your charge", "How much the night charged you and where it came from: how long you slept and your HRV during sleep compared with your average.", "Vela screen with last night's charge: up to 80, 27 points gained asleep, 7 h 15 min of sleep and sleep HRV 9% above average."),
+      ("The day's curve", "How it rose while you slept and how it drops from the moment you get up, with each workout marked at its time.", "The day's battery curve: green recharge overnight up to 80 and blue drain through the day down to 47, with two workouts marked."),
+      ("Where it went", "What you've spent since you woke up, split into stress and activity, workouts and time awake. It describes what happened, without giving advice.", "Breakdown of today's spending: 33 points since waking up, 7 from stress and activity, 12 from an hour of workouts and 14 from time awake."),
+    ],
+    "tier_free": "Free", "tier_pro": "Pro",
+    "stress_eyebrow": "Stress",
+    "stress_p": "Your stress level right now, the day hour by hour and what each range means. Color and text label always go together, designed with color blindness in mind too. All of stress is free.",
+    "pricing_eyebrow": "Pricing", "pricing_h2": "Free to start. Pro, just once.",
+    "pricing_p": "No monthly or yearly fees. You pay for Vela Pro once and it's yours.",
+    "free_sub": "For everyone",
+    "free_items": ["Your stress level in real time, with its state and its explanation", "Today hour by hour and your stress history", "Weekly insights and high-stress alerts", "Each night's charge and where it came from", "Stress and night-charge complications"],
+    "pro_sub": "One-time purchase",
+    "pro_items": ["Live Battery, all through the day", "The day's curve, with the overnight recharge and every workout", "Where it went: stress and activity, workouts and time awake", "Battery history by month, week and day", "Complications with live Battery and today's hourly bars"],
+  },
+  "ca": {
+    "nav_battery": "Bateria", "nav_stress": "Estrès", "nav_pricing": "Preu",
+    "title_tag": "Vela — Estrès i Bateria per a l'Apple Watch. Sense subscripció. Mai.",
+    "meta_desc": "Vela mesura el teu estrès i la teva Bateria a l'Apple Watch contra la teva pròpia línia base d'HRV: com estàs ara, quant t'ha carregat el son i en què se te'n va l'energia durant el dia. Tot es calcula al rellotge. Sense subscripció, mai.",
+    "eyebrow1": "Estrès i Bateria per a l'Apple Watch",
+    "h1": "La teva energia i la teva calma no són <em>la mitjana</em> de ningú.",
+    "hero_p": "Vela llegeix la teva variabilitat del ritme cardíac (SDNN) a l'Apple Watch i la compara amb la teva pròpia línia base, no amb un llindar de població. Amb això et diu quanta energia et queda avui, la teva Bateria, i com estàs ara, el teu estrès. Tot el càlcul passa al rellotge. Res no passa pels nostres servidors, perquè no en tenim.",
+    "story": ("L'estrès no es combat: es llegeix i s'ajusta.", "L'estrès i el cansament no es combaten: es llegeixen, i s'ajusta el rumb."),
+    "baseline_extra": "I val per a les dues coses: el teu estrès es mesura contra la teva HRV de sempre, i el que et carrega una nit també.",
+    "p0_rest": "HealthKit lliura les dades, el rellotge fa la resta. Ni la teva HRV, ni el teu son, ni la teva activitat surten del teu dispositiu cap a un servidor de Vela.",
+    "p2": ("Sense rastreig", "Sense analítica, sense anuncis, sense SDK de tercers.", "Vela no sap qui ets ni quan obres l'app: l'únic que surt del rellotge va al teu propi iCloud."),
+    "battery_eyebrow": "Bateria · Novetat a Vela 2.0",
+    "battery_p": "Es carrega només mentre dorms, també amb una migdiada o amb el son de dia després d'un torn de nit, i es gasta amb l'estrès, l'activitat, els entrenaments i les hores despert. Si un dia se t'ha fet llarg, la Bateria t'ensenya per què.",
+    "battery_tour": [
+      ("La teva càrrega", "Quant t'ha carregat la nit i d'on surt: el que has dormit i la teva HRV durant el son davant de la teva mitjana.", "Pantalla de Vela amb la càrrega de la nit: fins a 80, 27 punts més dormint, 7 h 15 min de son i l'HRV del son un 9 % per sobre de la mitjana."),
+      ("La corba del dia", "Com ha pujat mentre dormies i com baixa des que et lleves, amb cada entrenament marcat a la seva hora.", "Corba de bateria del dia: recàrrega en verd durant la nit fins a 80 i descàrrega en blau durant el dia fins a 47, amb dos entrenaments marcats."),
+      ("En què s'ha gastat", "El que has gastat des que et vas despertar, separat en estrès i activitat, entrenaments i hores de vetlla. Descriu el que ha passat, sense donar-te consells.", "Desglossament de la despesa d'avui: 33 punts des que et vas despertar, 7 per estrès i activitat, 12 per una hora d'entrenament i 14 per les hores de vetlla."),
+    ],
+    "tier_free": "Gratis", "tier_pro": "Pro",
+    "stress_eyebrow": "Estrès",
+    "stress_p": "El teu nivell d'estrès d'ara, el dia hora a hora i què vol dir cada rang. El color i l'etiqueta de text sempre van junts, pensat també per a qui no distingeix bé els colors. Tot l'estrès és gratuït.",
+    "pricing_eyebrow": "Preu", "pricing_h2": "Gratis per començar. Pro, una sola vegada.",
+    "pricing_p": "Sense quotes mensuals ni anuals. Vela Pro es paga una vegada i és teu.",
+    "free_sub": "Per a tothom",
+    "free_items": ["El teu nivell d'estrès en temps real, amb el seu estat i la seva explicació", "El dia d'avui hora a hora i l'historial d'estrès", "Anàlisis setmanals i avisos d'estrès alt", "La càrrega de cada nit i d'on surt", "Complicacions d'estrès i de la càrrega de la nit"],
+    "pro_sub": "Compra única",
+    "pro_items": ["La Bateria en directe, al llarg del dia", "La corba del dia, amb la recàrrega de la nit i cada entrenament", "En què s'ha gastat: estrès i activitat, entrenaments i hores de vetlla", "Historial de bateria per mes, setmana i dia", "Complicacions amb la Bateria en directe i les barres per hores d'avui"],
+  },
+  "eu": {
+    "nav_battery": "Bateria", "nav_stress": "Estresa", "nav_pricing": "Prezioa",
+    "title_tag": "Vela — Estresa eta Bateria Apple Watch-erako. Harpidetzarik gabe. Inoiz ez.",
+    "meta_desc": "Velak zure estresa eta zure Bateria neurtzen ditu Apple Watch-en, zure HRV oinarri-lerro propioaren aurka: nola zauden orain, loak zenbat kargatu zaituen eta egunean zehar zertan joaten zaizun energia. Dena erlojuan kalkulatzen da. Harpidetzarik gabe, inoiz ez.",
+    "eyebrow1": "Estresa eta Bateria Apple Watch-erako",
+    "h1": "Zure energia eta zure lasaitasuna ez dira <em>inoren batez bestekoa</em>.",
+    "hero_p": "Velak zure bihotz-maiztasunaren aldakortasuna (SDNN) irakurtzen du Apple Watch-en eta zure oinarri-lerro propioarekin alderatzen du, ez populazio-atalase batekin. Horrekin esaten dizu gaur zenbat energia geratzen zaizun, zure Bateria, eta nola zauden orain, zure estresa. Kalkulu guztia erlojuan gertatzen da. Ezer ez da gure zerbitzarietatik pasatzen, ez baitugu halakorik.",
+    "story": ("Estresa ez da borrokatzen: irakurri eta doitu egiten da.", "Estresa eta nekea ez dira borrokatzen: irakurri egiten dira, eta norabidea doitzen da."),
+    "baseline_extra": "Eta bientzat balio du: zure estresa zure ohiko HRVaren aurka neurtzen da, eta gau batek kargatzen dizuna ere bai.",
+    "p0_rest": "HealthKitek datuak ematen ditu, erlojuak gainerakoa egiten du. Ez zure HRVa, ez zure loa, ez zure jarduera ez dira inoiz zure gailutik ateratzen Velaren zerbitzari batera.",
+    "p2": ("Jarraipenik gabe", "Analitikarik, iragarkirik eta hirugarrenen SDKrik gabe.", "Velak ez daki nor zaren ezta noiz irekitzen duzun aplikazioa ere: erlojutik ateratzen den gauza bakarra zure iCloud-era doa."),
+    "battery_eyebrow": "Bateria · Berria Vela 2.0n",
+    "battery_p": "Lo zauden bitartean bakarrik kargatzen da, siesta batekin edo gaueko txandaren ondorengo eguneko loarekin ere bai, eta estresarekin, jarduerarekin, entrenamenduekin eta esna emandako orduekin gastatzen da. Egun bat luze egin bazaizu, Bateriak zergatik erakusten dizu.",
+    "battery_tour": [
+      ("Zure karga", "Gauak zenbat kargatu zaituen eta nondik datorren: zenbat lo egin duzun eta loaldiko zure HRVa zure batez bestekoarekin alderatuta.", "Velaren pantaila gaueko kargarekin: 80ra arte, lotan 27 puntu gehiago, 7 h 15 min lo eta loaldiko HRVa batez bestekoa baino % 9 gorago."),
+      ("Eguneko kurba", "Lo zeundela nola igo den eta jaikitzen zarenetik nola jaisten den, entrenamendu bakoitza bere orduan markatuta.", "Eguneko bateria-kurba: gauean berdez birkarga 80ra arte eta egunean zehar urdinez deskarga 47ra arte, bi entrenamendu markatuta."),
+      ("Zertan joan den", "Esnatu zinenetik gastatutakoa, estresa eta jarduera, entrenamenduak eta esna emandako orduak bereizita. Gertatutakoa deskribatzen du, aholkurik eman gabe.", "Gaurko gastuaren xehapena: 33 puntu esnatu zinenetik, 7 estres eta jarduerarengatik, 12 entrenamendu-ordu batengatik eta 14 esna emandako orduengatik."),
+    ],
+    "tier_free": "Doan", "tier_pro": "Pro",
+    "stress_eyebrow": "Estresa",
+    "stress_p": "Zure oraingo estres-maila, eguna orduz ordu eta tarte bakoitzak zer esan nahi duen. Kolorea eta testu-etiketa beti batera doaz, kolore-itsutasuna kontuan hartuta ere. Estres guztia doakoa da.",
+    "pricing_eyebrow": "Prezioa", "pricing_h2": "Doan hasteko. Pro, behin bakarrik.",
+    "pricing_p": "Hileroko edo urteroko kuotarik gabe. Vela Pro behin ordaintzen da eta zurea da.",
+    "free_sub": "Guztientzat",
+    "free_items": ["Zure estres-maila denbora errealean, bere egoera eta azalpenarekin", "Gaurko eguna orduz ordu eta estresaren historia", "Asteko analisiak eta estres altuko abisuak", "Gau bakoitzeko karga eta nondik datorren", "Estresaren eta gaueko kargaren konplikazioak"],
+    "pro_sub": "Erosketa bakarra",
+    "pro_items": ["Bateria zuzenean, egun osoan zehar", "Eguneko kurba, gaueko birkargarekin eta entrenamendu bakoitzarekin", "Zertan joan den: estresa eta jarduera, entrenamenduak eta esna emandako orduak", "Bateriaren historia hilabete, aste eta egunaka", "Konplikazioak Bateria zuzenean eta gaurko orduko barrekin"],
+  },
+  "gl": {
+    "nav_battery": "Batería", "nav_stress": "Estrés", "nav_pricing": "Prezo",
+    "title_tag": "Vela — Estrés e Batería para Apple Watch. Sen subscrición. Nunca.",
+    "meta_desc": "Vela mide o teu estrés e a túa Batería no Apple Watch contra a túa propia liña base de HRV: como estás agora, canto te cargou o sono e en que se che vai a enerxía durante o día. Todo se calcula no reloxo. Sen subscrición, nunca.",
+    "eyebrow1": "Estrés e Batería para Apple Watch",
+    "h1": "A túa enerxía e a túa calma non son <em>a media</em> de ninguén.",
+    "hero_p": "Vela le a túa variabilidade do ritmo cardíaco (SDNN) no Apple Watch e compáraa coa túa propia liña base, non cun limiar de poboación. Con iso dicche canta enerxía che queda hoxe, a túa Batería, e como estás agora, o teu estrés. Todo o cálculo ocorre no reloxo. Nada pasa polos nosos servidores, porque non os temos.",
+    "story": ("O estrés non se combate: lese e axústase.", "O estrés e o cansazo non se combaten: lense, e axústase o rumbo."),
+    "baseline_extra": "E vale para as dúas cousas: o teu estrés mídese contra a túa HRV de sempre, e o que te carga unha noite tamén.",
+    "p0_rest": "HealthKit entrega os datos, o reloxo fai o resto. Nin a túa HRV, nin o teu sono, nin a túa actividade saen do teu dispositivo cara a un servidor de Vela.",
+    "p2": ("Sen rastrexo", "Sen analítica, sen anuncios, sen SDK de terceiros.", "Vela non sabe quen es nin cando abres a app: o único que sae do reloxo vai ao teu propio iCloud."),
+    "battery_eyebrow": "Batería · Novo en Vela 2.0",
+    "battery_p": "Cárgase só mentres dormes, tamén cunha sesta ou co sono de día despois dunha quenda de noite, e gástase co estrés, a actividade, os adestramentos e as horas esperto. Se un día se che fixo longo, a Batería ensínache por que.",
+    "battery_tour": [
+      ("A túa carga", "Canto te cargou a noite e de onde sae: o que durmiches e a túa HRV durante o sono fronte á túa media.", "Pantalla de Vela coa carga da noite: ata 80, 27 puntos máis durmindo, 7 h 15 min de sono e a HRV do sono un 9 % por riba da media."),
+      ("A curva do día", "Como subiu mentres durmías e como baixa desde que te levantas, con cada adestramento marcado á súa hora.", "Curva de batería do día: recarga en verde durante a noite ata 80 e descarga en azul durante o día ata 47, con dous adestramentos marcados."),
+      ("En que se foi", "O gastado desde que espertaches, separado en estrés e actividade, adestramentos e horas de vixilia. Describe o que pasou, sen darche consellos.", "Desglose do gasto de hoxe: 33 puntos desde que espertaches, 7 por estrés e actividade, 12 por unha hora de adestramento e 14 polas horas de vixilia."),
+    ],
+    "tier_free": "De balde", "tier_pro": "Pro",
+    "stress_eyebrow": "Estrés",
+    "stress_p": "O teu nivel de estrés de agora, o día hora a hora e que significa cada rango. A cor e a etiqueta de texto van sempre xuntas, pensado tamén para quen non distingue ben as cores. Todo o estrés é de balde.",
+    "pricing_eyebrow": "Prezo", "pricing_h2": "De balde para empezar. Pro, unha soa vez.",
+    "pricing_p": "Sen cotas mensuais nin anuais. Vela Pro págase unha vez e é teu.",
+    "free_sub": "Para todos",
+    "free_items": ["O teu nivel de estrés en tempo real, co seu estado e a súa explicación", "O día de hoxe hora a hora e o historial de estrés", "Análises semanais e avisos de estrés alto", "A carga de cada noite e de onde sae", "Complicacións de estrés e da carga da noite"],
+    "pro_sub": "Compra única",
+    "pro_items": ["A Batería en directo, ao longo do día", "A curva do día, coa recarga da noite e cada adestramento", "En que se foi: estrés e actividade, adestramentos e horas de vixilia", "Historial de batería por mes, semana e día", "Complicacións coa Batería en directo e as barras por hora de hoxe"],
+  },
+  "fr": {
+    "nav_battery": "Batterie", "nav_stress": "Stress", "nav_pricing": "Prix",
+    "title_tag": "Vela — Stress et Batterie pour Apple Watch. Sans abonnement. Jamais.",
+    "meta_desc": "Vela mesure votre stress et votre Batterie sur Apple Watch par rapport à votre propre référence de VFC : comment vous allez maintenant, combien le sommeil vous a rechargé et où part votre énergie pendant la journée. Tout est calculé sur la montre. Sans abonnement, jamais.",
+    "eyebrow1": "Stress et Batterie pour Apple Watch",
+    "h1": "Votre énergie et votre calme ne sont <em>la moyenne</em> de personne.",
+    "hero_p": "Vela lit votre variabilité de la fréquence cardiaque (SDNN) sur l'Apple Watch et la compare à votre propre référence, pas à un seuil de population. Elle vous dit ainsi combien d'énergie il vous reste aujourd'hui, votre Batterie, et comment vous allez maintenant, votre stress. Tout le calcul se fait sur la montre. Rien ne passe par nos serveurs, parce que nous n'en avons pas.",
+    "story": ("Le stress ne se combat pas : il se lit et s'ajuste.", "Le stress et la fatigue ne se combattent pas : ils se lisent, et on ajuste le cap."),
+    "baseline_extra": "Et cela vaut pour les deux : votre stress se mesure par rapport à votre VFC habituelle, et ce qu'une nuit vous recharge aussi.",
+    "p0_rest": "HealthKit fournit les données, la montre fait le reste. Ni votre VFC, ni votre sommeil, ni votre activité ne quittent votre appareil vers un serveur Vela.",
+    "p2": ("Sans pistage", "Pas d'analytique, pas de publicité, pas de SDK tiers.", "Vela ne sait pas qui vous êtes ni quand vous ouvrez l'app : la seule chose qui quitte la montre va dans votre propre iCloud."),
+    "battery_eyebrow": "Batterie · Nouveau dans Vela 2.0",
+    "battery_p": "Elle se recharge uniquement pendant votre sommeil, siestes et sommeil de jour après un poste de nuit compris, et se vide avec le stress, l'activité, les séances et les heures d'éveil. Si une journée vous a paru longue, la Batterie vous montre pourquoi.",
+    "battery_tour": [
+      ("Votre recharge", "Combien la nuit vous a rechargé et d'où ça vient : combien de temps vous avez dormi et votre VFC pendant le sommeil par rapport à votre moyenne.", "Écran de Vela avec la recharge de la nuit : jusqu'à 80, 27 points gagnés en dormant, 7 h 15 min de sommeil et une VFC pendant le sommeil 9 % au-dessus de la moyenne."),
+      ("La courbe de la journée", "Comment elle est montée pendant votre sommeil et comment elle baisse depuis votre lever, avec chaque séance marquée à son heure.", "Courbe de batterie de la journée : recharge en vert pendant la nuit jusqu'à 80, décharge en bleu pendant la journée jusqu'à 47, avec deux séances marquées."),
+      ("Où elle est passée", "Ce que vous avez dépensé depuis votre réveil, réparti entre stress et activité, séances et heures d'éveil. Elle décrit ce qui s'est passé, sans vous donner de conseils.", "Détail de la dépense du jour : 33 points depuis le réveil, 7 pour le stress et l'activité, 12 pour une heure de séance et 14 pour les heures d'éveil."),
+    ],
+    "tier_free": "Gratuit", "tier_pro": "Pro",
+    "stress_eyebrow": "Stress",
+    "stress_p": "Votre niveau de stress maintenant, la journée heure par heure et ce que signifie chaque plage. La couleur et l'étiquette textuelle vont toujours ensemble, pensé aussi pour les personnes daltoniennes. Tout le stress est gratuit.",
+    "pricing_eyebrow": "Prix", "pricing_h2": "Gratuit pour commencer. Pro, une seule fois.",
+    "pricing_p": "Aucun frais mensuel ni annuel. Vela Pro se paie une fois et il est à vous.",
+    "free_sub": "Pour tous",
+    "free_items": ["Votre niveau de stress en temps réel, avec son état et son explication", "La journée heure par heure et l'historique du stress", "Analyses hebdomadaires et alertes de stress élevé", "La recharge de chaque nuit et d'où elle vient", "Complications du stress et de la recharge de la nuit"],
+    "pro_sub": "Achat unique",
+    "pro_items": ["La Batterie en direct, tout au long de la journée", "La courbe de la journée, avec la recharge de la nuit et chaque séance", "Où elle est passée : stress et activité, séances et heures d'éveil", "Historique de la batterie par mois, semaine et jour", "Complications avec la Batterie en direct et les barres horaires du jour"],
+  },
+  "de": {
+    "nav_battery": "Batterie", "nav_stress": "Stress", "nav_pricing": "Preis",
+    "title_tag": "Vela — Stress und Batterie für die Apple Watch. Kein Abo. Niemals.",
+    "meta_desc": "Vela misst deinen Stress und deine Batterie auf der Apple Watch an deiner eigenen HRV-Baseline: wie es dir gerade geht, wie viel dich der Schlaf aufgeladen hat und wofür deine Energie über den Tag draufgeht. Alles wird auf der Uhr berechnet. Kein Abo, niemals.",
+    "eyebrow1": "Stress und Batterie für die Apple Watch",
+    "h1": "Deine Energie und deine Ruhe sind <em>niemandes Durchschnitt</em>.",
+    "hero_p": "Vela liest deine Herzfrequenzvariabilität (SDNN) auf der Apple Watch und vergleicht sie mit deiner eigenen Baseline, nicht mit einem Bevölkerungsschwellenwert. Daraus sagt sie dir, wie viel Energie dir heute bleibt, deine Batterie, und wie es dir gerade geht, dein Stress. Die gesamte Berechnung läuft auf der Uhr. Nichts läuft über unsere Server, denn wir haben keine.",
+    "story": ("Stress wird nicht bekämpft, sondern gelesen und angepasst.", "Stress und Müdigkeit werden nicht bekämpft: Man liest sie und passt den Kurs an."),
+    "baseline_extra": "Und das gilt für beides: Dein Stress wird an deiner gewohnten HRV gemessen, und das, was dich eine Nacht auflädt, auch.",
+    "p0_rest": "HealthKit liefert die Daten, die Uhr erledigt den Rest. Weder deine HRV noch dein Schlaf noch deine Aktivität verlassen jemals dein Gerät in Richtung eines Vela-Servers.",
+    "p2": ("Kein Tracking", "Keine Analytics, keine Werbung, keine Drittanbieter-SDKs.", "Vela weiß nicht, wer du bist oder wann du die App öffnest: Das Einzige, was die Uhr verlässt, geht in deine eigene iCloud."),
+    "battery_eyebrow": "Batterie · Neu in Vela 2.0",
+    "battery_p": "Sie lädt sich nur im Schlaf auf, auch bei einem Nickerchen oder beim Tagschlaf nach einer Nachtschicht, und sinkt durch Stress, Aktivität, Trainings und die Stunden, die du wach bist. Wenn sich ein Tag lang angefühlt hat, zeigt dir die Batterie, warum.",
+    "battery_tour": [
+      ("Deine Ladung", "Wie viel dich die Nacht aufgeladen hat und woher das kommt: wie lange du geschlafen hast und deine HRV im Schlaf im Vergleich zu deinem Durchschnitt.", "Vela-Bildschirm mit der Ladung der Nacht: bis 80, 27 Punkte im Schlaf dazu, 7 Std. 15 Min. Schlaf und eine HRV im Schlaf 9 % über dem Durchschnitt."),
+      ("Die Tageskurve", "Wie sie im Schlaf gestiegen ist und wie sie seit dem Aufstehen sinkt, mit jedem Training zu seiner Uhrzeit markiert.", "Batteriekurve des Tages: grüne Aufladung in der Nacht bis 80 und blaue Entladung über den Tag bis 47, mit zwei markierten Trainings."),
+      ("Wofür sie draufging", "Was du seit dem Aufwachen verbraucht hast, aufgeteilt in Stress und Aktivität, Trainings und Wachzeit. Sie beschreibt, was passiert ist, ohne dir Ratschläge zu geben.", "Aufschlüsselung des heutigen Verbrauchs: 33 Punkte seit dem Aufwachen, 7 durch Stress und Aktivität, 12 durch eine Stunde Training und 14 durch die Wachzeit."),
+    ],
+    "tier_free": "Kostenlos", "tier_pro": "Pro",
+    "stress_eyebrow": "Stress",
+    "stress_p": "Dein Stresslevel gerade jetzt, der Tag Stunde für Stunde und was jeder Bereich bedeutet. Farbe und Textlabel gehören immer zusammen, auch für Menschen mit Farbsehschwäche gedacht. Alles rund um Stress ist kostenlos.",
+    "pricing_eyebrow": "Preis", "pricing_h2": "Kostenlos zum Start. Pro, nur einmal.",
+    "pricing_p": "Keine monatlichen oder jährlichen Gebühren. Vela Pro zahlst du einmal, und es gehört dir.",
+    "free_sub": "Für alle",
+    "free_items": ["Dein Stresslevel in Echtzeit, mit Zustand und Erklärung", "Der heutige Tag Stunde für Stunde und dein Stressverlauf", "Wöchentliche Analysen und Hinweise bei hohem Stress", "Die Ladung jeder Nacht und woher sie kommt", "Komplikationen für Stress und die Ladung der Nacht"],
+    "pro_sub": "Einmalkauf",
+    "pro_items": ["Die Live-Batterie, den ganzen Tag über", "Die Tageskurve, mit der Aufladung der Nacht und jedem Training", "Wofür sie draufging: Stress und Aktivität, Trainings und Wachzeit", "Batterieverlauf nach Monat, Woche und Tag", "Komplikationen mit der Live-Batterie und den Stundenbalken von heute"],
+  },
+  "it": {
+    "nav_battery": "Batteria", "nav_stress": "Stress", "nav_pricing": "Prezzo",
+    "title_tag": "Vela — Stress e Batteria per Apple Watch. Senza abbonamento. Mai.",
+    "meta_desc": "Vela misura il tuo stress e la tua Batteria su Apple Watch rispetto alla tua baseline HRV: come stai adesso, quanto ti ha ricaricato il sonno e dove se ne va la tua energia durante la giornata. Tutto viene calcolato sull'orologio. Senza abbonamento, mai.",
+    "eyebrow1": "Stress e Batteria per Apple Watch",
+    "h1": "La tua energia e la tua calma non sono <em>la media</em> di nessuno.",
+    "hero_p": "Vela legge la tua variabilità della frequenza cardiaca (SDNN) su Apple Watch e la confronta con la tua baseline, non con una soglia di popolazione. Così ti dice quanta energia ti resta oggi, la tua Batteria, e come stai adesso, il tuo stress. Tutto il calcolo avviene sull'orologio. Niente passa dai nostri server, perché non ne abbiamo.",
+    "story": ("Lo stress non si combatte: si legge e si regola.", "Lo stress e la stanchezza non si combattono: si leggono, e si regola la rotta."),
+    "baseline_extra": "E vale per entrambi: il tuo stress si misura rispetto alla tua HRV abituale, e anche quanto ti ricarica una notte.",
+    "p0_rest": "HealthKit fornisce i dati, l'orologio fa il resto. Né la tua HRV, né il tuo sonno, né la tua attività lasciano mai il tuo dispositivo verso un server Vela.",
+    "p2": ("Nessun tracciamento", "Niente analytics, niente pubblicità, niente SDK di terze parti.", "Vela non sa chi sei né quando apri l'app: l'unica cosa che lascia l'orologio va nel tuo iCloud."),
+    "battery_eyebrow": "Batteria · Novità di Vela 2.0",
+    "battery_p": "Si ricarica solo mentre dormi, anche con un pisolino o con il sonno diurno dopo un turno di notte, e si consuma con lo stress, l'attività, gli allenamenti e le ore di veglia. Se una giornata ti è sembrata lunga, la Batteria ti mostra perché.",
+    "battery_tour": [
+      ("La tua ricarica", "Quanto ti ha ricaricato la notte e da cosa dipende: quanto hai dormito e la tua HRV durante il sonno rispetto alla tua media.", "Schermata di Vela con la ricarica della notte: fino a 80, 27 punti guadagnati dormendo, 7 h 15 min di sonno e HRV nel sonno del 9% sopra la media."),
+      ("La curva della giornata", "Come è salita mentre dormivi e come scende da quando ti alzi, con ogni allenamento segnato alla sua ora.", "Curva della batteria della giornata: ricarica in verde durante la notte fino a 80 e scarica in blu durante il giorno fino a 47, con due allenamenti segnati."),
+      ("Dove è andata", "Quanto hai consumato da quando ti sei svegliato, diviso tra stress e attività, allenamenti e ore di veglia. Descrive cosa è successo, senza darti consigli.", "Dettaglio del consumo di oggi: 33 punti dal risveglio, 7 per stress e attività, 12 per un'ora di allenamento e 14 per le ore di veglia."),
+    ],
+    "tier_free": "Gratis", "tier_pro": "Pro",
+    "stress_eyebrow": "Stress",
+    "stress_p": "Il tuo livello di stress adesso, la giornata ora per ora e cosa significa ogni intervallo. Colore ed etichetta testuale vanno sempre insieme, pensato anche per chi non distingue bene i colori. Tutto lo stress è gratis.",
+    "pricing_eyebrow": "Prezzo", "pricing_h2": "Gratis per iniziare. Pro, una volta sola.",
+    "pricing_p": "Nessuna quota mensile o annuale. Vela Pro si paga una volta ed è tuo.",
+    "free_sub": "Per tutti",
+    "free_items": ["Il tuo livello di stress in tempo reale, con il suo stato e la sua spiegazione", "La giornata ora per ora e lo storico dello stress", "Analisi settimanali e avvisi di stress alto", "La ricarica di ogni notte e da cosa dipende", "Complicazioni dello stress e della ricarica notturna"],
+    "pro_sub": "Acquisto unico",
+    "pro_items": ["La Batteria in tempo reale, per tutta la giornata", "La curva della giornata, con la ricarica notturna e ogni allenamento", "Dove è andata: stress e attività, allenamenti e ore di veglia", "Storico della batteria per mese, settimana e giorno", "Complicazioni con la Batteria in tempo reale e le barre orarie di oggi"],
+  },
+  "pt": {
+    "nav_battery": "Bateria", "nav_stress": "Stress", "nav_pricing": "Preço",
+    "title_tag": "Vela — Stress e Bateria para Apple Watch. Sem subscrição. Nunca.",
+    "meta_desc": "A Vela mede o seu stress e a sua Bateria no Apple Watch contra a sua própria linha de base de HRV: como está agora, quanto o sono o carregou e onde se gasta a sua energia ao longo do dia. Tudo é calculado no relógio. Sem subscrição, nunca.",
+    "eyebrow1": "Stress e Bateria para Apple Watch",
+    "h1": "A sua energia e a sua calma não são <em>a média</em> de ninguém.",
+    "hero_p": "A Vela lê a sua variabilidade da frequência cardíaca (SDNN) no Apple Watch e compara-a com a sua própria linha de base, não com um limiar de população. Com isso diz-lhe quanta energia lhe resta hoje, a sua Bateria, e como está agora, o seu stress. Todo o cálculo acontece no relógio. Nada passa pelos nossos servidores, porque não os temos.",
+    "story": ("O stress não se combate: lê-se e ajusta-se.", "O stress e o cansaço não se combatem: leem-se, e ajusta-se o rumo."),
+    "baseline_extra": "E vale para as duas coisas: o seu stress é medido contra a sua HRV habitual, e o que uma noite lhe carrega também.",
+    "p0_rest": "O HealthKit fornece os dados, o relógio faz o resto. Nem a sua HRV, nem o seu sono, nem a sua atividade saem do seu dispositivo em direção a um servidor da Vela.",
+    "p2": ("Sem rastreio", "Sem análises, sem anúncios, sem SDK de terceiros.", "A Vela não sabe quem é nem quando abre a app: a única coisa que sai do relógio vai para o seu próprio iCloud."),
+    "battery_eyebrow": "Bateria · Novo na Vela 2.0",
+    "battery_p": "Carrega só enquanto dorme, também com uma sesta ou com o sono de dia depois de um turno da noite, e gasta-se com o stress, a atividade, os treinos e as horas acordado. Se um dia lhe pareceu longo, a Bateria mostra-lhe porquê.",
+    "battery_tour": [
+      ("A sua carga", "Quanto a noite o carregou e de onde vem: quanto dormiu e a sua HRV durante o sono face à sua média.", "Ecrã da Vela com a carga da noite: até 80, mais 27 pontos a dormir, 7 h 15 min de sono e a HRV do sono 9% acima da média."),
+      ("A curva do dia", "Como subiu enquanto dormia e como desce desde que se levanta, com cada treino marcado à sua hora.", "Curva da bateria do dia: recarga a verde durante a noite até 80 e descarga a azul durante o dia até 47, com dois treinos marcados."),
+      ("Onde se gastou", "O que gastou desde que acordou, separado em stress e atividade, treinos e horas de vigília. Descreve o que aconteceu, sem lhe dar conselhos.", "Detalhe do gasto de hoje: 33 pontos desde que acordou, 7 por stress e atividade, 12 por uma hora de treino e 14 pelas horas de vigília."),
+    ],
+    "tier_free": "Grátis", "tier_pro": "Pro",
+    "stress_eyebrow": "Stress",
+    "stress_p": "O seu nível de stress agora, o dia hora a hora e o que significa cada intervalo. A cor e a etiqueta de texto andam sempre juntas, pensado também para quem não distingue bem as cores. Todo o stress é gratuito.",
+    "pricing_eyebrow": "Preço", "pricing_h2": "Grátis para começar. Pro, uma só vez.",
+    "pricing_p": "Sem quotas mensais nem anuais. O Vela Pro paga-se uma vez e é seu.",
+    "free_sub": "Para todos",
+    "free_items": ["O seu nível de stress em tempo real, com o seu estado e a sua explicação", "O dia de hoje hora a hora e o histórico de stress", "Análises semanais e avisos de stress alto", "A carga de cada noite e de onde vem", "Complicações de stress e da carga da noite"],
+    "pro_sub": "Compra única",
+    "pro_items": ["A Bateria em direto, ao longo do dia", "A curva do dia, com a recarga da noite e cada treino", "Onde se gastou: stress e atividade, treinos e horas de vigília", "Histórico da bateria por mês, semana e dia", "Complicações com a Bateria em direto e as barras por hora de hoje"],
+  },
+  "cs": {
+    "nav_battery": "Baterie", "nav_stress": "Stres", "nav_pricing": "Cena",
+    "title_tag": "Vela — Stres a Baterie pro Apple Watch. Žádné předplatné. Nikdy.",
+    "meta_desc": "Vela měří váš stres a vaši Baterii na Apple Watch vůči vaší vlastní základní linii HRV: jak na tom jste právě teď, kolik vás nabil spánek a kam během dne mizí vaše energie. Vše se počítá v hodinkách. Žádné předplatné, nikdy.",
+    "eyebrow1": "Stres a Baterie pro Apple Watch",
+    "h1": "Vaše energie a váš klid nejsou <em>ničí průměr</em>.",
+    "hero_p": "Vela čte variabilitu vaší srdeční frekvence (SDNN) na Apple Watch a porovnává ji s vaší vlastní základní linií, ne s populačním prahem. Z toho vám řekne, kolik energie vám dnes zbývá, vaši Baterii, a jak na tom jste právě teď, váš stres. Veškerý výpočet probíhá v hodinkách. Nic neprochází našimi servery, protože žádné nemáme.",
+    "story": ("Se stresem se nebojuje — čte se a přizpůsobuje.", "Se stresem a únavou se nebojuje: čtou se a upravuje se kurz."),
+    "baseline_extra": "A platí to pro obojí: váš stres se měří vůči vaší obvyklé HRV, a to, kolik vás nabije noc, také.",
+    "p0_rest": "HealthKit poskytuje data, hodinky udělají zbytek. Vaše HRV, váš spánek ani vaše aktivita nikdy neopustí vaše zařízení směrem k serveru Vely.",
+    "p2": ("Žádné sledování", "Žádná analytika, žádné reklamy, žádná SDK třetích stran.", "Vela neví, kdo jste, ani kdy aplikaci otevíráte: jediné, co opouští hodinky, jde do vašeho vlastního iCloudu."),
+    "battery_eyebrow": "Baterie · Novinka ve Vela 2.0",
+    "battery_p": "Nabíjí se jen ve spánku, včetně zdřímnutí a denního spánku po noční směně, a vybíjí se stresem, aktivitou, tréninky a hodinami v bdělém stavu. Pokud vám den připadal dlouhý, Baterie vám ukáže proč.",
+    "battery_tour": [
+      ("Vaše nabití", "Kolik vás nabila noc a z čeho to vychází: jak dlouho jste spali a vaše HRV ve spánku ve srovnání s vaším průměrem.", "Obrazovka Vely s nočním nabitím: na 80, o 27 bodů víc ve spánku, 7 h 15 min spánku a HRV ve spánku o 9 % nad průměrem."),
+      ("Křivka dne", "Jak stoupala, zatímco jste spali, a jak klesá od chvíle, kdy vstanete, s každým tréninkem vyznačeným v jeho čase.", "Křivka baterie za den: zelené nabíjení v noci až na 80 a modré vybíjení během dne až na 47, se dvěma vyznačenými tréninky."),
+      ("Kam se poděla", "Co jste spotřebovali od probuzení, rozdělené na stres a aktivitu, tréninky a čas v bdělém stavu. Popisuje, co se stalo, bez rad.", "Rozpis dnešní spotřeby: 33 bodů od probuzení, 7 za stres a aktivitu, 12 za hodinu tréninku a 14 za čas v bdělém stavu."),
+    ],
+    "tier_free": "Zdarma", "tier_pro": "Pro",
+    "stress_eyebrow": "Stres",
+    "stress_p": "Vaše aktuální úroveň stresu, den hodinu po hodině a co znamená každý rozsah. Barva a textový popisek jdou vždy spolu, navrženo i s ohledem na barvoslepost. Vše kolem stresu je zdarma.",
+    "pricing_eyebrow": "Cena", "pricing_h2": "Zdarma na začátek. Pro jen jednou.",
+    "pricing_p": "Žádné měsíční ani roční poplatky. Vela Pro zaplatíte jednou a je vaše.",
+    "free_sub": "Pro všechny",
+    "free_items": ["Vaše úroveň stresu v reálném čase, se stavem a vysvětlením", "Dnešní den hodinu po hodině a historie stresu", "Týdenní analýzy a upozornění na vysoký stres", "Nabití za každou noc a z čeho vychází", "Komplikace se stresem a nočním nabitím"],
+    "pro_sub": "Jednorázový nákup",
+    "pro_items": ["Baterie v reálném čase, po celý den", "Křivka dne s nočním nabíjením a každým tréninkem", "Kam se poděla: stres a aktivita, tréninky a čas v bdělém stavu", "Historie baterie po měsících, týdnech a dnech", "Komplikace s Baterií v reálném čase a dnešními hodinovými sloupci"],
+  },
+  "el": {
+    "nav_battery": "Μπαταρία", "nav_stress": "Στρες", "nav_pricing": "Τιμή",
+    "title_tag": "Vela — Στρες και Μπαταρία για Apple Watch. Χωρίς συνδρομή. Ποτέ.",
+    "meta_desc": "Το Vela μετρά το στρες και την Μπαταρία σας στο Apple Watch με βάση το δικό σας baseline HRV: πώς είστε τώρα, πόσο σας φόρτισε ο ύπνος και πού πηγαίνει η ενέργειά σας μέσα στη μέρα. Όλα υπολογίζονται στο ρολόι. Χωρίς συνδρομή, ποτέ.",
+    "eyebrow1": "Στρες και Μπαταρία για Apple Watch",
+    "h1": "Η ενέργεια και η ηρεμία σας δεν είναι <em>ο μέσος όρος κανενός</em>.",
+    "hero_p": "Το Vela διαβάζει τη μεταβλητότητα του καρδιακού σας ρυθμού (SDNN) στο Apple Watch και τη συγκρίνει με το δικό σας baseline, όχι με ένα όριο πληθυσμού. Έτσι σας λέει πόση ενέργεια σας μένει σήμερα, την Μπαταρία σας, και πώς είστε τώρα, το στρες σας. Όλος ο υπολογισμός γίνεται στο ρολόι. Τίποτα δεν περνά από τους διακομιστές μας, γιατί δεν έχουμε.",
+    "story": ("Το άγχος δεν το πολεμάς — το διαβάζεις και προσαρμόζεσαι.", "Το άγχος και την κούραση δεν τα πολεμάς: τα διαβάζεις και προσαρμόζεις την πορεία."),
+    "baseline_extra": "Και ισχύει και για τα δύο: το στρες σας μετριέται με βάση το συνηθισμένο σας HRV, και το πόσο σας φορτίζει μια νύχτα επίσης.",
+    "p0_rest": "Το HealthKit παρέχει τα δεδομένα, το ρολόι κάνει τα υπόλοιπα. Ούτε το HRV, ούτε ο ύπνος, ούτε η δραστηριότητά σας φεύγουν ποτέ από τη συσκευή σας προς διακομιστή του Vela.",
+    "p2": ("Χωρίς παρακολούθηση", "Χωρίς analytics, χωρίς διαφημίσεις, χωρίς SDK τρίτων.", "Το Vela δεν ξέρει ποιος είστε ούτε πότε ανοίγετε την εφαρμογή: το μόνο που φεύγει από το ρολόι πηγαίνει στο δικό σας iCloud."),
+    "battery_eyebrow": "Μπαταρία · Νέο στο Vela 2.0",
+    "battery_p": "Φορτίζει μόνο όσο κοιμάστε, και με έναν υπνάκο ή με τον ημερήσιο ύπνο μετά από νυχτερινή βάρδια, και αδειάζει με το στρες, τη δραστηριότητα, τις προπονήσεις και τις ώρες που είστε ξύπνιοι. Αν μια μέρα σας φάνηκε μεγάλη, η Μπαταρία σας δείχνει γιατί.",
+    "battery_tour": [
+      ("Η φόρτισή σας", "Πόσο σας φόρτισε η νύχτα και από πού προκύπτει: πόσο κοιμηθήκατε και το HRV σας στον ύπνο σε σύγκριση με τον μέσο όρο σας.", "Οθόνη του Vela με τη φόρτιση της νύχτας: έως το 80, 27 μονάδες παραπάνω στον ύπνο, 7 ώ. 15 λ. ύπνου και HRV στον ύπνο 9% πάνω από τον μέσο όρο."),
+      ("Η καμπύλη της ημέρας", "Πώς ανέβηκε όσο κοιμόσασταν και πώς πέφτει από τη στιγμή που σηκώνεστε, με κάθε προπόνηση σημειωμένη στην ώρα της.", "Καμπύλη μπαταρίας της ημέρας: πράσινη επαναφόρτιση τη νύχτα έως το 80 και μπλε αποφόρτιση μέσα στη μέρα έως το 47, με δύο προπονήσεις σημειωμένες."),
+      ("Πού πήγε", "Τι ξοδέψατε από τότε που ξυπνήσατε, χωρισμένο σε στρες και δραστηριότητα, προπονήσεις και ώρες εγρήγορσης. Περιγράφει τι έγινε, χωρίς συμβουλές.", "Ανάλυση της σημερινής κατανάλωσης: 33 μονάδες από το ξύπνημα, 7 από στρες και δραστηριότητα, 12 από μία ώρα προπόνησης και 14 από τις ώρες εγρήγορσης."),
+    ],
+    "tier_free": "Δωρεάν", "tier_pro": "Pro",
+    "stress_eyebrow": "Στρες",
+    "stress_p": "Το επίπεδο στρες σας τώρα, η μέρα ώρα με την ώρα και τι σημαίνει κάθε εύρος. Το χρώμα και η ετικέτα κειμένου πάνε πάντα μαζί, σχεδιασμένο και με γνώμονα την αχρωματοψία. Όλο το στρες είναι δωρεάν.",
+    "pricing_eyebrow": "Τιμή", "pricing_h2": "Δωρεάν για να ξεκινήσετε. Pro, μία φορά.",
+    "pricing_p": "Χωρίς μηνιαίες ή ετήσιες χρεώσεις. Το Vela Pro το πληρώνετε μία φορά και είναι δικό σας.",
+    "free_sub": "Για όλους",
+    "free_items": ["Το επίπεδο στρες σας σε πραγματικό χρόνο, με την κατάστασή του και την εξήγησή του", "Η σημερινή μέρα ώρα με την ώρα και το ιστορικό στρες", "Εβδομαδιαίες αναλύσεις και ειδοποιήσεις υψηλού στρες", "Η φόρτιση κάθε νύχτας και από πού προκύπτει", "Επιπλοκές (complications) στρες και νυχτερινής φόρτισης"],
+    "pro_sub": "Εφάπαξ αγορά",
+    "pro_items": ["Η Μπαταρία σε πραγματικό χρόνο, όλη τη μέρα", "Η καμπύλη της ημέρας, με τη νυχτερινή επαναφόρτιση και κάθε προπόνηση", "Πού πήγε: στρες και δραστηριότητα, προπονήσεις και ώρες εγρήγορσης", "Ιστορικό μπαταρίας ανά μήνα, εβδομάδα και ημέρα", "Επιπλοκές με την Μπαταρία σε πραγματικό χρόνο και τις σημερινές ωριαίες μπάρες"],
+  },
+  "ja": {
+    "nav_battery": "バッテリー", "nav_stress": "ストレス", "nav_pricing": "価格",
+    "title_tag": "Vela — Apple Watch 用ストレスとバッテリー。サブスクなし。ずっと。",
+    "meta_desc": "Vela は Apple Watch で、あなた自身の HRV ベースラインを基準にストレスとバッテリーを測ります。いまの状態、睡眠でどれだけ充電されたか、日中にエネルギーが何に使われたか。計算はすべて時計の中で行われます。サブスクなし、ずっと。",
+    "eyebrow1": "Apple Watch 用ストレスとバッテリー",
+    "h1": "あなたのエネルギーと穏やかさは、<em>誰かの平均</em>ではない。",
+    "hero_p": "Vela は Apple Watch で心拍変動（SDNN）を読み取り、集団のしきい値ではなく、あなた自身のベースラインと比べます。そこから、今日残っているエネルギー（バッテリー）と、いまの状態（ストレス）を伝えます。計算はすべて時計の中で行われます。私たちのサーバーを通るものは何もありません。そもそもサーバーを持っていないからです。",
+    "story": ("ストレスは戦うものではなく、読み取って合わせていくものです。", "ストレスも疲れも、戦うものではありません。読み取って、針路を合わせていくものです。"),
+    "baseline_extra": "これはどちらにも当てはまります。ストレスはふだんの HRV を基準に測られ、ひと晩でどれだけ充電されるかも同じです。",
+    "p0_rest": "HealthKit がデータを提供し、残りは時計が処理します。HRV も睡眠も活動量も、Vela のサーバーへ向けてデバイスの外に出ることはありません。",
+    "p2": ("トラッキングなし", "解析ツールも広告も、サードパーティの SDK もありません。", "Vela はあなたが誰なのか、いつアプリを開いたのかを知りません。時計の外に出るのは、あなた自身の iCloud へのデータだけです。"),
+    "battery_eyebrow": "バッテリー · Vela 2.0 の新機能",
+    "battery_p": "充電されるのは眠っている間だけで、昼寝や夜勤明けの日中の睡眠も含みます。ストレス、活動量、ワークアウト、起きている時間で減っていきます。長く感じた一日には、その理由をバッテリーが見せてくれます。",
+    "battery_tour": [
+      ("充電", "ひと晩でどれだけ充電されたか、その内訳：睡眠時間と、ふだんの平均と比べた睡眠中の HRV。", "夜間の充電を表示した Vela の画面：80 まで充電、睡眠中に +27、睡眠時間 7 時間 15 分、睡眠中の HRV は平均より 9% 高い。"),
+      ("1日のカーブ", "眠っている間にどう上がり、起きてからどう下がっていくか。ワークアウトはその時刻に印が付きます。", "1日のバッテリーカーブ：夜間は緑の充電で 80 まで、日中は青の消費で 47 まで。ワークアウトが2回記録されている。"),
+      ("何に使ったか", "起きてから消費した分を、ストレスと活動、ワークアウト、起きていた時間に分けて表示します。起きたことを説明するだけで、アドバイスはしません。", "今日の消費の内訳：起きてから 33、ストレスと活動で 7、1時間のワークアウトで 12、起きていた時間で 14。"),
+    ],
+    "tier_free": "無料", "tier_pro": "Pro",
+    "stress_eyebrow": "ストレス",
+    "stress_p": "いまのストレスレベル、1日の時間ごとの推移、各範囲の意味。色とテキストのラベルは常にセットで表示され、色覚特性にも配慮しています。ストレス機能はすべて無料です。",
+    "pricing_eyebrow": "価格", "pricing_h2": "無料で始められて、Pro は一度きり。",
+    "pricing_p": "月額も年額もありません。Vela Pro は一度支払えば、ずっとあなたのものです。",
+    "free_sub": "すべての方に",
+    "free_items": ["リアルタイムのストレスレベルと、その状態・説明", "今日の時間ごとの推移とストレスの履歴", "週ごとの分析と高ストレスの通知", "毎晩の充電量とその内訳", "ストレスと夜間の充電のコンプリケーション"],
+    "pro_sub": "買い切り",
+    "pro_items": ["1日を通したリアルタイムのバッテリー", "夜間の充電とワークアウトを含む1日のカーブ", "何に使ったか：ストレスと活動、ワークアウト、起きていた時間", "月・週・日ごとのバッテリー履歴", "リアルタイムのバッテリーと今日の時間別バーを表示するコンプリケーション"],
+  },
+}
+
+for _code, _n in _LANDING_2.items():
+    _l = L[_code]["landing"]
+    _old, _new = _n["story"]
+    assert _l["story_p"].count(_old) == 1, (_code, "story")
+    _l["story_p"] = _l["story_p"].replace(_old, _new)
+    _l["baseline_p"] = _l["baseline_p"] + " " + _n["baseline_extra"]
+    _tag, _strong, _ = _l["principles"][0]
+    _l["principles"][0] = (_tag, _strong, _n["p0_rest"])
+    _l["principles"][2] = _n["p2"]
+    _l["h1_plain"] = re.sub(r"<[^>]+>", "", _n["h1"])
+    for _k, _val in _n.items():
+        if _k not in ("story", "baseline_extra", "p0_rest", "p2"):
+            _l[_k] = _val
+
+# ---------------------------------------------------------------------------
+# Wellness, not medicine (2.0). A tester asked why the site shows no health
+# certification. Vela is a wellness app, not a medical device (EU MDR 2017/745), so
+# it can't carry a medical CE mark, and it collects no data, so a privacy seal has
+# nothing to certify. A fifth principle says so on the landing page and links to two
+# FAQ entries that explain it. Answers use {legal} and {appstore}; the principle, {faq}.
+_TRUST = {
+  "es": {
+    "principles_h2": "Cinco decisiones, tomadas para no cambiar de idea.",
+    "principle": ("Bienestar, no medicina", "Vela no es un producto sanitario.",
+                  "No diagnostica ni trata ninguna enfermedad: te ayuda a leer tus propios patrones. Por eso no lleva marcado CE ni sellos sanitarios (<a href=\"{faq}\">te contamos por qué</a>)."),
+    "faq": [
+      ("¿Vela es un producto sanitario? ¿Por qué no lleva marcado CE ni ningún sello sanitario?",
+       "No, y es a propósito. Vela es una app de bienestar: compara tu estrés y tu energía con tu propia media, pero no diagnostica, trata, previene ni vigila ninguna enfermedad. En la Unión Europea, el marcado CE sanitario es solo para los productos sanitarios (Reglamento (UE) 2017/745), así que una app de bienestar no puede llevarlo sin engañar a quien la usa. Si algo de lo que ves te preocupa, coméntalo con un profesional sanitario.",
+       "medical"),
+      ("¿Por qué no tiene un sello de privacidad? ¿Cómo sé qué pasa con mis datos?",
+       "Un sello de privacidad certifica cómo una empresa trata los datos que recoge, y Vela no recoge ninguno: no hay cuenta, ni servidores, ni analítica, ni SDK de terceros. Tus datos se quedan en tu reloj y en tu propio iCloud, donde solo entras tú, y así lo declara la etiqueta de privacidad de la <a href=\"{appstore}\">ficha del App Store</a>. Puedes quitarle a Vela el acceso a tus datos de salud cuando quieras, desde la app Salud o los Ajustes del reloj. Detrás de Vela hay una persona, con su nombre y su dirección en el <a href=\"{legal}\">aviso legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "en": {
+    "principles_h2": "Five decisions, made to not change our minds.",
+    "principle": ("Wellness, not medicine", "Vela is not a medical device.",
+                  "It doesn't diagnose or treat any condition: it helps you read your own patterns. So it carries no CE medical marking or health certification (<a href=\"{faq}\">here's why</a>)."),
+    "faq": [
+      ("Is Vela a medical device? Why doesn't it have a CE mark or any health certification?",
+       "No, and that's deliberate. Vela is a wellness app: it compares your stress and your energy with your own average, but it doesn't diagnose, treat, prevent or monitor any disease. In the European Union, the medical CE mark is only for medical devices (Regulation (EU) 2017/745), so a wellness app can't carry one without misleading the people who use it. If anything you see worries you, talk to a healthcare professional.",
+       "medical"),
+      ("Why doesn't it have a privacy seal? How do I know what happens to my data?",
+       "A privacy seal certifies how a company handles the data it collects, and Vela collects none: there's no account, no servers, no analytics and no third-party SDKs. Your data stays on your watch and in your own iCloud, where only you can get in, and that's what the privacy label on the <a href=\"{appstore}\">App Store listing</a> declares. You can remove Vela's access to your health data at any time, from the Health app or your watch's Settings. Behind Vela there's a person, whose name and address are in the <a href=\"{legal}\">legal notice</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "ca": {
+    "principles_h2": "Cinc decisions, preses per no canviar d'opinió.",
+    "principle": ("Benestar, no medicina", "Vela no és un producte sanitari.",
+                  "No diagnostica ni tracta cap malaltia: t'ajuda a llegir els teus propis patrons. Per això no porta marcatge CE ni segells sanitaris (<a href=\"{faq}\">t'expliquem per què</a>)."),
+    "faq": [
+      ("Vela és un producte sanitari? Per què no porta marcatge CE ni cap segell sanitari?",
+       "No, i és a propòsit. Vela és una app de benestar: compara el teu estrès i la teva energia amb la teva pròpia mitjana, però no diagnostica, tracta, prevé ni vigila cap malaltia. A la Unió Europea, el marcatge CE sanitari és només per als productes sanitaris (Reglament (UE) 2017/745), així que una app de benestar no el pot portar sense enganyar qui la fa servir. Si alguna cosa del que veus et preocupa, parla'n amb un professional sanitari.",
+       "medical"),
+      ("Per què no té cap segell de privadesa? Com sé què passa amb les meves dades?",
+       "Un segell de privadesa certifica com una empresa tracta les dades que recull, i Vela no en recull cap: no hi ha compte, ni servidors, ni analítica, ni SDK de tercers. Les teves dades es queden al teu rellotge i al teu propi iCloud, on només hi entres tu, i així ho declara l'etiqueta de privadesa de la <a href=\"{appstore}\">fitxa de l'App Store</a>. Pots treure a Vela l'accés a les teves dades de salut quan vulguis, des de l'app Salut o la Configuració del rellotge. Darrere de Vela hi ha una persona, amb el seu nom i la seva adreça a l'<a href=\"{legal}\">avís legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "eu": {
+    "principles_h2": "Bost erabaki, iritziz ez aldatzeko hartuak.",
+    "principle": ("Ongizatea, ez medikuntza", "Vela ez da produktu sanitario bat.",
+                  "Ez du gaixotasunik diagnostikatzen ez tratatzen: zure ereduak irakurtzen laguntzen dizu. Horregatik ez darama CE marka sanitariorik ez osasun-zigilurik (<a href=\"{faq}\">zergatik azaltzen dizugu</a>)."),
+    "faq": [
+      ("Vela produktu sanitario bat al da? Zergatik ez darama CE markarik ez osasun-zigilurik?",
+       "Ez, eta nahita da. Vela ongizaterako aplikazio bat da: zure estresa eta energia zure batez bestekoarekin alderatzen ditu, baina ez du gaixotasunik diagnostikatzen, tratatzen, prebenitzen ez zaintzen. Europar Batasunean, CE marka sanitarioa produktu sanitarioentzat bakarrik da ((EB) 2017/745 Erregelamendua); beraz, ongizaterako aplikazio batek ezin du eraman, erabiltzen duena engainatu gabe. Ikusten duzun zerbaitek kezkatzen bazaitu, hitz egin osasun-profesional batekin.",
+       "medical"),
+      ("Zergatik ez du pribatutasun-zigilurik? Nola jakin zer gertatzen den nire datuekin?",
+       "Pribatutasun-zigilu batek ziurtatzen du enpresa batek nola tratatzen dituen biltzen dituen datuak, eta Velak ez du bat ere biltzen: ez dago konturik, ez zerbitzaririk, ez analitikarik, ez hirugarrenen SDKrik. Zure datuak zure erlojuan eta zure iCloud-ean geratzen dira, eta zuk bakarrik sar zaitezke bertara; hala adierazten du <a href=\"{appstore}\">App Storeko fitxako</a> pribatutasun-etiketak. Nahi duzunean ken diezaiokezu Velari zure osasun-datuetarako sarbidea, Osasuna aplikaziotik edo erlojuaren Ezarpenetatik. Velaren atzean pertsona bat dago, eta haren izena eta helbidea <a href=\"{legal}\">lege-oharrean</a> daude.",
+       "privacy-seal"),
+    ],
+  },
+  "gl": {
+    "principles_h2": "Cinco decisións, tomadas para non cambiar de opinión.",
+    "principle": ("Benestar, non medicina", "Vela non é un produto sanitario.",
+                  "Non diagnostica nin trata ningunha enfermidade: axúdache a ler os teus propios patróns. Por iso non leva marcado CE nin selos sanitarios (<a href=\"{faq}\">contámosche por que</a>)."),
+    "faq": [
+      ("Vela é un produto sanitario? Por que non leva marcado CE nin ningún selo sanitario?",
+       "Non, e é a propósito. Vela é unha app de benestar: compara o teu estrés e a túa enerxía coa túa propia media, pero non diagnostica, trata, prevén nin vixía ningunha enfermidade. Na Unión Europea, o marcado CE sanitario é só para os produtos sanitarios (Regulamento (UE) 2017/745), así que unha app de benestar non pode levalo sen enganar a quen a usa. Se algo do que ves te preocupa, coméntao cun profesional sanitario.",
+       "medical"),
+      ("Por que non ten un selo de privacidade? Como sei que pasa cos meus datos?",
+       "Un selo de privacidade certifica como unha empresa trata os datos que recolle, e Vela non recolle ningún: non hai conta, nin servidores, nin analítica, nin SDK de terceiros. Os teus datos quedan no teu reloxo e no teu propio iCloud, onde só entras ti, e así o declara a etiqueta de privacidade da <a href=\"{appstore}\">ficha da App Store</a>. Podes quitarlle a Vela o acceso aos teus datos de saúde cando queiras, desde a app Saúde ou os Axustes do reloxo. Detrás de Vela hai unha persoa, co seu nome e o seu enderezo no <a href=\"{legal}\">aviso legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "fr": {
+    "principles_h2": "Cinq décisions, prises pour ne pas changer d'avis.",
+    "principle": ("Bien-être, pas médecine", "Vela n'est pas un dispositif médical.",
+                  "Elle ne diagnostique ni ne traite aucune maladie : elle vous aide à lire vos propres tendances. C'est pourquoi elle ne porte ni marquage CE médical ni certification de santé (<a href=\"{faq}\">on vous explique pourquoi</a>)."),
+    "faq": [
+      ("Vela est-elle un dispositif médical ? Pourquoi n'a-t-elle ni marquage CE ni certification de santé ?",
+       "Non, et c'est voulu. Vela est une app de bien-être : elle compare votre stress et votre énergie avec votre propre moyenne, mais elle ne diagnostique, ne traite, ne prévient ni ne surveille aucune maladie. Dans l'Union européenne, le marquage CE médical est réservé aux dispositifs médicaux (règlement (UE) 2017/745) : une app de bien-être ne peut donc pas le porter sans tromper ceux qui l'utilisent. Si quelque chose vous inquiète, parlez-en à un professionnel de santé.",
+       "medical"),
+      ("Pourquoi n'a-t-elle pas de label de confidentialité ? Comment savoir ce que deviennent mes données ?",
+       "Un label de confidentialité certifie la façon dont une entreprise traite les données qu'elle collecte, et Vela n'en collecte aucune : pas de compte, pas de serveurs, pas d'analytique, pas de SDK tiers. Vos données restent sur votre montre et dans votre propre iCloud, auquel vous seul avez accès, et c'est ce que déclare l'étiquette de confidentialité de la <a href=\"{appstore}\">fiche App Store</a>. Vous pouvez retirer à Vela l'accès à vos données de santé à tout moment, depuis l'app Santé ou les Réglages de la montre. Derrière Vela, il y a une personne, dont le nom et l'adresse figurent dans les <a href=\"{legal}\">mentions légales</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "de": {
+    "principles_h2": "Fünf Entscheidungen, getroffen, um sie nicht mehr zu ändern.",
+    "principle": ("Wellness, keine Medizin", "Vela ist kein Medizinprodukt.",
+                  "Die App stellt keine Diagnosen und behandelt keine Krankheiten: Sie hilft dir, deine eigenen Muster zu lesen. Deshalb trägt sie weder eine CE-Kennzeichnung als Medizinprodukt noch ein Gesundheitssiegel (<a href=\"{faq}\">warum, erklären wir hier</a>)."),
+    "faq": [
+      ("Ist Vela ein Medizinprodukt? Warum hat die App keine CE-Kennzeichnung und kein Gesundheitssiegel?",
+       "Nein, und das ist Absicht. Vela ist eine Wellness-App: Sie vergleicht deinen Stress und deine Energie mit deinem eigenen Durchschnitt, erkennt, behandelt, verhindert oder überwacht aber keine Krankheiten. In der Europäischen Union ist die CE-Kennzeichnung nach der Medizinprodukteverordnung (EU) 2017/745 Medizinprodukten vorbehalten; eine Wellness-App darf sie also nicht tragen, ohne ihre Nutzer in die Irre zu führen. Wenn dich etwas beunruhigt, das du siehst, sprich mit einer Ärztin oder einem Arzt.",
+       "medical"),
+      ("Warum gibt es kein Datenschutzsiegel? Woher weiß ich, was mit meinen Daten passiert?",
+       "Ein Datenschutzsiegel bescheinigt, wie ein Unternehmen mit den Daten umgeht, die es erhebt, und Vela erhebt keine: kein Konto, keine Server, keine Analyse, keine SDKs von Drittanbietern. Deine Daten bleiben auf deiner Uhr und in deiner eigenen iCloud, auf die nur du Zugriff hast, und genau das gibt das Datenschutzetikett im <a href=\"{appstore}\">App Store</a> an. Du kannst Vela den Zugriff auf deine Gesundheitsdaten jederzeit entziehen, in der Health-App oder in den Einstellungen der Uhr. Hinter Vela steht ein Mensch, mit Name und Adresse im <a href=\"{legal}\">Impressum</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "it": {
+    "principles_h2": "Cinque decisioni, prese per non cambiare idea.",
+    "principle": ("Benessere, non medicina", "Vela non è un dispositivo medico.",
+                  "Non diagnostica né cura alcuna malattia: ti aiuta a leggere i tuoi schemi. Per questo non ha marcatura CE medica né certificazioni sanitarie (<a href=\"{faq}\">ti spieghiamo perché</a>)."),
+    "faq": [
+      ("Vela è un dispositivo medico? Perché non ha la marcatura CE né certificazioni sanitarie?",
+       "No, ed è voluto. Vela è un'app per il benessere: confronta il tuo stress e la tua energia con la tua media, ma non diagnostica, cura, previene né monitora alcuna malattia. Nell'Unione europea la marcatura CE medica è riservata ai dispositivi medici (regolamento (UE) 2017/745), quindi un'app per il benessere non può averla senza ingannare chi la usa. Se qualcosa di ciò che vedi ti preoccupa, parlane con un professionista sanitario.",
+       "medical"),
+      ("Perché non ha un sigillo di privacy? Come so cosa succede ai miei dati?",
+       "Un sigillo di privacy certifica come un'azienda tratta i dati che raccoglie, e Vela non ne raccoglie nessuno: niente account, niente server, niente analisi, niente SDK di terze parti. I tuoi dati restano sul tuo orologio e nel tuo iCloud, a cui accedi solo tu, ed è quello che dichiara l'etichetta della privacy della <a href=\"{appstore}\">scheda dell'App Store</a>. Puoi togliere a Vela l'accesso ai tuoi dati sanitari quando vuoi, dall'app Salute o dalle Impostazioni dell'orologio. Dietro Vela c'è una persona, con nome e indirizzo nelle <a href=\"{legal}\">note legali</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "pt": {
+    "principles_h2": "Cinco decisões, tomadas para não mudar de ideias.",
+    "principle": ("Bem-estar, não medicina", "A Vela não é um dispositivo médico.",
+                  "Não diagnostica nem trata nenhuma doença: ajuda-o a ler os seus próprios padrões. Por isso não tem marcação CE médica nem selos de saúde (<a href=\"{faq}\">explicamos porquê</a>)."),
+    "faq": [
+      ("A Vela é um dispositivo médico? Porque não tem marcação CE nem nenhum selo de saúde?",
+       "Não, e é de propósito. A Vela é uma app de bem-estar: compara o seu stress e a sua energia com a sua própria média, mas não diagnostica, trata, previne nem monitoriza nenhuma doença. Na União Europeia, a marcação CE médica é só para dispositivos médicos (Regulamento (UE) 2017/745), por isso uma app de bem-estar não a pode ter sem enganar quem a usa. Se algo do que vê o preocupa, fale com um profissional de saúde.",
+       "medical"),
+      ("Porque não tem um selo de privacidade? Como sei o que acontece aos meus dados?",
+       "Um selo de privacidade certifica como uma empresa trata os dados que recolhe, e a Vela não recolhe nenhum: não há conta, nem servidores, nem analítica, nem SDK de terceiros. Os seus dados ficam no seu relógio e no seu próprio iCloud, a que só você tem acesso, e é isso que declara a etiqueta de privacidade da <a href=\"{appstore}\">página da App Store</a>. Pode retirar à Vela o acesso aos seus dados de saúde quando quiser, na app Saúde ou nas Definições do relógio. Por trás da Vela há uma pessoa, com o nome e a morada no <a href=\"{legal}\">aviso legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "cs": {
+    "principles_h2": "Pět rozhodnutí, učiněných tak, abychom je neměnili.",
+    "principle": ("Wellness, ne medicína", "Vela není zdravotnický prostředek.",
+                  "Nestanovuje diagnózy ani neléčí žádné onemocnění: pomáhá vám číst vaše vlastní vzorce. Proto nemá zdravotnické označení CE ani žádnou zdravotní certifikaci (<a href=\"{faq}\">vysvětlujeme proč</a>)."),
+    "faq": [
+      ("Je Vela zdravotnický prostředek? Proč nemá označení CE ani žádnou zdravotní certifikaci?",
+       "Není, a je to záměr. Vela je wellness aplikace: porovnává váš stres a energii s vaším vlastním průměrem, ale žádné onemocnění nediagnostikuje, neléčí, nepředchází mu ani ho nesleduje. V Evropské unii je zdravotnické označení CE určeno jen zdravotnickým prostředkům (nařízení (EU) 2017/745), takže wellness aplikace ho nesmí nést, aniž by klamala své uživatele. Pokud vás něco z toho, co vidíte, znepokojuje, poraďte se se zdravotníkem.",
+       "medical"),
+      ("Proč nemá pečeť ochrany soukromí? Jak poznám, co se děje s mými daty?",
+       "Pečeť ochrany soukromí potvrzuje, jak firma zachází s daty, která shromažďuje, a Vela žádná neshromažďuje: žádný účet, žádné servery, žádná analytika, žádná SDK třetích stran. Vaše data zůstávají v hodinkách a ve vašem vlastním iCloudu, kam máte přístup jen vy, a právě to uvádí štítek soukromí na <a href=\"{appstore}\">stránce v App Storu</a>. Přístup Vely k vašim zdravotním datům můžete kdykoli odebrat v aplikaci Zdraví nebo v Nastavení hodinek. Za Velou stojí člověk, jehož jméno a adresu najdete v <a href=\"{legal}\">právních informacích</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "el": {
+    "principles_h2": "Πέντε αποφάσεις, που πάρθηκαν για να μην τις αλλάξουμε.",
+    "principle": ("Ευεξία, όχι ιατρική", "Το Vela δεν είναι ιατροτεχνολογικό προϊόν.",
+                  "Δεν κάνει διάγνωση ούτε θεραπεύει καμία πάθηση: σας βοηθά να διαβάζετε τα δικά σας μοτίβα. Γι' αυτό δεν φέρει ιατρική σήμανση CE ούτε πιστοποίηση υγείας (<a href=\"{faq}\">σας εξηγούμε γιατί</a>)."),
+    "faq": [
+      ("Είναι το Vela ιατροτεχνολογικό προϊόν; Γιατί δεν έχει σήμανση CE ούτε πιστοποίηση υγείας;",
+       "Όχι, και αυτό είναι σκόπιμο. Το Vela είναι εφαρμογή ευεξίας: συγκρίνει το στρες και την ενέργειά σας με τον δικό σας μέσο όρο, αλλά δεν διαγιγνώσκει, δεν θεραπεύει, δεν προλαμβάνει ούτε παρακολουθεί καμία ασθένεια. Στην Ευρωπαϊκή Ένωση, η ιατρική σήμανση CE προορίζεται μόνο για ιατροτεχνολογικά προϊόντα (Κανονισμός (ΕΕ) 2017/745), οπότε μια εφαρμογή ευεξίας δεν μπορεί να τη φέρει χωρίς να παραπλανά όσους τη χρησιμοποιούν. Αν κάτι από όσα βλέπετε σας ανησυχεί, μιλήστε με έναν επαγγελματία υγείας.",
+       "medical"),
+      ("Γιατί δεν έχει σφραγίδα απορρήτου; Πώς ξέρω τι γίνεται με τα δεδομένα μου;",
+       "Μια σφραγίδα απορρήτου πιστοποιεί πώς μια εταιρεία χειρίζεται τα δεδομένα που συλλέγει, και το Vela δεν συλλέγει κανένα: δεν υπάρχει λογαριασμός, ούτε διακομιστές, ούτε αναλυτικά εργαλεία, ούτε SDK τρίτων. Τα δεδομένα σας μένουν στο ρολόι σας και στο δικό σας iCloud, όπου έχετε πρόσβαση μόνο εσείς, και αυτό δηλώνει η ετικέτα απορρήτου στη <a href=\"{appstore}\">σελίδα του App Store</a>. Μπορείτε να αφαιρέσετε από το Vela την πρόσβαση στα δεδομένα υγείας σας όποτε θέλετε, από την εφαρμογή Υγεία ή τις Ρυθμίσεις του ρολογιού. Πίσω από το Vela υπάρχει ένας άνθρωπος, με όνομα και διεύθυνση στις <a href=\"{legal}\">νομικές πληροφορίες</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "ja": {
+    "principles_h2": "考えを変えないために下した、5つの決定。",
+    "principle": ("ウェルネスであり、医療ではない", "Velaは医療機器ではありません。",
+                  "病気の診断や治療は行わず、あなた自身のパターンを読み取る手助けをします。そのため、医療機器としてのCEマークや健康関連の認証はありません（<a href=\"{faq}\">理由はこちら</a>）。"),
+    "faq": [
+      ("Velaは医療機器ですか？なぜCEマークや健康関連の認証がないのですか？",
+       "いいえ、意図的にそうしています。Velaはウェルネスアプリです。ストレスとエネルギーをあなた自身の平均と比べますが、病気の診断・治療・予防・監視は行いません。EUでは医療用のCEマークは医療機器のためのもの（規則 (EU) 2017/745）なので、ウェルネスアプリがそれを付ければ利用者を誤解させることになります。表示された内容が気になる場合は、医療の専門家にご相談ください。",
+       "medical"),
+      ("なぜプライバシー認証マークがないのですか？データがどう扱われるかはどうすれば分かりますか？",
+       "プライバシー認証マークは、企業が収集したデータをどう扱うかを証明するものですが、Velaはデータを一切収集しません。アカウントもサーバーも分析ツールも、他社のSDKもありません。データはあなたのApple Watchとあなた自身のiCloudにだけ保存され、アクセスできるのはあなただけです。<a href=\"{appstore}\">App Storeのページ</a>のプライバシーラベルにもそう記載されています。ヘルスケアデータへのVelaのアクセスは、ヘルスケアAppまたはApple Watchの設定からいつでも取り消せます。Velaは一人の個人が開発しており、氏名と住所は<a href=\"{legal}\">法的情報</a>に記載しています。",
+       "privacy-seal"),
+    ],
+  },
+}
+
+assert set(_TRUST) == set(ORDER), set(ORDER) ^ set(_TRUST)
+for _code, _n in _TRUST.items():
+    _l = L[_code]["landing"]
+    assert len(_l["principles"]) == 4, (_code, "principles")
+    _l["principles"].append(_n["principle"])
+    _l["principles_h2"] = _n["principles_h2"]
+    L[_code]["faq"].extend(_n["faq"])
 
 # ------------------------------------------------------------ generation
 

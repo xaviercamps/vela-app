@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vela — HRV pro Apple Watch. Žádné předplatné. Nikdy.</title>
-<meta name="description" content="Vela měří vaši variabilitu srdečního tepu (HRV/SDNN) na Apple Watch a vytváří vaši vlastní osobní základní linii. Vše se zpracovává na hodinkách. Synchronizuje se s vaším iCloudem. Žádné předplatné, nikdy.">
+<title>Vela — Stres a Baterie pro Apple Watch. Žádné předplatné. Nikdy.</title>
+<meta name="description" content="Vela měří váš stres a vaši Baterii na Apple Watch vůči vaší vlastní základní linii HRV: jak na tom jste právě teď, kolik vás nabil spánek a kam během dne mizí vaše energie. Vše se počítá v hodinkách. Žádné předplatné, nikdy.">
 <link rel="canonical" href="https://velahrv.com/cs/">
 <link rel="alternate" hreflang="es" href="https://velahrv.com/es/">
 <link rel="alternate" hreflang="en" href="https://velahrv.com/">
@@ -22,8 +22,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Vela HRV">
 <meta property="og:url" content="https://velahrv.com/cs/">
-<meta property="og:title" content="Vela — HRV pro Apple Watch. Žádné předplatné. Nikdy.">
-<meta property="og:description" content="Vela měří vaši variabilitu srdečního tepu (HRV/SDNN) na Apple Watch a vytváří vaši vlastní osobní základní linii. Vše se zpracovává na hodinkách. Synchronizuje se s vaším iCloudem. Žádné předplatné, nikdy.">
+<meta property="og:title" content="Vela — Stres a Baterie pro Apple Watch. Žádné předplatné. Nikdy.">
+<meta property="og:description" content="Vela měří váš stres a vaši Baterii na Apple Watch vůči vaší vlastní základní linii HRV: jak na tom jste právě teď, kolik vás nabil spánek a kam během dne mizí vaše energie. Vše se počítá v hodinkách. Žádné předplatné, nikdy.">
 <meta property="og:image" content="https://velahrv.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -40,10 +40,10 @@
 <meta property="og:locale:alternate" content="el_GR">
 <meta property="og:locale:alternate" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Vela — HRV pro Apple Watch. Žádné předplatné. Nikdy.">
-<meta name="twitter:description" content="Vela měří vaši variabilitu srdečního tepu (HRV/SDNN) na Apple Watch a vytváří vaši vlastní osobní základní linii. Vše se zpracovává na hodinkách. Synchronizuje se s vaším iCloudem. Žádné předplatné, nikdy.">
+<meta name="twitter:title" content="Vela — Stres a Baterie pro Apple Watch. Žádné předplatné. Nikdy.">
+<meta name="twitter:description" content="Vela měří váš stres a vaši Baterii na Apple Watch vůči vaší vlastní základní linii HRV: jak na tom jste právě teď, kolik vás nabil spánek a kam během dne mizí vaše energie. Vše se počítá v hodinkách. Žádné předplatné, nikdy.">
 <meta name="twitter:image" content="https://velahrv.com/assets/og-image.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Vela HRV", "description": "Vela měří vaši variabilitu srdečního tepu (HRV/SDNN) na Apple Watch a vytváří vaši vlastní osobní základní linii. Vše se zpracovává na hodinkách. Synchronizuje se s vaším iCloudem. Žádné předplatné, nikdy.", "applicationCategory": "HealthApplication", "operatingSystem": "watchOS 26", "url": "https://velahrv.com/cs/", "image": "https://velahrv.com/assets/icon-1024.png", "downloadUrl": "https://apps.apple.com/app/vela-hrv/id6762096428", "inLanguage": "cs", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "url": "https://apps.apple.com/app/vela-hrv/id6762096428"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Vela HRV", "description": "Vela měří váš stres a vaši Baterii na Apple Watch vůči vaší vlastní základní linii HRV: jak na tom jste právě teď, kolik vás nabil spánek a kam během dne mizí vaše energie. Vše se počítá v hodinkách. Žádné předplatné, nikdy.", "applicationCategory": "HealthApplication", "operatingSystem": "watchOS 26", "url": "https://velahrv.com/cs/", "image": "https://velahrv.com/assets/icon-1024.png", "downloadUrl": "https://apps.apple.com/app/vela-hrv/id6762096428", "inLanguage": "cs", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "url": "https://apps.apple.com/app/vela-hrv/id6762096428"}}</script>
 <link rel="icon" href="/assets/icon-1024.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -139,6 +139,13 @@
     text-decoration:none;
   }
   .brand img{ width:26px; height:26px; border-radius:7px; }
+  .nav-links{ display:flex; gap:28px; margin-left:auto; margin-right:28px; }
+  .nav-links a{
+    font-family:var(--mono); font-size:13px; color:var(--text-2);
+    text-decoration:none; transition:color .16s ease;
+  }
+  .nav-links a:hover{ color:var(--teal); }
+  section[id]{ scroll-margin-top:72px; }
   .pulse-dot{
     width:6px; height:6px; border-radius:50%;
     background:var(--teal);
@@ -203,12 +210,9 @@
     padding:88px 0 64px;
     position:relative;
   }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:56px;
-    align-items:center;
-  }
+  .hero-text{ max-width:720px; }
+  .hero-shot{ max-width:1040px; margin:56px auto 0; }
+  .hero .v2-hint{ max-width:none; margin:12px 0 0; font-size:13px; }
   .hero h1{
     font-size:clamp(34px, 5vw, 58px);
     line-height:1.06;
@@ -263,29 +267,6 @@
     box-shadow:0 8px 24px rgba(0,0,0,0.4);
   }
 
-  .wave-panel{
-    background:var(--bg-deep);
-    border:1px solid var(--hairline);
-    border-radius:20px;
-    padding:22px 20px 18px;
-  }
-  .wave-panel-head{
-    display:flex; justify-content:space-between; align-items:baseline;
-    font-family:var(--mono); font-size:11px; color:var(--text-3);
-    letter-spacing:0.06em; margin-bottom:10px;
-  }
-  .wave-panel-head span:last-child{ color:var(--teal); }
-  canvas#hero-wave{
-    width:100%; height:180px; display:block;
-  }
-  .wave-readout{
-    display:flex; justify-content:space-between;
-    margin-top:14px;
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--text-3);
-  }
-  .wave-readout b{ color:var(--text-1); font-weight:500; }
 
   /* ---------- SECTION SHELL ---------- */
   section{ padding:96px 0; }
@@ -349,12 +330,19 @@
     font-size:15px;
   }
   .principle strong{ color:var(--text-1); font-weight:500; }
+  .principle.wide{ grid-column:1 / -1; }
+  .principle a{ color:var(--teal); text-decoration:underline; text-underline-offset:3px; }
 
   /* ---------- WATCH SHOWCASE ---------- */
-  .shot-card{
+  /* Montages of several watches keep the app's background, framed as a card like the
+     rest of the page's panels. Single watches (the tours) are transparent and sit on the page. */
+  .frame{
     display:block;
+    border:1px solid var(--hairline);
+    border-radius:20px;
+    overflow:hidden;
   }
-  .shot-card img{ width:100%; height:auto; display:block; }
+  .frame img{ width:100%; height:auto; display:block; }
 
   .watch-showcase{ max-width:720px; margin:0 auto; }
 
@@ -363,7 +351,7 @@
     grid-template-columns:repeat(3, 1fr);
     gap:28px;
   }
-  .tour-item .shot-card{ margin-bottom:20px; }
+  .tour-item img{ width:100%; height:auto; display:block; margin-bottom:12px; }
   .tour-item .tag{
     font-family:var(--mono);
     font-size:11px;
@@ -377,6 +365,31 @@
     color:var(--text-2);
     font-size:14.5px;
   }
+  .tier{
+    display:inline-block; margin-left:10px; padding:2px 8px;
+    border:1px solid var(--hairline); border-radius:100px;
+    font-size:10px; letter-spacing:0.08em; color:var(--text-3); vertical-align:1px;
+  }
+  .tier-pro{ border-color:rgba(61,207,207,0.45); color:var(--teal); }
+
+  /* ---------- PRICING ---------- */
+  .plans{ display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; }
+  .plan{
+    border:1px solid var(--hairline); border-radius:20px;
+    padding:32px 28px; background:var(--bg);
+  }
+  .plan-pro{ border-color:rgba(61,207,207,0.45); box-shadow:0 0 40px rgba(61,207,207,0.08); }
+  .plan .tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+    color:var(--teal); text-transform:uppercase; display:block;
+  }
+  .plan-sub{ color:var(--text-1); font-size:20px; margin:10px 0 20px; }
+  .plan ul{ list-style:none; padding:0; margin:0; }
+  .plan li{
+    color:var(--text-2); font-size:15px; padding:9px 0 9px 22px; position:relative;
+    border-top:1px solid var(--hairline);
+  }
+  .plan li::before{ content:""; position:absolute; left:2px; top:17px; width:8px; height:8px; border-radius:50%; background:var(--teal); opacity:0.7; }
 
   /* ---------- CLOSING ---------- */
   .closing{
@@ -416,7 +429,8 @@
   .lang-row span{ color:var(--teal); }
 
   @media (max-width:820px){
-    .hero-grid{ grid-template-columns:1fr; }
+    .plans{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
     .principles-grid{ grid-template-columns:1fr; }
     .tour-grid{ grid-template-columns:1fr; gap:40px; }
     .hero{ padding-top:56px; }
@@ -437,6 +451,11 @@
       <img src="/assets/icon-1024.png" alt="">
       vela
     </a>
+    <div class="nav-links">
+      <a href="#battery">Baterie</a>
+      <a href="#stress">Stres</a>
+      <a href="#pricing">Cena</a>
+    </div>
     <a class="nav-cta" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">Stáhnout</a>
   </nav>
 </header>
@@ -444,49 +463,27 @@
 <main id="top">
 
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <p class="eyebrow">HRV pro Apple Watch</p>
-        <h1>Váš klid není <em>ničí průměr</em>.</h1>
-        <p>Vela měří vaši variabilitu srdečního tepu (SDNN) přímo na vašich Apple Watch a vytváří základní linii, která patří vám — ne obecný populační práh. Veškerý výpočet probíhá na hodinkách. Nic nikdy neprochází našimi servery, protože žádné nemáme.</p>
+    <div class="wrap">
+      <div class="hero-text">
+        <p class="eyebrow">Stres a Baterie pro Apple Watch</p>
+        <h1>Vaše energie a váš klid nejsou <em>ničí průměr</em>.</h1>
+        <p>Vela čte variabilitu vaší srdeční frekvence (SDNN) na Apple Watch a porovnává ji s vaší vlastní základní linií, ne s populačním prahem. Z toho vám řekne, kolik energie vám dnes zbývá, vaši Baterii, a jak na tom jste právě teď, váš stres. Veškerý výpočet probíhá v hodinkách. Nic neprochází našimi servery, protože žádné nemáme.</p>
         <div class="cta-row">
           <a class="badge-link" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">
             <img class="badge-appstore" src="/assets/app-store-badge-white.svg" alt="Stáhnout v App Store">
           </a>
         </div>
       </div>
-      <div class="wave-panel">
-        <div class="wave-panel-head">
-          <span>SDNN · ŽIVĚ</span>
-          <span>V KLIDU</span>
-        </div>
-        <canvas id="hero-wave" width="480" height="180"></canvas>
-        <div class="wave-readout">
-          <span>populační šum</span>
-          <span><b>vaše základní linie</b> se ustálí</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="v2">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Novinka ve Vela 2.0 · Veřejná beta</p>
-        <h2>Baterie pro vás, ne pro vaše hodinky.</h2>
-        <p>Vela 2.0 přidává Baterii: nabíjí se jen ve spánku a vybíjí se stresem, aktivitou a tréninky, měřeno vůči vaší vlastní základní linii HRV. Už teď je ve veřejné betě v TestFlightu, před vydáním v prosinci.</p>
-        <a class="beta-cta" href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">Připojit se k betě v TestFlightu</a>
-      </div>
-      <div class="watch-showcase v2-showcase">
-        <a class="shot-card v2-zoom" href="/assets/vela-2-beta.png" aria-haspopup="dialog">
-          <img src="/assets/vela-2-beta.png" alt="Přehled Vela 2.0: Baterie na 78 s křivkou dne; nabíjí ji jen spánek; počítají se zdřímnutí i noční směny; založeno na SDNN; co vás dnes vyčerpalo nejvíc, 45minutový trénink za −18; ranní přehled zdarma; Vela Pro jako jednorázový nákup; zpracování v zařízení a žádné servery Vely; a pozvánka do veřejné bety v TestFlightu." width="3840" height="2160" loading="lazy" decoding="async">
+      <div class="hero-shot">
+        <a class="frame v2-zoom" href="/assets/vela-2-battery-cs.jpg" aria-haspopup="dialog">
+          <img src="/assets/vela-2-battery-cs.jpg" alt="Tři Apple Watch Ultra s Velou: uprostřed křivka baterie za den, teď na 44 po nočním nabití na 80; po stranách úroveň stresu (34, nízká) a stav baterie (44, střední)." width="2400" height="1600" decoding="async">
         </a>
         <p class="v2-hint">Klepnutím na obrázek ho zobrazíte v plné velikosti</p>
       </div>
-      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="Baterie pro vás, ne pro vaše hodinky.">
+      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="Vaše energie a váš klid nejsou ničí průměr.">
         <button class="v2-close" type="button" aria-label="Zavřít">×</button>
         <div class="v2-lightbox-scroll">
-          <img src="/assets/vela-2-beta.png" alt="Přehled Vela 2.0: Baterie na 78 s křivkou dne; nabíjí ji jen spánek; počítají se zdřímnutí i noční směny; založeno na SDNN; co vás dnes vyčerpalo nejvíc, 45minutový trénink za −18; ranní přehled zdarma; Vela Pro jako jednorázový nákup; zpracování v zařízení a žádné servery Vely; a pozvánka do veřejné bety v TestFlightu." width="3840" height="2160" loading="lazy" decoding="async">
+          <img src="/assets/vela-2-battery-cs.jpg" alt="Tři Apple Watch Ultra s Velou: uprostřed křivka baterie za den, teď na 44 po nočním nabití na 80; po stranách úroveň stresu (34, nízká) a stav baterie (44, střední)." width="2400" height="1600" loading="lazy" decoding="async">
         </div>
       </dialog>
     </div>
@@ -497,7 +494,7 @@
       <div class="section-head">
         <p class="eyebrow">O názvu</p>
         <h2>Proč „Vela“</h2>
-        <p>„Vela“ je španělsky také plachta lodi — z latinského velum. Plachetnice s větrem nebojuje: čte ho a upravuje kurz. To je myšlenka celé aplikace. Místo aby vás srovnávala s vnějším standardem, Vela čte vaši vlastní osobní základní linii a pomáhá vám pochopit vaše vlastní vzorce. Se stresem se nebojuje — čte se a přizpůsobuje.</p>
+        <p>„Vela“ je španělsky také plachta lodi — z latinského velum. Plachetnice s větrem nebojuje: čte ho a upravuje kurz. To je myšlenka celé aplikace. Místo aby vás srovnávala s vnějším standardem, Vela čte vaši vlastní osobní základní linii a pomáhá vám pochopit vaše vlastní vzorce. Se stresem a únavou se nebojuje: čtou se a upravuje se kurz.</p>
       </div>
     </div>
   </section>
@@ -507,7 +504,7 @@
       <div class="section-head">
         <p class="eyebrow">Proč průměr nefunguje</p>
         <h2>25&nbsp;ms HRV může být pro vás vysoká a pro někoho jiného nízká.</h2>
-        <p>HRV se mezi lidmi enormně liší. Populační práh zachází se všemi stejně — a přesně proto se skoro vždy mýlí. Vela vytváří vaši vlastní základní linii z vaší skutečné historie: pokud už na Apple Watch data HRV máte, může začít hned první den; pokud jste noví, ustálí se za 7–14 dní.</p>
+        <p>HRV se mezi lidmi enormně liší. Populační práh zachází se všemi stejně — a přesně proto se skoro vždy mýlí. Vela vytváří vaši vlastní základní linii z vaší skutečné historie: pokud už na Apple Watch data HRV máte, může začít hned první den; pokud jste noví, ustálí se za 7–14 dní. A platí to pro obojí: váš stres se měří vůči vaší obvyklé HRV, a to, kolik vás nabije noc, také.</p>
       </div>
       <div class="baseline-figure">
         <svg viewBox="0 0 800 180" preserveAspectRatio="none">
@@ -526,73 +523,53 @@
     </div>
   </section>
 
-  <section>
+  <section id="battery">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">Jak to funguje</p>
-        <h2>Čtyři rozhodnutí, učiněná tak, abychom je neměnili.</h2>
-      </div>
-      <div class="principles-grid">
-        <div class="principle">
-          <span class="tag">On-device</span>
-          <p><strong>Veškerý výpočet probíhá na vašich Watch.</strong> HealthKit poskytuje data, hodinky udělají zbytek. Žádná data HRV nikdy neopustí vaše zařízení směrem k serveru Vely.</p>
-        </div>
-        <div class="principle">
-          <span class="tag">Váš iCloud, ne náš</span>
-          <p><strong>Synchronizace používá váš vlastní účet iCloud</strong> přes CloudKit. Vela vaše data nikde nehostuje — nemůže, protože nemá kde.</p>
-        </div>
-        <div class="principle">
-          <span class="tag">Žádné předplatné. Nikdy.</span>
-          <p><strong>Žádné měsíční ani roční poplatky.</strong> Vela je dnes zdarma. V budoucnu bude placená verze Pro s jednorázovou platbou — nikdy ne předplatné.</p>
-        </div>
-        <div class="principle">
-          <span class="tag">Přístupná ve výchozím stavu</span>
-          <p><strong>VoiceOver, Dynamic Type, Reduce Motion</strong> a 12 jazyků: španělština, katalánština, baskičtina, galicijština, angličtina, francouzština, němčina, italština, portugalština, čeština, řečtina a japonština.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Na vašem zápěstí</p>
-        <h2>Jedno skóre, jeden stav, jeden trend.</h2>
-        <p>Barva a textový popisek jdou vždy spolu — navrženo i s ohledem na barvoslepost. Každé skóre je vysvětleno: který rozsah se počítá jako „Normální“, kdy se stává „Vysokým“ a proč.</p>
-      </div>
-      <div class="watch-showcase">
-        <div class="shot-card">
-          <img src="/assets/watch-mockup-combined.png" alt="Tři obrazovky Vely na Apple Watch Ultra: aktuální skóre stresu se stavem Normální, týdenní trend s denním průměrem a obrazovka vysvětlující rozsahy Normální a Vysoký." width="1920" height="1920" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Rychlá prohlídka</p>
-        <h2>Tři obrazovky, každá s jediným úkolem.</h2>
+        <p class="eyebrow">Baterie · Novinka ve Vela 2.0</p>
+        <h2>Baterie pro vás, ne pro vaše hodinky.</h2>
+        <p>Nabíjí se jen ve spánku, včetně zdřímnutí a denního spánku po noční směně, a vybíjí se stresem, aktivitou, tréninky a hodinami v bdělém stavu. Pokud vám den připadal dlouhý, Baterie vám ukáže proč.</p>
       </div>
       <div class="tour-grid">
         <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/watch-shot-score.png" alt="Hlavní obrazovka Vely se skóre stresu 68, stav Normální, spočítáno v daném okamžiku." width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
+          <img src="/assets/tour-charge-cs.webp" alt="Obrazovka Vely s nočním nabitím: na 80, o 27 bodů víc ve spánku, 7 h 15 min spánku a HRV ve spánku o 9 % nad průměrem." width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">Vaše nabití<span class="tier">Zdarma</span></span>
+          <p>Kolik vás nabila noc a z čeho to vychází: jak dlouho jste spali a vaše HRV ve spánku ve srovnání s vaším průměrem.</p>
+        </div>
+        <div class="tour-item">
+          <img src="/assets/tour-curve-cs.webp" alt="Křivka baterie za den: zelené nabíjení v noci až na 80 a modré vybíjení během dne až na 47, se dvěma vyznačenými tréninky." width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">Křivka dne<span class="tier tier-pro">Pro</span></span>
+          <p>Jak stoupala, zatímco jste spali, a jak klesá od chvíle, kdy vstanete, s každým tréninkem vyznačeným v jeho čase.</p>
+        </div>
+        <div class="tour-item">
+          <img src="/assets/tour-spent-cs.webp" alt="Rozpis dnešní spotřeby: 33 bodů od probuzení, 7 za stres a aktivitu, 12 za hodinu tréninku a 14 za čas v bdělém stavu." width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">Kam se poděla<span class="tier tier-pro">Pro</span></span>
+          <p>Co jste spotřebovali od probuzení, rozdělené na stres a aktivitu, tréninky a čas v bdělém stavu. Popisuje, co se stalo, bez rad.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stress">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Stres</p>
+        <h2>Jedno skóre, jeden stav, jeden trend.</h2>
+        <p>Vaše aktuální úroveň stresu, den hodinu po hodině a co znamená každý rozsah. Barva a textový popisek jdou vždy spolu, navrženo i s ohledem na barvoslepost. Vše kolem stresu je zdarma.</p>
+      </div>
+      <div class="tour-grid">
+        <div class="tour-item">
+          <img src="/assets/tour-score-cs.webp" alt="Hlavní obrazovka Vela s úrovní stresu 34, stav Nízký, spočítanou v daném okamžiku." width="1200" height="1200" loading="lazy" decoding="async">
           <span class="tag">Aktuální skóre</span>
           <p>Jedno číslo, jeden stav, spočítané kompletně na hodinkách — bez čekání na jakoukoli synchronizaci.</p>
         </div>
         <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/watch-shot-trend.png" alt="Graf trendu s denním průměrem stresu a hodinovými měřeními, porovnanými s osobní základní linií." width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
+          <img src="/assets/tour-trend-cs.webp" alt="Graf trendu s denním průměrem stresu a hodinovými měřeními, porovnanými s osobní základní linií." width="1200" height="1200" loading="lazy" decoding="async">
           <span class="tag">Trend</span>
           <p>Každé měření dne, porovnané s vaší vlastní přerušovanou čárou — ne s ničí jinou.</p>
         </div>
         <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/watch-shot-explain.png" alt="Obrazovka vysvětlující rozsahy stresu: Normální mezi 40 a 69, Vysoký mezi 70 a 100." width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
+          <img src="/assets/tour-ranges-cs.webp" alt="Obrazovka vysvětlující rozsahy stresu: Normální mezi 40 a 69, Vysoký mezi 70 a 100." width="1200" height="1200" loading="lazy" decoding="async">
           <span class="tag">Vysvětlené rozsahy</span>
           <p>Žádná záhadná čísla: každý rozsah říká, co znamená a co čekat.</p>
         </div>
@@ -603,13 +580,78 @@
   <section>
     <div class="wrap">
       <div class="section-head">
+        <p class="eyebrow">Jak to funguje</p>
+        <h2>Pět rozhodnutí, učiněných tak, abychom je neměnili.</h2>
+      </div>
+      <div class="principles-grid">
+        <div class="principle">
+          <span class="tag">On-device</span>
+          <p><strong>Veškerý výpočet probíhá na vašich Watch.</strong> HealthKit poskytuje data, hodinky udělají zbytek. Vaše HRV, váš spánek ani vaše aktivita nikdy neopustí vaše zařízení směrem k serveru Vely.</p>
+        </div>
+        <div class="principle">
+          <span class="tag">Váš iCloud, ne náš</span>
+          <p><strong>Synchronizace používá váš vlastní účet iCloud</strong> přes CloudKit. Vela vaše data nikde nehostuje — nemůže, protože nemá kde.</p>
+        </div>
+        <div class="principle">
+          <span class="tag">Žádné sledování</span>
+          <p><strong>Žádná analytika, žádné reklamy, žádná SDK třetích stran.</strong> Vela neví, kdo jste, ani kdy aplikaci otevíráte: jediné, co opouští hodinky, jde do vašeho vlastního iCloudu.</p>
+        </div>
+        <div class="principle">
+          <span class="tag">Přístupná ve výchozím stavu</span>
+          <p><strong>VoiceOver, Dynamic Type, Reduce Motion</strong> a 12 jazyků: španělština, katalánština, baskičtina, galicijština, angličtina, francouzština, němčina, italština, portugalština, čeština, řečtina a japonština.</p>
+        </div>
+        <div class="principle wide">
+          <span class="tag">Wellness, ne medicína</span>
+          <p><strong>Vela není zdravotnický prostředek.</strong> Nestanovuje diagnózy ani neléčí žádné onemocnění: pomáhá vám číst vaše vlastní vzorce. Proto nemá zdravotnické označení CE ani žádnou zdravotní certifikaci (<a href="/cs/support/#medical">vysvětlujeme proč</a>).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="baseline">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Cena</p>
+        <h2>Zdarma na začátek. Pro jen jednou.</h2>
+        <p>Žádné měsíční ani roční poplatky. Vela Pro zaplatíte jednou a je vaše.</p>
+      </div>
+      <div class="plans">
+        <div class="plan plan-free">
+          <span class="tag">Zdarma</span>
+          <p class="plan-sub">Pro všechny</p>
+          <ul>
+            <li>Vaše úroveň stresu v reálném čase, se stavem a vysvětlením</li>
+            <li>Dnešní den hodinu po hodině a historie stresu</li>
+            <li>Týdenní analýzy a upozornění na vysoký stres</li>
+            <li>Nabití za každou noc a z čeho vychází</li>
+            <li>Komplikace se stresem a nočním nabitím</li>
+          </ul>
+        </div>
+        <div class="plan plan-pro">
+          <span class="tag">Vela Pro</span>
+          <p class="plan-sub">Jednorázový nákup</p>
+          <ul>
+            <li>Baterie v reálném čase, po celý den</li>
+            <li>Křivka dne s nočním nabíjením a každým tréninkem</li>
+            <li>Kam se poděla: stres a aktivita, tréninky a čas v bdělém stavu</li>
+            <li>Historie baterie po měsících, týdnech a dnech</li>
+            <li>Komplikace s Baterií v reálném čase a dnešními hodinovými sloupci</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
         <p class="eyebrow">Jak začít</p>
         <h2>Než začneme cokoli měřit, požádáme o svolení.</h2>
-        <p>Vela žádá o přístup k vaší HRV výslovně, ne v drobném písmu. A pokud s měřením HRV začínáte, řekne vám, jak dlouho potrvá, než budete mít spolehlivou základní linii — aniž by předstírala, že vás zná už první den.</p>
+        <p>Vela žádá o přístup k vašim zdravotním datům výslovně, ne v drobném písmu, a řekne vám, k čemu které používá. A pokud s měřením HRV začínáte, řekne vám, jak dlouho potrvá, než budete mít spolehlivou základní linii — aniž by předstírala, že vás zná už první den.</p>
       </div>
       <div class="watch-showcase">
-        <div class="shot-card">
-          <img src="/assets/watch-onboarding.png" alt="Úvodní průvodce Vely na Apple Watch: uvítací obrazovka, výslovná žádost o přístup k datům variability srdečního tepu a obrazovka budování základní linie se zbývajícími 7 dny." width="1920" height="1920" loading="lazy" decoding="async">
+        <div class="frame">
+          <img src="/assets/onboarding-cs.jpg" alt="Dva kroky úvodu Vela na Apple Watch: uvítací obrazovka a žádost o přístup ke zdravotním datům, která vysvětluje, k čemu se která používají." width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -619,7 +661,7 @@
     <div class="wrap">
       <p class="eyebrow" style="justify-content:center">Stáhněte si ji dnes</p>
       <h2>Žádné předplatné. <em>Nikdy.</em></h2>
-      <p>Vela je k dispozici zdarma v App Store pro Apple Watch.</p>
+      <p>Vela je zdarma v App Store pro Apple Watch, s Vela Pro jako jednorázovým nákupem.</p>
       <div class="cta-row">
         <a class="badge-link" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">
           <img class="badge-appstore" src="/assets/app-store-badge-white.svg" alt="Stáhnout v App Store">
@@ -658,74 +700,6 @@
     if(e.target === box || e.target.classList.contains('v2-lightbox-scroll') || window.innerWidth > 700) box.close();
   });
   box.addEventListener('close', function(){ zoom.focus(); });
-})();
-</script>
-
-<script>
-(function(){
-  var canvas = document.getElementById('hero-wave');
-  var ctx = canvas.getContext('2d');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W, H, dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  function resize(){
-    var rect = canvas.getBoundingClientRect();
-    W = rect.width; H = rect.height;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  var t = 0;
-  var noise = 1;
-
-  function drawWave(offsetY, amp, freq, phase, color, glow, lineWidth){
-    ctx.beginPath();
-    for(var x=0; x<=W; x+=4){
-      var n = reduceMotion ? 0 : (Math.random()-0.5) * noise * 6;
-      var y = offsetY + Math.sin((x*freq) + phase) * amp + n;
-      if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    if(glow){
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
-    } else {
-      ctx.shadowBlur = 0;
-    }
-    ctx.stroke();
-  }
-
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    t += 0.02;
-    if(!reduceMotion && noise > 0){ noise = Math.max(0, noise - 0.0018); }
-
-    ctx.beginPath();
-    ctx.setLineDash([6,7]);
-    ctx.moveTo(0, H*0.5);
-    ctx.lineTo(W, H*0.5);
-    ctx.strokeStyle = 'rgba(245,248,252,0.18)';
-    ctx.lineWidth = 1;
-    ctx.shadowBlur = 0;
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    drawWave(H*0.5, H*0.22, 0.045, t, '#3DCFCF', true, 2.4);
-
-    if(!reduceMotion){
-      requestAnimationFrame(frame);
-    }
-  }
-
-  if(reduceMotion){
-    noise = 0;
-    frame();
-  } else {
-    requestAnimationFrame(frame);
-  }
 })();
 </script>
 

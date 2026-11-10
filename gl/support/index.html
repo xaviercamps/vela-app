@@ -166,6 +166,8 @@
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -271,6 +273,16 @@
         <div class="faq-item">
           <h3>Que permisos necesita Vela?</h3>
           <p>Vela solicita acceso só de lectura a HealthKit: a variabilidade da frecuencia cardíaca para a túa puntuación de estrés, e o sono, os pasos, a enerxía activa, os adestramentos e a frecuencia cardíaca para a túa Batería. Son datos que o teu Apple Watch xa recolle automaticamente. Se queres, tamén che pide permiso para enviarche notificacións cos avisos de estrés.</p>
+        </div>
+
+        <div class="faq-item" id="medical">
+          <h3>Vela é un produto sanitario? Por que non leva marcado CE nin ningún selo sanitario?</h3>
+          <p>Non, e é a propósito. Vela é unha app de benestar: compara o teu estrés e a túa enerxía coa túa propia media, pero non diagnostica, trata, prevén nin vixía ningunha enfermidade. Na Unión Europea, o marcado CE sanitario é só para os produtos sanitarios (Regulamento (UE) 2017/745), así que unha app de benestar non pode levalo sen enganar a quen a usa. Se algo do que ves te preocupa, coméntao cun profesional sanitario.</p>
+        </div>
+
+        <div class="faq-item" id="privacy-seal">
+          <h3>Por que non ten un selo de privacidade? Como sei que pasa cos meus datos?</h3>
+          <p>Un selo de privacidade certifica como unha empresa trata os datos que recolle, e Vela non recolle ningún: non hai conta, nin servidores, nin analítica, nin SDK de terceiros. Os teus datos quedan no teu reloxo e no teu propio iCloud, onde só entras ti, e así o declara a etiqueta de privacidade da <a href="https://apps.apple.com/app/vela-hrv/id6762096428">ficha da App Store</a>. Podes quitarlle a Vela o acceso aos teus datos de saúde cando queiras, desde a app Saúde ou os Axustes do reloxo. Detrás de Vela hai unha persoa, co seu nome e o seu enderezo no <a href="/gl/legal/">aviso legal</a>.</p>
         </div>
       </section>
     </div>

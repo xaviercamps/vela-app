@@ -166,6 +166,8 @@
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -271,6 +273,16 @@
         <div class="faq-item">
           <h3>What permissions does Vela need?</h3>
           <p>Vela requests read-only access to HealthKit: heart rate variability for your stress score, and sleep, steps, active energy, workouts and heart rate for your Battery. This is data your Apple Watch already collects automatically. If you want, it also asks for permission to send you notifications for stress alerts.</p>
+        </div>
+
+        <div class="faq-item" id="medical">
+          <h3>Is Vela a medical device? Why doesn't it have a CE mark or any health certification?</h3>
+          <p>No, and that's deliberate. Vela is a wellness app: it compares your stress and your energy with your own average, but it doesn't diagnose, treat, prevent or monitor any disease. In the European Union, the medical CE mark is only for medical devices (Regulation (EU) 2017/745), so a wellness app can't carry one without misleading the people who use it. If anything you see worries you, talk to a healthcare professional.</p>
+        </div>
+
+        <div class="faq-item" id="privacy-seal">
+          <h3>Why doesn't it have a privacy seal? How do I know what happens to my data?</h3>
+          <p>A privacy seal certifies how a company handles the data it collects, and Vela collects none: there's no account, no servers, no analytics and no third-party SDKs. Your data stays on your watch and in your own iCloud, where only you can get in, and that's what the privacy label on the <a href="https://apps.apple.com/app/vela-hrv/id6762096428">App Store listing</a> declares. You can remove Vela's access to your health data at any time, from the Health app or your watch's Settings. Behind Vela there's a person, whose name and address are in the <a href="/legal/">legal notice</a>.</p>
         </div>
       </section>
     </div>

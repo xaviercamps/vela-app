@@ -166,6 +166,8 @@
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -271,6 +273,16 @@
         <div class="faq-item">
           <h3>Zein baimen behar ditu Velak?</h3>
           <p>Velak HealthKit-erako irakurtzeko sarbidea soilik eskatzen du: bihotz-maiztasunaren aldakortasuna zure estres-puntuaziorako, eta loa, urratsak, energia aktiboa, entrenamenduak eta bihotz-maiztasuna zure Bateriarako. Zure Apple Watch-ak dagoeneko automatikoki biltzen dituen datuak dira. Nahi baduzu, estres-abisuen jakinarazpenak bidaltzeko baimena ere eskatzen dizu.</p>
+        </div>
+
+        <div class="faq-item" id="medical">
+          <h3>Vela produktu sanitario bat al da? Zergatik ez darama CE markarik ez osasun-zigilurik?</h3>
+          <p>Ez, eta nahita da. Vela ongizaterako aplikazio bat da: zure estresa eta energia zure batez bestekoarekin alderatzen ditu, baina ez du gaixotasunik diagnostikatzen, tratatzen, prebenitzen ez zaintzen. Europar Batasunean, CE marka sanitarioa produktu sanitarioentzat bakarrik da ((EB) 2017/745 Erregelamendua); beraz, ongizaterako aplikazio batek ezin du eraman, erabiltzen duena engainatu gabe. Ikusten duzun zerbaitek kezkatzen bazaitu, hitz egin osasun-profesional batekin.</p>
+        </div>
+
+        <div class="faq-item" id="privacy-seal">
+          <h3>Zergatik ez du pribatutasun-zigilurik? Nola jakin zer gertatzen den nire datuekin?</h3>
+          <p>Pribatutasun-zigilu batek ziurtatzen du enpresa batek nola tratatzen dituen biltzen dituen datuak, eta Velak ez du bat ere biltzen: ez dago konturik, ez zerbitzaririk, ez analitikarik, ez hirugarrenen SDKrik. Zure datuak zure erlojuan eta zure iCloud-ean geratzen dira, eta zuk bakarrik sar zaitezke bertara; hala adierazten du <a href="https://apps.apple.com/app/vela-hrv/id6762096428">App Storeko fitxako</a> pribatutasun-etiketak. Nahi duzunean ken diezaiokezu Velari zure osasun-datuetarako sarbidea, Osasuna aplikaziotik edo erlojuaren Ezarpenetatik. Velaren atzean pertsona bat dago, eta haren izena eta helbidea <a href="/eu/legal/">lege-oharrean</a> daude.</p>
         </div>
       </section>
     </div>

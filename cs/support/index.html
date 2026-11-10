@@ -166,6 +166,8 @@
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -271,6 +273,16 @@
         <div class="faq-item">
           <h3>Jaká oprávnění Vela potřebuje?</h3>
           <p>Vela žádá o přístup k HealthKitu pouze pro čtení: variabilitu srdečního tepu pro vaše skóre stresu a spánek, kroky, aktivní energii, tréninky a srdeční tep pro vaši Baterii. Jsou to data, která vaše Apple Watch už automaticky shromažďují. Pokud chcete, požádá také o povolení posílat vám oznámení s upozorněními na stres.</p>
+        </div>
+
+        <div class="faq-item" id="medical">
+          <h3>Je Vela zdravotnický prostředek? Proč nemá označení CE ani žádnou zdravotní certifikaci?</h3>
+          <p>Není, a je to záměr. Vela je wellness aplikace: porovnává váš stres a energii s vaším vlastním průměrem, ale žádné onemocnění nediagnostikuje, neléčí, nepředchází mu ani ho nesleduje. V Evropské unii je zdravotnické označení CE určeno jen zdravotnickým prostředkům (nařízení (EU) 2017/745), takže wellness aplikace ho nesmí nést, aniž by klamala své uživatele. Pokud vás něco z toho, co vidíte, znepokojuje, poraďte se se zdravotníkem.</p>
+        </div>
+
+        <div class="faq-item" id="privacy-seal">
+          <h3>Proč nemá pečeť ochrany soukromí? Jak poznám, co se děje s mými daty?</h3>
+          <p>Pečeť ochrany soukromí potvrzuje, jak firma zachází s daty, která shromažďuje, a Vela žádná neshromažďuje: žádný účet, žádné servery, žádná analytika, žádná SDK třetích stran. Vaše data zůstávají v hodinkách a ve vašem vlastním iCloudu, kam máte přístup jen vy, a právě to uvádí štítek soukromí na <a href="https://apps.apple.com/app/vela-hrv/id6762096428">stránce v App Storu</a>. Přístup Vely k vašim zdravotním datům můžete kdykoli odebrat v aplikaci Zdraví nebo v Nastavení hodinek. Za Velou stojí člověk, jehož jméno a adresu najdete v <a href="/cs/legal/">právních informacích</a>.</p>
         </div>
       </section>
     </div>

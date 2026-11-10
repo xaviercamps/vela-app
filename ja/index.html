@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vela — Apple Watch 用 HRV。サブスクなし。ずっと。</title>
-<meta name="description" content="Vela は Apple Watch で心拍変動（HRV/SDNN）を測定し、あなた自身の個人ベースラインを構築します。すべては時計上で処理されます。iCloud と同期します。サブスクリプションは、ずっとありません。">
+<title>Vela — Apple Watch 用ストレスとバッテリー。サブスクなし。ずっと。</title>
+<meta name="description" content="Vela は Apple Watch で、あなた自身の HRV ベースラインを基準にストレスとバッテリーを測ります。いまの状態、睡眠でどれだけ充電されたか、日中にエネルギーが何に使われたか。計算はすべて時計の中で行われます。サブスクなし、ずっと。">
 <link rel="canonical" href="https://velahrv.com/ja/">
 <link rel="alternate" hreflang="es" href="https://velahrv.com/es/">
 <link rel="alternate" hreflang="en" href="https://velahrv.com/">
@@ -22,8 +22,8 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Vela HRV">
 <meta property="og:url" content="https://velahrv.com/ja/">
-<meta property="og:title" content="Vela — Apple Watch 用 HRV。サブスクなし。ずっと。">
-<meta property="og:description" content="Vela は Apple Watch で心拍変動（HRV/SDNN）を測定し、あなた自身の個人ベースラインを構築します。すべては時計上で処理されます。iCloud と同期します。サブスクリプションは、ずっとありません。">
+<meta property="og:title" content="Vela — Apple Watch 用ストレスとバッテリー。サブスクなし。ずっと。">
+<meta property="og:description" content="Vela は Apple Watch で、あなた自身の HRV ベースラインを基準にストレスとバッテリーを測ります。いまの状態、睡眠でどれだけ充電されたか、日中にエネルギーが何に使われたか。計算はすべて時計の中で行われます。サブスクなし、ずっと。">
 <meta property="og:image" content="https://velahrv.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -40,10 +40,10 @@
 <meta property="og:locale:alternate" content="cs_CZ">
 <meta property="og:locale:alternate" content="el_GR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Vela — Apple Watch 用 HRV。サブスクなし。ずっと。">
-<meta name="twitter:description" content="Vela は Apple Watch で心拍変動（HRV/SDNN）を測定し、あなた自身の個人ベースラインを構築します。すべては時計上で処理されます。iCloud と同期します。サブスクリプションは、ずっとありません。">
+<meta name="twitter:title" content="Vela — Apple Watch 用ストレスとバッテリー。サブスクなし。ずっと。">
+<meta name="twitter:description" content="Vela は Apple Watch で、あなた自身の HRV ベースラインを基準にストレスとバッテリーを測ります。いまの状態、睡眠でどれだけ充電されたか、日中にエネルギーが何に使われたか。計算はすべて時計の中で行われます。サブスクなし、ずっと。">
 <meta name="twitter:image" content="https://velahrv.com/assets/og-image.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Vela HRV", "description": "Vela は Apple Watch で心拍変動（HRV/SDNN）を測定し、あなた自身の個人ベースラインを構築します。すべては時計上で処理されます。iCloud と同期します。サブスクリプションは、ずっとありません。", "applicationCategory": "HealthApplication", "operatingSystem": "watchOS 26", "url": "https://velahrv.com/ja/", "image": "https://velahrv.com/assets/icon-1024.png", "downloadUrl": "https://apps.apple.com/app/vela-hrv/id6762096428", "inLanguage": "ja", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "url": "https://apps.apple.com/app/vela-hrv/id6762096428"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Vela HRV", "description": "Vela は Apple Watch で、あなた自身の HRV ベースラインを基準にストレスとバッテリーを測ります。いまの状態、睡眠でどれだけ充電されたか、日中にエネルギーが何に使われたか。計算はすべて時計の中で行われます。サブスクなし、ずっと。", "applicationCategory": "HealthApplication", "operatingSystem": "watchOS 26", "url": "https://velahrv.com/ja/", "image": "https://velahrv.com/assets/icon-1024.png", "downloadUrl": "https://apps.apple.com/app/vela-hrv/id6762096428", "inLanguage": "ja", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "url": "https://apps.apple.com/app/vela-hrv/id6762096428"}}</script>
 <link rel="icon" href="/assets/icon-1024.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -139,6 +139,13 @@
     text-decoration:none;
   }
   .brand img{ width:26px; height:26px; border-radius:7px; }
+  .nav-links{ display:flex; gap:28px; margin-left:auto; margin-right:28px; }
+  .nav-links a{
+    font-family:var(--mono); font-size:13px; color:var(--text-2);
+    text-decoration:none; transition:color .16s ease;
+  }
+  .nav-links a:hover{ color:var(--teal); }
+  section[id]{ scroll-margin-top:72px; }
   .pulse-dot{
     width:6px; height:6px; border-radius:50%;
     background:var(--teal);
@@ -203,12 +210,9 @@
     padding:88px 0 64px;
     position:relative;
   }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:56px;
-    align-items:center;
-  }
+  .hero-text{ max-width:720px; }
+  .hero-shot{ max-width:1040px; margin:56px auto 0; }
+  .hero .v2-hint{ max-width:none; margin:12px 0 0; font-size:13px; }
   .hero h1{
     font-size:clamp(34px, 5vw, 58px);
     line-height:1.06;
@@ -263,29 +267,6 @@
     box-shadow:0 8px 24px rgba(0,0,0,0.4);
   }
 
-  .wave-panel{
-    background:var(--bg-deep);
-    border:1px solid var(--hairline);
-    border-radius:20px;
-    padding:22px 20px 18px;
-  }
-  .wave-panel-head{
-    display:flex; justify-content:space-between; align-items:baseline;
-    font-family:var(--mono); font-size:11px; color:var(--text-3);
-    letter-spacing:0.06em; margin-bottom:10px;
-  }
-  .wave-panel-head span:last-child{ color:var(--teal); }
-  canvas#hero-wave{
-    width:100%; height:180px; display:block;
-  }
-  .wave-readout{
-    display:flex; justify-content:space-between;
-    margin-top:14px;
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--text-3);
-  }
-  .wave-readout b{ color:var(--text-1); font-weight:500; }
 
   /* ---------- SECTION SHELL ---------- */
   section{ padding:96px 0; }
@@ -349,12 +330,19 @@
     font-size:15px;
   }
   .principle strong{ color:var(--text-1); font-weight:500; }
+  .principle.wide{ grid-column:1 / -1; }
+  .principle a{ color:var(--teal); text-decoration:underline; text-underline-offset:3px; }
 
   /* ---------- WATCH SHOWCASE ---------- */
-  .shot-card{
+  /* Montages of several watches keep the app's background, framed as a card like the
+     rest of the page's panels. Single watches (the tours) are transparent and sit on the page. */
+  .frame{
     display:block;
+    border:1px solid var(--hairline);
+    border-radius:20px;
+    overflow:hidden;
   }
-  .shot-card img{ width:100%; height:auto; display:block; }
+  .frame img{ width:100%; height:auto; display:block; }
 
   .watch-showcase{ max-width:720px; margin:0 auto; }
 
@@ -363,7 +351,7 @@
     grid-template-columns:repeat(3, 1fr);
     gap:28px;
   }
-  .tour-item .shot-card{ margin-bottom:20px; }
+  .tour-item img{ width:100%; height:auto; display:block; margin-bottom:12px; }
   .tour-item .tag{
     font-family:var(--mono);
     font-size:11px;
@@ -377,6 +365,31 @@
     color:var(--text-2);
     font-size:14.5px;
   }
+  .tier{
+    display:inline-block; margin-left:10px; padding:2px 8px;
+    border:1px solid var(--hairline); border-radius:100px;
+    font-size:10px; letter-spacing:0.08em; color:var(--text-3); vertical-align:1px;
+  }
+  .tier-pro{ border-color:rgba(61,207,207,0.45); color:var(--teal); }
+
+  /* ---------- PRICING ---------- */
+  .plans{ display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; }
+  .plan{
+    border:1px solid var(--hairline); border-radius:20px;
+    padding:32px 28px; background:var(--bg);
+  }
+  .plan-pro{ border-color:rgba(61,207,207,0.45); box-shadow:0 0 40px rgba(61,207,207,0.08); }
+  .plan .tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+    color:var(--teal); text-transform:uppercase; display:block;
+  }
+  .plan-sub{ color:var(--text-1); font-size:20px; margin:10px 0 20px; }
+  .plan ul{ list-style:none; padding:0; margin:0; }
+  .plan li{
+    color:var(--text-2); font-size:15px; padding:9px 0 9px 22px; position:relative;
+    border-top:1px solid var(--hairline);
+  }
+  .plan li::before{ content:""; position:absolute; left:2px; top:17px; width:8px; height:8px; border-radius:50%; background:var(--teal); opacity:0.7; }
 
   /* ---------- CLOSING ---------- */
   .closing{
@@ -416,7 +429,8 @@
   .lang-row span{ color:var(--teal); }
 
   @media (max-width:820px){
-    .hero-grid{ grid-template-columns:1fr; }
+    .plans{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
     .principles-grid{ grid-template-columns:1fr; }
     .tour-grid{ grid-template-columns:1fr; gap:40px; }
     .hero{ padding-top:56px; }
@@ -437,6 +451,11 @@
       <img src="/assets/icon-1024.png" alt="">
       vela
     </a>
+    <div class="nav-links">
+      <a href="#battery">バッテリー</a>
+      <a href="#stress">ストレス</a>
+      <a href="#pricing">価格</a>
+    </div>
     <a class="nav-cta" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">ダウンロード</a>
   </nav>
 </header>
@@ -444,49 +463,27 @@
 <main id="top">
 
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <p class="eyebrow">Apple Watch 用 HRV</p>
-        <h1>あなたの穏やかさは、<em>誰かの平均</em>ではない。</h1>
-        <p>Vela は Apple Watch 上で直接あなたの心拍変動（SDNN）を測定し、一般的な集団のしきい値ではなく、あなただけのベースラインを構築します。すべての計算は時計上で行われます。私たちのサーバーを経由するものは何もありません。サーバーがないからです。</p>
+    <div class="wrap">
+      <div class="hero-text">
+        <p class="eyebrow">Apple Watch 用ストレスとバッテリー</p>
+        <h1>あなたのエネルギーと穏やかさは、<em>誰かの平均</em>ではない。</h1>
+        <p>Vela は Apple Watch で心拍変動（SDNN）を読み取り、集団のしきい値ではなく、あなた自身のベースラインと比べます。そこから、今日残っているエネルギー（バッテリー）と、いまの状態（ストレス）を伝えます。計算はすべて時計の中で行われます。私たちのサーバーを通るものは何もありません。そもそもサーバーを持っていないからです。</p>
         <div class="cta-row">
           <a class="badge-link" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">
             <img class="badge-appstore" src="/assets/app-store-badge-white.svg" alt="App Store でダウンロード">
           </a>
         </div>
       </div>
-      <div class="wave-panel">
-        <div class="wave-panel-head">
-          <span>SDNN · ライブ</span>
-          <span>安静時</span>
-        </div>
-        <canvas id="hero-wave" width="480" height="180"></canvas>
-        <div class="wave-readout">
-          <span>集団のノイズ</span>
-          <span><b>あなたのベースライン</b>が定まる</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="v2">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Vela 2.0 の新機能 · パブリックベータ</p>
-        <h2>時計のためではなく、あなたのためのバッテリー。</h2>
-        <p>Vela 2.0 にはバッテリーが加わりました。充電されるのは眠っている間だけで、ストレス、活動量、ワークアウトで減っていきます。基準になるのは、あなた自身の HRV ベースラインです。12月の公開に先立ち、TestFlight でパブリックベータを公開中です。</p>
-        <a class="beta-cta" href="https://testflight.apple.com/join/pJ3esgGy" target="_blank" rel="noopener">TestFlight でベータに参加</a>
-      </div>
-      <div class="watch-showcase v2-showcase">
-        <a class="shot-card v2-zoom" href="/assets/vela-2-beta.png" aria-haspopup="dialog">
-          <img src="/assets/vela-2-beta.png" alt="Vela 2.0 の概要：1日のカーブとともに 78 を示すバッテリー、充電は睡眠中だけ、昼寝や夜勤も対象、SDNN に基づく計算、今日いちばん消耗した原因（45分のワークアウトで −18）、無料の朝のスナップショット、買い切りの Vela Pro、デバイス上での処理と Vela のサーバーなし、そして TestFlight のパブリックベータへの招待。" width="3840" height="2160" loading="lazy" decoding="async">
+      <div class="hero-shot">
+        <a class="frame v2-zoom" href="/assets/vela-2-battery-ja.jpg" aria-haspopup="dialog">
+          <img src="/assets/vela-2-battery-ja.jpg" alt="Vela を表示した3台の Apple Watch Ultra：中央は1日のバッテリーカーブで、夜に80まで充電されて現在は44。左右はストレスレベル（34、低い）とバッテリー残量（44、中程度）。" width="2400" height="1600" decoding="async">
         </a>
         <p class="v2-hint">画像をタップすると拡大表示されます</p>
       </div>
-      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="時計のためではなく、あなたのためのバッテリー。">
+      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="あなたのエネルギーと穏やかさは、誰かの平均ではない。">
         <button class="v2-close" type="button" aria-label="閉じる">×</button>
         <div class="v2-lightbox-scroll">
-          <img src="/assets/vela-2-beta.png" alt="Vela 2.0 の概要：1日のカーブとともに 78 を示すバッテリー、充電は睡眠中だけ、昼寝や夜勤も対象、SDNN に基づく計算、今日いちばん消耗した原因（45分のワークアウトで −18）、無料の朝のスナップショット、買い切りの Vela Pro、デバイス上での処理と Vela のサーバーなし、そして TestFlight のパブリックベータへの招待。" width="3840" height="2160" loading="lazy" decoding="async">
+          <img src="/assets/vela-2-battery-ja.jpg" alt="Vela を表示した3台の Apple Watch Ultra：中央は1日のバッテリーカーブで、夜に80まで充電されて現在は44。左右はストレスレベル（34、低い）とバッテリー残量（44、中程度）。" width="2400" height="1600" loading="lazy" decoding="async">
         </div>
       </dialog>
     </div>
@@ -497,7 +494,7 @@
       <div class="section-head">
         <p class="eyebrow">名前について</p>
         <h2>なぜ「Vela」なのか</h2>
-        <p>「Vela」はスペイン語で船の帆のことでもあり、ラテン語の velum に由来します。ヨットは風と戦いません。風を読み、針路を調整します。それがこのアプリの考え方です。外部の基準と比べるのではなく、Vela はあなた自身の個人ベースラインを読み取り、あなた自身のパターンを理解する手助けをします。ストレスは戦うものではなく、読み取って合わせていくものです。</p>
+        <p>「Vela」はスペイン語で船の帆のことでもあり、ラテン語の velum に由来します。ヨットは風と戦いません。風を読み、針路を調整します。それがこのアプリの考え方です。外部の基準と比べるのではなく、Vela はあなた自身の個人ベースラインを読み取り、あなた自身のパターンを理解する手助けをします。ストレスも疲れも、戦うものではありません。読み取って、針路を合わせていくものです。</p>
       </div>
     </div>
   </section>
@@ -507,7 +504,7 @@
       <div class="section-head">
         <p class="eyebrow">なぜ平均では不十分なのか</p>
         <h2>同じ 25&nbsp;ms の HRV でも、ある人には高く、別の人には低いことがあります。</h2>
-        <p>HRV は人によって大きく異なります。集団のしきい値は誰もを同じように扱うため、ほとんどの場合それが外れる原因になります。Vela はあなたの実際の履歴からあなた自身のベースラインを構築します。Apple Watch にすでに HRV データがあれば初日から始められ、初めての場合は定まるまで 7〜14 日かかります。</p>
+        <p>HRV は人によって大きく異なります。集団のしきい値は誰もを同じように扱うため、ほとんどの場合それが外れる原因になります。Vela はあなたの実際の履歴からあなた自身のベースラインを構築します。Apple Watch にすでに HRV データがあれば初日から始められ、初めての場合は定まるまで 7〜14 日かかります。 これはどちらにも当てはまります。ストレスはふだんの HRV を基準に測られ、ひと晩でどれだけ充電されるかも同じです。</p>
       </div>
       <div class="baseline-figure">
         <svg viewBox="0 0 800 180" preserveAspectRatio="none">
@@ -526,73 +523,53 @@
     </div>
   </section>
 
-  <section>
+  <section id="battery">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">しくみ</p>
-        <h2>考えを変えないために下した、4つの決定。</h2>
-      </div>
-      <div class="principles-grid">
-        <div class="principle">
-          <span class="tag">On-device</span>
-          <p><strong>すべての計算は Watch 上で行われます。</strong> HealthKit がデータを提供し、残りは時計が処理します。HRV データが Vela のサーバーへ向けてデバイスの外に出ることはありません。</p>
-        </div>
-        <div class="principle">
-          <span class="tag">私たちのではなく、あなたの iCloud</span>
-          <p><strong>同期にはあなた自身の iCloud アカウントを使います。</strong> CloudKit 経由です。Vela はあなたのデータをどこにも保管しません。保管する場所がないため、できないのです。</p>
-        </div>
-        <div class="principle">
-          <span class="tag">サブスクなし。ずっと。</span>
-          <p><strong>月額も年額もありません。</strong> Vela は今は無料です。将来的には買い切りの Pro 版が登場します。サブスクリプションにはしません。</p>
-        </div>
-        <div class="principle">
-          <span class="tag">はじめからアクセシブル</span>
-          <p><strong>VoiceOver、Dynamic Type、視差効果を減らす。</strong> 対応言語は12：スペイン語、カタルーニャ語、バスク語、ガリシア語、英語、フランス語、ドイツ語、イタリア語、ポルトガル語、チェコ語、ギリシャ語、日本語。</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">手首の上で</p>
-        <h2>1つのスコア、1つの状態、1つのトレンド。</h2>
-        <p>色とテキストのラベルは常にセットで表示されます。色覚特性にも配慮した設計です。どのスコアにも説明があります。どの範囲が「正常」なのか、いつ「高い」になるのか、そしてその理由まで。</p>
-      </div>
-      <div class="watch-showcase">
-        <div class="shot-card">
-          <img src="/assets/watch-mockup-combined.png" alt="Apple Watch Ultra に表示された Vela の3画面：正常ステータスの現在のストレススコア、その日の平均を示す週間トレンド、正常と高いの範囲を説明する画面。" width="1920" height="1920" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">クイックツアー</p>
-        <h2>3つの画面、それぞれに役割は1つ。</h2>
+        <p class="eyebrow">バッテリー · Vela 2.0 の新機能</p>
+        <h2>時計のためではなく、あなたのためのバッテリー。</h2>
+        <p>充電されるのは眠っている間だけで、昼寝や夜勤明けの日中の睡眠も含みます。ストレス、活動量、ワークアウト、起きている時間で減っていきます。長く感じた一日には、その理由をバッテリーが見せてくれます。</p>
       </div>
       <div class="tour-grid">
         <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/watch-shot-score.png" alt="ストレススコア68、正常ステータスを表示する Vela のメイン画面。その場で計算されたもの。" width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
+          <img src="/assets/tour-charge-ja.webp" alt="夜間の充電を表示した Vela の画面：80 まで充電、睡眠中に +27、睡眠時間 7 時間 15 分、睡眠中の HRV は平均より 9% 高い。" width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">充電<span class="tier">無料</span></span>
+          <p>ひと晩でどれだけ充電されたか、その内訳：睡眠時間と、ふだんの平均と比べた睡眠中の HRV。</p>
+        </div>
+        <div class="tour-item">
+          <img src="/assets/tour-curve-ja.webp" alt="1日のバッテリーカーブ：夜間は緑の充電で 80 まで、日中は青の消費で 47 まで。ワークアウトが2回記録されている。" width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">1日のカーブ<span class="tier tier-pro">Pro</span></span>
+          <p>眠っている間にどう上がり、起きてからどう下がっていくか。ワークアウトはその時刻に印が付きます。</p>
+        </div>
+        <div class="tour-item">
+          <img src="/assets/tour-spent-ja.webp" alt="今日の消費の内訳：起きてから 33、ストレスと活動で 7、1時間のワークアウトで 12、起きていた時間で 14。" width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">何に使ったか<span class="tier tier-pro">Pro</span></span>
+          <p>起きてから消費した分を、ストレスと活動、ワークアウト、起きていた時間に分けて表示します。起きたことを説明するだけで、アドバイスはしません。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stress">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">ストレス</p>
+        <h2>1つのスコア、1つの状態、1つのトレンド。</h2>
+        <p>いまのストレスレベル、1日の時間ごとの推移、各範囲の意味。色とテキストのラベルは常にセットで表示され、色覚特性にも配慮しています。ストレス機能はすべて無料です。</p>
+      </div>
+      <div class="tour-grid">
+        <div class="tour-item">
+          <img src="/assets/tour-score-ja.webp" alt="ストレスレベル 34（低い）をその場で算出して表示する Vela のメイン画面。" width="1200" height="1200" loading="lazy" decoding="async">
           <span class="tag">現在のスコア</span>
           <p>1つの数字、1つの状態。すべて時計上で計算され、同期を待つ必要はありません。</p>
         </div>
         <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/watch-shot-trend.png" alt="その日の平均ストレスと1時間ごとの測定値を、個人ベースラインと比較したトレンドチャート。" width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
+          <img src="/assets/tour-trend-ja.webp" alt="その日の平均ストレスと1時間ごとの測定値を、個人ベースラインと比較したトレンドチャート。" width="1200" height="1200" loading="lazy" decoding="async">
           <span class="tag">トレンド</span>
           <p>その日のすべての測定値を、他の誰でもない、あなた自身の破線と比較します。</p>
         </div>
         <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/watch-shot-explain.png" alt="ストレスの範囲を説明する画面：正常は40〜69、高いは70〜100。" width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
+          <img src="/assets/tour-ranges-ja.webp" alt="ストレスの範囲を説明する画面：正常は40〜69、高いは70〜100。" width="1200" height="1200" loading="lazy" decoding="async">
           <span class="tag">範囲の説明</span>
           <p>分かりにくい数字はなし。どの範囲にも、意味と何を予期すべきかが書かれています。</p>
         </div>
@@ -603,13 +580,78 @@
   <section>
     <div class="wrap">
       <div class="section-head">
+        <p class="eyebrow">しくみ</p>
+        <h2>考えを変えないために下した、5つの決定。</h2>
+      </div>
+      <div class="principles-grid">
+        <div class="principle">
+          <span class="tag">On-device</span>
+          <p><strong>すべての計算は Watch 上で行われます。</strong> HealthKit がデータを提供し、残りは時計が処理します。HRV も睡眠も活動量も、Vela のサーバーへ向けてデバイスの外に出ることはありません。</p>
+        </div>
+        <div class="principle">
+          <span class="tag">私たちのではなく、あなたの iCloud</span>
+          <p><strong>同期にはあなた自身の iCloud アカウントを使います。</strong> CloudKit 経由です。Vela はあなたのデータをどこにも保管しません。保管する場所がないため、できないのです。</p>
+        </div>
+        <div class="principle">
+          <span class="tag">トラッキングなし</span>
+          <p><strong>解析ツールも広告も、サードパーティの SDK もありません。</strong> Vela はあなたが誰なのか、いつアプリを開いたのかを知りません。時計の外に出るのは、あなた自身の iCloud へのデータだけです。</p>
+        </div>
+        <div class="principle">
+          <span class="tag">はじめからアクセシブル</span>
+          <p><strong>VoiceOver、Dynamic Type、視差効果を減らす。</strong> 対応言語は12：スペイン語、カタルーニャ語、バスク語、ガリシア語、英語、フランス語、ドイツ語、イタリア語、ポルトガル語、チェコ語、ギリシャ語、日本語。</p>
+        </div>
+        <div class="principle wide">
+          <span class="tag">ウェルネスであり、医療ではない</span>
+          <p><strong>Velaは医療機器ではありません。</strong> 病気の診断や治療は行わず、あなた自身のパターンを読み取る手助けをします。そのため、医療機器としてのCEマークや健康関連の認証はありません（<a href="/ja/support/#medical">理由はこちら</a>）。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="baseline">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">価格</p>
+        <h2>無料で始められて、Pro は一度きり。</h2>
+        <p>月額も年額もありません。Vela Pro は一度支払えば、ずっとあなたのものです。</p>
+      </div>
+      <div class="plans">
+        <div class="plan plan-free">
+          <span class="tag">無料</span>
+          <p class="plan-sub">すべての方に</p>
+          <ul>
+            <li>リアルタイムのストレスレベルと、その状態・説明</li>
+            <li>今日の時間ごとの推移とストレスの履歴</li>
+            <li>週ごとの分析と高ストレスの通知</li>
+            <li>毎晩の充電量とその内訳</li>
+            <li>ストレスと夜間の充電のコンプリケーション</li>
+          </ul>
+        </div>
+        <div class="plan plan-pro">
+          <span class="tag">Vela Pro</span>
+          <p class="plan-sub">買い切り</p>
+          <ul>
+            <li>1日を通したリアルタイムのバッテリー</li>
+            <li>夜間の充電とワークアウトを含む1日のカーブ</li>
+            <li>何に使ったか：ストレスと活動、ワークアウト、起きていた時間</li>
+            <li>月・週・日ごとのバッテリー履歴</li>
+            <li>リアルタイムのバッテリーと今日の時間別バーを表示するコンプリケーション</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
         <p class="eyebrow">使い始める</p>
         <h2>何かを測定する前に、許可を求めます。</h2>
-        <p>Vela は細かい文字の中ではなく、はっきりと HRV へのアクセスを求めます。そして HRV の測定が初めてなら、信頼できるベースラインができるまでの日数を伝えます。初日からあなたを知っているふりはしません。</p>
+        <p>Vela は細かい文字の中ではなく、はっきりと健康データへのアクセスを求め、それぞれを何に使うのかを伝えます。そして HRV の測定が初めてなら、信頼できるベースラインができるまでの日数を伝えます。初日からあなたを知っているふりはしません。</p>
       </div>
       <div class="watch-showcase">
-        <div class="shot-card">
-          <img src="/assets/watch-onboarding.png" alt="Apple Watch での Vela のオンボーディングの流れ：ようこそ画面、心拍変動データへのアクセスを求める明示的なリクエスト、残り7日と表示されたベースライン構築中の画面。" width="1920" height="1920" loading="lazy" decoding="async">
+        <div class="frame">
+          <img src="/assets/onboarding-ja.jpg" alt="Apple Watch での Vela の初期設定の2つのステップ：ようこそ画面と、それぞれのデータを何に使うかを説明する健康データへのアクセスのリクエスト。" width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
@@ -619,7 +661,7 @@
     <div class="wrap">
       <p class="eyebrow" style="justify-content:center">今すぐダウンロード</p>
       <h2>サブスクなし。<em>ずっと。</em></h2>
-      <p>Vela は Apple Watch 向けに App Store で無料で入手できます。</p>
+      <p>Vela は Apple Watch 向けに App Store で無料、Vela Pro は買い切りで入手できます。</p>
       <div class="cta-row">
         <a class="badge-link" href="https://apps.apple.com/app/vela-hrv/id6762096428" target="_blank" rel="noopener">
           <img class="badge-appstore" src="/assets/app-store-badge-white.svg" alt="App Store でダウンロード">
@@ -658,74 +700,6 @@
     if(e.target === box || e.target.classList.contains('v2-lightbox-scroll') || window.innerWidth > 700) box.close();
   });
   box.addEventListener('close', function(){ zoom.focus(); });
-})();
-</script>
-
-<script>
-(function(){
-  var canvas = document.getElementById('hero-wave');
-  var ctx = canvas.getContext('2d');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W, H, dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  function resize(){
-    var rect = canvas.getBoundingClientRect();
-    W = rect.width; H = rect.height;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  var t = 0;
-  var noise = 1;
-
-  function drawWave(offsetY, amp, freq, phase, color, glow, lineWidth){
-    ctx.beginPath();
-    for(var x=0; x<=W; x+=4){
-      var n = reduceMotion ? 0 : (Math.random()-0.5) * noise * 6;
-      var y = offsetY + Math.sin((x*freq) + phase) * amp + n;
-      if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    if(glow){
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
-    } else {
-      ctx.shadowBlur = 0;
-    }
-    ctx.stroke();
-  }
-
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    t += 0.02;
-    if(!reduceMotion && noise > 0){ noise = Math.max(0, noise - 0.0018); }
-
-    ctx.beginPath();
-    ctx.setLineDash([6,7]);
-    ctx.moveTo(0, H*0.5);
-    ctx.lineTo(W, H*0.5);
-    ctx.strokeStyle = 'rgba(245,248,252,0.18)';
-    ctx.lineWidth = 1;
-    ctx.shadowBlur = 0;
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    drawWave(H*0.5, H*0.22, 0.045, t, '#3DCFCF', true, 2.4);
-
-    if(!reduceMotion){
-      requestAnimationFrame(frame);
-    }
-  }
-
-  if(reduceMotion){
-    noise = 0;
-    frame();
-  } else {
-    requestAnimationFrame(frame);
-  }
 })();
 </script>
 
