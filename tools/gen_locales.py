@@ -273,6 +273,8 @@ SUPPORT_CSS = """    :root {
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -758,6 +760,8 @@ LANDING_CSS = """  :root{
     font-size:15px;
   }
   .principle strong{ color:var(--text-1); font-weight:500; }
+  .principle.wide{ grid-column:1 / -1; }
+  .principle a{ color:var(--teal); text-decoration:underline; text-underline-offset:3px; }
 
   /* ---------- WATCH SHOWCASE ---------- */
   /* Montages of several watches keep the app's background, framed as a card like the
@@ -908,12 +912,16 @@ def footer(t, page, code):
     </footer>"""
 
 def render_support(code, t):
-    faqs = "\n\n".join(
-        f'''        <div class="faq-item">
+    # An entry can carry a third element, its anchor id, so other pages can link to it.
+    # Answers may hold {legal} and {appstore}, filled in here.
+    def faq_item(q, a, anchor=None):
+        a = a.replace("{legal}", path_for(code, "legal")).replace("{appstore}", APPSTORE_URL)
+        attr = f' id="{anchor}"' if anchor else ""
+        return f'''        <div class="faq-item"{attr}>
           <h3>{q}</h3>
           <p>{a}</p>
         </div>'''
-        for q, a in t["faq"])
+    faqs = "\n\n".join(faq_item(*item) for item in t["faq"])
     return HEAD.format(lang=code, title=t["support_title"], css=SUPPORT_CSS,
                        seo=seo_head(code, "support", t["support_title"], t["about_p1"])) + f"""<body>
   <div class="container">
@@ -1102,12 +1110,15 @@ def render_changelog(code, t):
 def render_landing(code, t):
     L = t["landing"]
     V = L["v2"]
+    # The fifth principle (wellness, not medicine) spans the whole grid and links to the FAQ
+    # entry that explains why there's no health certification.
+    faq_link = path_for(code, "support") + "#medical"
     principles = "\n".join(
-        f'''        <div class="principle">
+        f'''        <div class="principle{' wide' if i == 4 else ''}">
           <span class="tag">{tag}</span>
-          <p><strong>{strong}</strong> {rest}</p>
+          <p><strong>{strong}</strong> {rest.replace("{faq}", faq_link)}</p>
         </div>'''
-        for tag, strong, rest in L["principles"])
+        for i, (tag, strong, rest) in enumerate(L["principles"]))
 
     def tour(items, images, tier=None):
         # tier: one entry per item, "free" / "pro" / None, shown as a small badge next to the tag.
@@ -3591,6 +3602,179 @@ for _code, _n in _LANDING_2.items():
     for _k, _val in _n.items():
         if _k not in ("story", "baseline_extra", "p0_rest", "p2"):
             _l[_k] = _val
+
+# ---------------------------------------------------------------------------
+# Wellness, not medicine (2.0). A tester asked why the site shows no health
+# certification. Vela is a wellness app, not a medical device (EU MDR 2017/745), so
+# it can't carry a medical CE mark, and it collects no data, so a privacy seal has
+# nothing to certify. A fifth principle says so on the landing page and links to two
+# FAQ entries that explain it. Answers use {legal} and {appstore}; the principle, {faq}.
+_TRUST = {
+  "es": {
+    "principles_h2": "Cinco decisiones, tomadas para no cambiar de idea.",
+    "principle": ("Bienestar, no medicina", "Vela no es un producto sanitario.",
+                  "No diagnostica ni trata ninguna enfermedad: te ayuda a leer tus propios patrones. Por eso no lleva marcado CE ni sellos sanitarios (<a href=\"{faq}\">te contamos por qué</a>)."),
+    "faq": [
+      ("¿Vela es un producto sanitario? ¿Por qué no lleva marcado CE ni ningún sello sanitario?",
+       "No, y es a propósito. Vela es una app de bienestar: compara tu estrés y tu energía con tu propia media, pero no diagnostica, trata, previene ni vigila ninguna enfermedad. En la Unión Europea, el marcado CE sanitario es solo para los productos sanitarios (Reglamento (UE) 2017/745), así que una app de bienestar no puede llevarlo sin engañar a quien la usa. Si algo de lo que ves te preocupa, coméntalo con un profesional sanitario.",
+       "medical"),
+      ("¿Por qué no tiene un sello de privacidad? ¿Cómo sé qué pasa con mis datos?",
+       "Un sello de privacidad certifica cómo una empresa trata los datos que recoge, y Vela no recoge ninguno: no hay cuenta, ni servidores, ni analítica, ni SDK de terceros. Tus datos se quedan en tu reloj y en tu propio iCloud, donde solo entras tú, y así lo declara la etiqueta de privacidad de la <a href=\"{appstore}\">ficha del App Store</a>. Puedes quitarle a Vela el acceso a tus datos de salud cuando quieras, desde la app Salud o los Ajustes del reloj. Detrás de Vela hay una persona, con su nombre y su dirección en el <a href=\"{legal}\">aviso legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "en": {
+    "principles_h2": "Five decisions, made to not change our minds.",
+    "principle": ("Wellness, not medicine", "Vela is not a medical device.",
+                  "It doesn't diagnose or treat any condition: it helps you read your own patterns. So it carries no CE medical marking or health certification (<a href=\"{faq}\">here's why</a>)."),
+    "faq": [
+      ("Is Vela a medical device? Why doesn't it have a CE mark or any health certification?",
+       "No, and that's deliberate. Vela is a wellness app: it compares your stress and your energy with your own average, but it doesn't diagnose, treat, prevent or monitor any disease. In the European Union, the medical CE mark is only for medical devices (Regulation (EU) 2017/745), so a wellness app can't carry one without misleading the people who use it. If anything you see worries you, talk to a healthcare professional.",
+       "medical"),
+      ("Why doesn't it have a privacy seal? How do I know what happens to my data?",
+       "A privacy seal certifies how a company handles the data it collects, and Vela collects none: there's no account, no servers, no analytics and no third-party SDKs. Your data stays on your watch and in your own iCloud, where only you can get in, and that's what the privacy label on the <a href=\"{appstore}\">App Store listing</a> declares. You can remove Vela's access to your health data at any time, from the Health app or your watch's Settings. Behind Vela there's a person, whose name and address are in the <a href=\"{legal}\">legal notice</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "ca": {
+    "principles_h2": "Cinc decisions, preses per no canviar d'opinió.",
+    "principle": ("Benestar, no medicina", "Vela no és un producte sanitari.",
+                  "No diagnostica ni tracta cap malaltia: t'ajuda a llegir els teus propis patrons. Per això no porta marcatge CE ni segells sanitaris (<a href=\"{faq}\">t'expliquem per què</a>)."),
+    "faq": [
+      ("Vela és un producte sanitari? Per què no porta marcatge CE ni cap segell sanitari?",
+       "No, i és a propòsit. Vela és una app de benestar: compara el teu estrès i la teva energia amb la teva pròpia mitjana, però no diagnostica, tracta, prevé ni vigila cap malaltia. A la Unió Europea, el marcatge CE sanitari és només per als productes sanitaris (Reglament (UE) 2017/745), així que una app de benestar no el pot portar sense enganyar qui la fa servir. Si alguna cosa del que veus et preocupa, parla'n amb un professional sanitari.",
+       "medical"),
+      ("Per què no té cap segell de privadesa? Com sé què passa amb les meves dades?",
+       "Un segell de privadesa certifica com una empresa tracta les dades que recull, i Vela no en recull cap: no hi ha compte, ni servidors, ni analítica, ni SDK de tercers. Les teves dades es queden al teu rellotge i al teu propi iCloud, on només hi entres tu, i així ho declara l'etiqueta de privadesa de la <a href=\"{appstore}\">fitxa de l'App Store</a>. Pots treure a Vela l'accés a les teves dades de salut quan vulguis, des de l'app Salut o la Configuració del rellotge. Darrere de Vela hi ha una persona, amb el seu nom i la seva adreça a l'<a href=\"{legal}\">avís legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "eu": {
+    "principles_h2": "Bost erabaki, iritziz ez aldatzeko hartuak.",
+    "principle": ("Ongizatea, ez medikuntza", "Vela ez da produktu sanitario bat.",
+                  "Ez du gaixotasunik diagnostikatzen ez tratatzen: zure ereduak irakurtzen laguntzen dizu. Horregatik ez darama CE marka sanitariorik ez osasun-zigilurik (<a href=\"{faq}\">zergatik azaltzen dizugu</a>)."),
+    "faq": [
+      ("Vela produktu sanitario bat al da? Zergatik ez darama CE markarik ez osasun-zigilurik?",
+       "Ez, eta nahita da. Vela ongizaterako aplikazio bat da: zure estresa eta energia zure batez bestekoarekin alderatzen ditu, baina ez du gaixotasunik diagnostikatzen, tratatzen, prebenitzen ez zaintzen. Europar Batasunean, CE marka sanitarioa produktu sanitarioentzat bakarrik da ((EB) 2017/745 Erregelamendua); beraz, ongizaterako aplikazio batek ezin du eraman, erabiltzen duena engainatu gabe. Ikusten duzun zerbaitek kezkatzen bazaitu, hitz egin osasun-profesional batekin.",
+       "medical"),
+      ("Zergatik ez du pribatutasun-zigilurik? Nola jakin zer gertatzen den nire datuekin?",
+       "Pribatutasun-zigilu batek ziurtatzen du enpresa batek nola tratatzen dituen biltzen dituen datuak, eta Velak ez du bat ere biltzen: ez dago konturik, ez zerbitzaririk, ez analitikarik, ez hirugarrenen SDKrik. Zure datuak zure erlojuan eta zure iCloud-ean geratzen dira, eta zuk bakarrik sar zaitezke bertara; hala adierazten du <a href=\"{appstore}\">App Storeko fitxako</a> pribatutasun-etiketak. Nahi duzunean ken diezaiokezu Velari zure osasun-datuetarako sarbidea, Osasuna aplikaziotik edo erlojuaren Ezarpenetatik. Velaren atzean pertsona bat dago, eta haren izena eta helbidea <a href=\"{legal}\">lege-oharrean</a> daude.",
+       "privacy-seal"),
+    ],
+  },
+  "gl": {
+    "principles_h2": "Cinco decisións, tomadas para non cambiar de opinión.",
+    "principle": ("Benestar, non medicina", "Vela non é un produto sanitario.",
+                  "Non diagnostica nin trata ningunha enfermidade: axúdache a ler os teus propios patróns. Por iso non leva marcado CE nin selos sanitarios (<a href=\"{faq}\">contámosche por que</a>)."),
+    "faq": [
+      ("Vela é un produto sanitario? Por que non leva marcado CE nin ningún selo sanitario?",
+       "Non, e é a propósito. Vela é unha app de benestar: compara o teu estrés e a túa enerxía coa túa propia media, pero non diagnostica, trata, prevén nin vixía ningunha enfermidade. Na Unión Europea, o marcado CE sanitario é só para os produtos sanitarios (Regulamento (UE) 2017/745), así que unha app de benestar non pode levalo sen enganar a quen a usa. Se algo do que ves te preocupa, coméntao cun profesional sanitario.",
+       "medical"),
+      ("Por que non ten un selo de privacidade? Como sei que pasa cos meus datos?",
+       "Un selo de privacidade certifica como unha empresa trata os datos que recolle, e Vela non recolle ningún: non hai conta, nin servidores, nin analítica, nin SDK de terceiros. Os teus datos quedan no teu reloxo e no teu propio iCloud, onde só entras ti, e así o declara a etiqueta de privacidade da <a href=\"{appstore}\">ficha da App Store</a>. Podes quitarlle a Vela o acceso aos teus datos de saúde cando queiras, desde a app Saúde ou os Axustes do reloxo. Detrás de Vela hai unha persoa, co seu nome e o seu enderezo no <a href=\"{legal}\">aviso legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "fr": {
+    "principles_h2": "Cinq décisions, prises pour ne pas changer d'avis.",
+    "principle": ("Bien-être, pas médecine", "Vela n'est pas un dispositif médical.",
+                  "Elle ne diagnostique ni ne traite aucune maladie : elle vous aide à lire vos propres tendances. C'est pourquoi elle ne porte ni marquage CE médical ni certification de santé (<a href=\"{faq}\">on vous explique pourquoi</a>)."),
+    "faq": [
+      ("Vela est-elle un dispositif médical ? Pourquoi n'a-t-elle ni marquage CE ni certification de santé ?",
+       "Non, et c'est voulu. Vela est une app de bien-être : elle compare votre stress et votre énergie avec votre propre moyenne, mais elle ne diagnostique, ne traite, ne prévient ni ne surveille aucune maladie. Dans l'Union européenne, le marquage CE médical est réservé aux dispositifs médicaux (règlement (UE) 2017/745) : une app de bien-être ne peut donc pas le porter sans tromper ceux qui l'utilisent. Si quelque chose vous inquiète, parlez-en à un professionnel de santé.",
+       "medical"),
+      ("Pourquoi n'a-t-elle pas de label de confidentialité ? Comment savoir ce que deviennent mes données ?",
+       "Un label de confidentialité certifie la façon dont une entreprise traite les données qu'elle collecte, et Vela n'en collecte aucune : pas de compte, pas de serveurs, pas d'analytique, pas de SDK tiers. Vos données restent sur votre montre et dans votre propre iCloud, auquel vous seul avez accès, et c'est ce que déclare l'étiquette de confidentialité de la <a href=\"{appstore}\">fiche App Store</a>. Vous pouvez retirer à Vela l'accès à vos données de santé à tout moment, depuis l'app Santé ou les Réglages de la montre. Derrière Vela, il y a une personne, dont le nom et l'adresse figurent dans les <a href=\"{legal}\">mentions légales</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "de": {
+    "principles_h2": "Fünf Entscheidungen, getroffen, um sie nicht mehr zu ändern.",
+    "principle": ("Wellness, keine Medizin", "Vela ist kein Medizinprodukt.",
+                  "Die App stellt keine Diagnosen und behandelt keine Krankheiten: Sie hilft dir, deine eigenen Muster zu lesen. Deshalb trägt sie weder eine CE-Kennzeichnung als Medizinprodukt noch ein Gesundheitssiegel (<a href=\"{faq}\">warum, erklären wir hier</a>)."),
+    "faq": [
+      ("Ist Vela ein Medizinprodukt? Warum hat die App keine CE-Kennzeichnung und kein Gesundheitssiegel?",
+       "Nein, und das ist Absicht. Vela ist eine Wellness-App: Sie vergleicht deinen Stress und deine Energie mit deinem eigenen Durchschnitt, erkennt, behandelt, verhindert oder überwacht aber keine Krankheiten. In der Europäischen Union ist die CE-Kennzeichnung nach der Medizinprodukteverordnung (EU) 2017/745 Medizinprodukten vorbehalten; eine Wellness-App darf sie also nicht tragen, ohne ihre Nutzer in die Irre zu führen. Wenn dich etwas beunruhigt, das du siehst, sprich mit einer Ärztin oder einem Arzt.",
+       "medical"),
+      ("Warum gibt es kein Datenschutzsiegel? Woher weiß ich, was mit meinen Daten passiert?",
+       "Ein Datenschutzsiegel bescheinigt, wie ein Unternehmen mit den Daten umgeht, die es erhebt, und Vela erhebt keine: kein Konto, keine Server, keine Analyse, keine SDKs von Drittanbietern. Deine Daten bleiben auf deiner Uhr und in deiner eigenen iCloud, auf die nur du Zugriff hast, und genau das gibt das Datenschutzetikett im <a href=\"{appstore}\">App Store</a> an. Du kannst Vela den Zugriff auf deine Gesundheitsdaten jederzeit entziehen, in der Health-App oder in den Einstellungen der Uhr. Hinter Vela steht ein Mensch, mit Name und Adresse im <a href=\"{legal}\">Impressum</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "it": {
+    "principles_h2": "Cinque decisioni, prese per non cambiare idea.",
+    "principle": ("Benessere, non medicina", "Vela non è un dispositivo medico.",
+                  "Non diagnostica né cura alcuna malattia: ti aiuta a leggere i tuoi schemi. Per questo non ha marcatura CE medica né certificazioni sanitarie (<a href=\"{faq}\">ti spieghiamo perché</a>)."),
+    "faq": [
+      ("Vela è un dispositivo medico? Perché non ha la marcatura CE né certificazioni sanitarie?",
+       "No, ed è voluto. Vela è un'app per il benessere: confronta il tuo stress e la tua energia con la tua media, ma non diagnostica, cura, previene né monitora alcuna malattia. Nell'Unione europea la marcatura CE medica è riservata ai dispositivi medici (regolamento (UE) 2017/745), quindi un'app per il benessere non può averla senza ingannare chi la usa. Se qualcosa di ciò che vedi ti preoccupa, parlane con un professionista sanitario.",
+       "medical"),
+      ("Perché non ha un sigillo di privacy? Come so cosa succede ai miei dati?",
+       "Un sigillo di privacy certifica come un'azienda tratta i dati che raccoglie, e Vela non ne raccoglie nessuno: niente account, niente server, niente analisi, niente SDK di terze parti. I tuoi dati restano sul tuo orologio e nel tuo iCloud, a cui accedi solo tu, ed è quello che dichiara l'etichetta della privacy della <a href=\"{appstore}\">scheda dell'App Store</a>. Puoi togliere a Vela l'accesso ai tuoi dati sanitari quando vuoi, dall'app Salute o dalle Impostazioni dell'orologio. Dietro Vela c'è una persona, con nome e indirizzo nelle <a href=\"{legal}\">note legali</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "pt": {
+    "principles_h2": "Cinco decisões, tomadas para não mudar de ideias.",
+    "principle": ("Bem-estar, não medicina", "A Vela não é um dispositivo médico.",
+                  "Não diagnostica nem trata nenhuma doença: ajuda-o a ler os seus próprios padrões. Por isso não tem marcação CE médica nem selos de saúde (<a href=\"{faq}\">explicamos porquê</a>)."),
+    "faq": [
+      ("A Vela é um dispositivo médico? Porque não tem marcação CE nem nenhum selo de saúde?",
+       "Não, e é de propósito. A Vela é uma app de bem-estar: compara o seu stress e a sua energia com a sua própria média, mas não diagnostica, trata, previne nem monitoriza nenhuma doença. Na União Europeia, a marcação CE médica é só para dispositivos médicos (Regulamento (UE) 2017/745), por isso uma app de bem-estar não a pode ter sem enganar quem a usa. Se algo do que vê o preocupa, fale com um profissional de saúde.",
+       "medical"),
+      ("Porque não tem um selo de privacidade? Como sei o que acontece aos meus dados?",
+       "Um selo de privacidade certifica como uma empresa trata os dados que recolhe, e a Vela não recolhe nenhum: não há conta, nem servidores, nem analítica, nem SDK de terceiros. Os seus dados ficam no seu relógio e no seu próprio iCloud, a que só você tem acesso, e é isso que declara a etiqueta de privacidade da <a href=\"{appstore}\">página da App Store</a>. Pode retirar à Vela o acesso aos seus dados de saúde quando quiser, na app Saúde ou nas Definições do relógio. Por trás da Vela há uma pessoa, com o nome e a morada no <a href=\"{legal}\">aviso legal</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "cs": {
+    "principles_h2": "Pět rozhodnutí, učiněných tak, abychom je neměnili.",
+    "principle": ("Wellness, ne medicína", "Vela není zdravotnický prostředek.",
+                  "Nestanovuje diagnózy ani neléčí žádné onemocnění: pomáhá vám číst vaše vlastní vzorce. Proto nemá zdravotnické označení CE ani žádnou zdravotní certifikaci (<a href=\"{faq}\">vysvětlujeme proč</a>)."),
+    "faq": [
+      ("Je Vela zdravotnický prostředek? Proč nemá označení CE ani žádnou zdravotní certifikaci?",
+       "Není, a je to záměr. Vela je wellness aplikace: porovnává váš stres a energii s vaším vlastním průměrem, ale žádné onemocnění nediagnostikuje, neléčí, nepředchází mu ani ho nesleduje. V Evropské unii je zdravotnické označení CE určeno jen zdravotnickým prostředkům (nařízení (EU) 2017/745), takže wellness aplikace ho nesmí nést, aniž by klamala své uživatele. Pokud vás něco z toho, co vidíte, znepokojuje, poraďte se se zdravotníkem.",
+       "medical"),
+      ("Proč nemá pečeť ochrany soukromí? Jak poznám, co se děje s mými daty?",
+       "Pečeť ochrany soukromí potvrzuje, jak firma zachází s daty, která shromažďuje, a Vela žádná neshromažďuje: žádný účet, žádné servery, žádná analytika, žádná SDK třetích stran. Vaše data zůstávají v hodinkách a ve vašem vlastním iCloudu, kam máte přístup jen vy, a právě to uvádí štítek soukromí na <a href=\"{appstore}\">stránce v App Storu</a>. Přístup Vely k vašim zdravotním datům můžete kdykoli odebrat v aplikaci Zdraví nebo v Nastavení hodinek. Za Velou stojí člověk, jehož jméno a adresu najdete v <a href=\"{legal}\">právních informacích</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "el": {
+    "principles_h2": "Πέντε αποφάσεις, που πάρθηκαν για να μην τις αλλάξουμε.",
+    "principle": ("Ευεξία, όχι ιατρική", "Το Vela δεν είναι ιατροτεχνολογικό προϊόν.",
+                  "Δεν κάνει διάγνωση ούτε θεραπεύει καμία πάθηση: σας βοηθά να διαβάζετε τα δικά σας μοτίβα. Γι' αυτό δεν φέρει ιατρική σήμανση CE ούτε πιστοποίηση υγείας (<a href=\"{faq}\">σας εξηγούμε γιατί</a>)."),
+    "faq": [
+      ("Είναι το Vela ιατροτεχνολογικό προϊόν; Γιατί δεν έχει σήμανση CE ούτε πιστοποίηση υγείας;",
+       "Όχι, και αυτό είναι σκόπιμο. Το Vela είναι εφαρμογή ευεξίας: συγκρίνει το στρες και την ενέργειά σας με τον δικό σας μέσο όρο, αλλά δεν διαγιγνώσκει, δεν θεραπεύει, δεν προλαμβάνει ούτε παρακολουθεί καμία ασθένεια. Στην Ευρωπαϊκή Ένωση, η ιατρική σήμανση CE προορίζεται μόνο για ιατροτεχνολογικά προϊόντα (Κανονισμός (ΕΕ) 2017/745), οπότε μια εφαρμογή ευεξίας δεν μπορεί να τη φέρει χωρίς να παραπλανά όσους τη χρησιμοποιούν. Αν κάτι από όσα βλέπετε σας ανησυχεί, μιλήστε με έναν επαγγελματία υγείας.",
+       "medical"),
+      ("Γιατί δεν έχει σφραγίδα απορρήτου; Πώς ξέρω τι γίνεται με τα δεδομένα μου;",
+       "Μια σφραγίδα απορρήτου πιστοποιεί πώς μια εταιρεία χειρίζεται τα δεδομένα που συλλέγει, και το Vela δεν συλλέγει κανένα: δεν υπάρχει λογαριασμός, ούτε διακομιστές, ούτε αναλυτικά εργαλεία, ούτε SDK τρίτων. Τα δεδομένα σας μένουν στο ρολόι σας και στο δικό σας iCloud, όπου έχετε πρόσβαση μόνο εσείς, και αυτό δηλώνει η ετικέτα απορρήτου στη <a href=\"{appstore}\">σελίδα του App Store</a>. Μπορείτε να αφαιρέσετε από το Vela την πρόσβαση στα δεδομένα υγείας σας όποτε θέλετε, από την εφαρμογή Υγεία ή τις Ρυθμίσεις του ρολογιού. Πίσω από το Vela υπάρχει ένας άνθρωπος, με όνομα και διεύθυνση στις <a href=\"{legal}\">νομικές πληροφορίες</a>.",
+       "privacy-seal"),
+    ],
+  },
+  "ja": {
+    "principles_h2": "考えを変えないために下した、5つの決定。",
+    "principle": ("ウェルネスであり、医療ではない", "Velaは医療機器ではありません。",
+                  "病気の診断や治療は行わず、あなた自身のパターンを読み取る手助けをします。そのため、医療機器としてのCEマークや健康関連の認証はありません（<a href=\"{faq}\">理由はこちら</a>）。"),
+    "faq": [
+      ("Velaは医療機器ですか？なぜCEマークや健康関連の認証がないのですか？",
+       "いいえ、意図的にそうしています。Velaはウェルネスアプリです。ストレスとエネルギーをあなた自身の平均と比べますが、病気の診断・治療・予防・監視は行いません。EUでは医療用のCEマークは医療機器のためのもの（規則 (EU) 2017/745）なので、ウェルネスアプリがそれを付ければ利用者を誤解させることになります。表示された内容が気になる場合は、医療の専門家にご相談ください。",
+       "medical"),
+      ("なぜプライバシー認証マークがないのですか？データがどう扱われるかはどうすれば分かりますか？",
+       "プライバシー認証マークは、企業が収集したデータをどう扱うかを証明するものですが、Velaはデータを一切収集しません。アカウントもサーバーも分析ツールも、他社のSDKもありません。データはあなたのApple Watchとあなた自身のiCloudにだけ保存され、アクセスできるのはあなただけです。<a href=\"{appstore}\">App Storeのページ</a>のプライバシーラベルにもそう記載されています。ヘルスケアデータへのVelaのアクセスは、ヘルスケアAppまたはApple Watchの設定からいつでも取り消せます。Velaは一人の個人が開発しており、氏名と住所は<a href=\"{legal}\">法的情報</a>に記載しています。",
+       "privacy-seal"),
+    ],
+  },
+}
+
+assert set(_TRUST) == set(ORDER), set(ORDER) ^ set(_TRUST)
+for _code, _n in _TRUST.items():
+    _l = L[_code]["landing"]
+    assert len(_l["principles"]) == 4, (_code, "principles")
+    _l["principles"].append(_n["principle"])
+    _l["principles_h2"] = _n["principles_h2"]
+    L[_code]["faq"].extend(_n["faq"])
 
 # ------------------------------------------------------------ generation
 

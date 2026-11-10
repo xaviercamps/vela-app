@@ -166,6 +166,8 @@
       letter-spacing: 0.01em;
     }
     .faq-item p { font-size: 0.88rem; line-height: 1.65; }
+    .faq-item a { color: var(--primary-bright); text-decoration: none; border-bottom: 1px solid rgba(142,207,255,0.3); }
+    .faq-item:target { border-color: rgba(74,158,255,0.45); }
     .contact-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -271,6 +273,16 @@
         <div class="faq-item">
           <h3>Quins permisos necessita Vela?</h3>
           <p>Vela sol·licita accés només de lectura a HealthKit: la variabilitat de la freqüència cardíaca per al teu score d'estrès, i la son, els passos, l'energia activa, els entrenaments i la freqüència cardíaca per a la teva Bateria. Són dades que el teu Apple Watch ja recull automàticament. Si vols, també et demana permís per enviar-te notificacions amb els avisos d'estrès.</p>
+        </div>
+
+        <div class="faq-item" id="medical">
+          <h3>Vela és un producte sanitari? Per què no porta marcatge CE ni cap segell sanitari?</h3>
+          <p>No, i és a propòsit. Vela és una app de benestar: compara el teu estrès i la teva energia amb la teva pròpia mitjana, però no diagnostica, tracta, prevé ni vigila cap malaltia. A la Unió Europea, el marcatge CE sanitari és només per als productes sanitaris (Reglament (UE) 2017/745), així que una app de benestar no el pot portar sense enganyar qui la fa servir. Si alguna cosa del que veus et preocupa, parla'n amb un professional sanitari.</p>
+        </div>
+
+        <div class="faq-item" id="privacy-seal">
+          <h3>Per què no té cap segell de privadesa? Com sé què passa amb les meves dades?</h3>
+          <p>Un segell de privadesa certifica com una empresa tracta les dades que recull, i Vela no en recull cap: no hi ha compte, ni servidors, ni analítica, ni SDK de tercers. Les teves dades es queden al teu rellotge i al teu propi iCloud, on només hi entres tu, i així ho declara l'etiqueta de privadesa de la <a href="https://apps.apple.com/app/vela-hrv/id6762096428">fitxa de l'App Store</a>. Pots treure a Vela l'accés a les teves dades de salut quan vulguis, des de l'app Salut o la Configuració del rellotge. Darrere de Vela hi ha una persona, amb el seu nom i la seva adreça a l'<a href="/ca/legal/">avís legal</a>.</p>
         </div>
       </section>
     </div>
