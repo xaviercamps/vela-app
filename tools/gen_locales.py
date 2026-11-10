@@ -17,7 +17,9 @@ ORDER = ["es", "en", "ca", "eu", "gl", "fr", "de", "it", "pt", "cs", "el", "ja"]
 APPSTORE_URL = "https://apps.apple.com/app/vela-hrv/id6762096428"
 # Per-language images made by vela-store/2.0.0/scripts/web_images.py (Apple Watch Ultra,
 # Ocean band, the app in that language). 1920x1920 JPEG.
-TOUR_IMAGES = ["tour-score", "tour-trend", "tour-ranges"]
+# Single watches on a transparent background (WebP), made by vela-store/2.0.0/scripts/web_images.py.
+STRESS_TOUR = ["tour-score", "tour-trend", "tour-ranges"]
+BATTERY_TOUR = ["tour-charge", "tour-curve", "tour-spent"]
 SITE_URL = "https://velahrv.com"
 DEFAULT_LOCALE = "en"  # served at the domain root; used as the x-default hreflang target
 BUILD_DATE = date.today().isoformat()
@@ -565,6 +567,13 @@ LANDING_CSS = """  :root{
     text-decoration:none;
   }
   .brand img{ width:26px; height:26px; border-radius:7px; }
+  .nav-links{ display:flex; gap:28px; margin-left:auto; margin-right:28px; }
+  .nav-links a{
+    font-family:var(--mono); font-size:13px; color:var(--text-2);
+    text-decoration:none; transition:color .16s ease;
+  }
+  .nav-links a:hover{ color:var(--teal); }
+  section[id]{ scroll-margin-top:72px; }
   .pulse-dot{
     width:6px; height:6px; border-radius:50%;
     background:var(--teal);
@@ -629,12 +638,9 @@ LANDING_CSS = """  :root{
     padding:88px 0 64px;
     position:relative;
   }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:56px;
-    align-items:center;
-  }
+  .hero-text{ max-width:720px; }
+  .hero-shot{ max-width:1040px; margin:56px auto 0; }
+  .hero .v2-hint{ max-width:none; margin:12px 0 0; font-size:13px; }
   .hero h1{
     font-size:clamp(34px, 5vw, 58px);
     line-height:1.06;
@@ -689,29 +695,6 @@ LANDING_CSS = """  :root{
     box-shadow:0 8px 24px rgba(0,0,0,0.4);
   }
 
-  .wave-panel{
-    background:var(--bg-deep);
-    border:1px solid var(--hairline);
-    border-radius:20px;
-    padding:22px 20px 18px;
-  }
-  .wave-panel-head{
-    display:flex; justify-content:space-between; align-items:baseline;
-    font-family:var(--mono); font-size:11px; color:var(--text-3);
-    letter-spacing:0.06em; margin-bottom:10px;
-  }
-  .wave-panel-head span:last-child{ color:var(--teal); }
-  canvas#hero-wave{
-    width:100%; height:180px; display:block;
-  }
-  .wave-readout{
-    display:flex; justify-content:space-between;
-    margin-top:14px;
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--text-3);
-  }
-  .wave-readout b{ color:var(--text-1); font-weight:500; }
 
   /* ---------- SECTION SHELL ---------- */
   section{ padding:96px 0; }
@@ -777,10 +760,15 @@ LANDING_CSS = """  :root{
   .principle strong{ color:var(--text-1); font-weight:500; }
 
   /* ---------- WATCH SHOWCASE ---------- */
-  .shot-card{
+  /* Montages of several watches keep the app's background, framed as a card like the
+     rest of the page's panels. Single watches (the tours) are transparent and sit on the page. */
+  .frame{
     display:block;
+    border:1px solid var(--hairline);
+    border-radius:20px;
+    overflow:hidden;
   }
-  .shot-card img{ width:100%; height:auto; display:block; }
+  .frame img{ width:100%; height:auto; display:block; }
 
   .watch-showcase{ max-width:720px; margin:0 auto; }
 
@@ -789,7 +777,7 @@ LANDING_CSS = """  :root{
     grid-template-columns:repeat(3, 1fr);
     gap:28px;
   }
-  .tour-item .shot-card{ margin-bottom:20px; }
+  .tour-item img{ width:100%; height:auto; display:block; margin-bottom:12px; }
   .tour-item .tag{
     font-family:var(--mono);
     font-size:11px;
@@ -803,6 +791,31 @@ LANDING_CSS = """  :root{
     color:var(--text-2);
     font-size:14.5px;
   }
+  .tier{
+    display:inline-block; margin-left:10px; padding:2px 8px;
+    border:1px solid var(--hairline); border-radius:100px;
+    font-size:10px; letter-spacing:0.08em; color:var(--text-3); vertical-align:1px;
+  }
+  .tier-pro{ border-color:rgba(61,207,207,0.45); color:var(--teal); }
+
+  /* ---------- PRICING ---------- */
+  .plans{ display:grid; grid-template-columns:repeat(2, 1fr); gap:24px; }
+  .plan{
+    border:1px solid var(--hairline); border-radius:20px;
+    padding:32px 28px; background:var(--bg);
+  }
+  .plan-pro{ border-color:rgba(61,207,207,0.45); box-shadow:0 0 40px rgba(61,207,207,0.08); }
+  .plan .tag{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+    color:var(--teal); text-transform:uppercase; display:block;
+  }
+  .plan-sub{ color:var(--text-1); font-size:20px; margin:10px 0 20px; }
+  .plan ul{ list-style:none; padding:0; margin:0; }
+  .plan li{
+    color:var(--text-2); font-size:15px; padding:9px 0 9px 22px; position:relative;
+    border-top:1px solid var(--hairline);
+  }
+  .plan li::before{ content:""; position:absolute; left:2px; top:17px; width:8px; height:8px; border-radius:50%; background:var(--teal); opacity:0.7; }
 
   /* ---------- CLOSING ---------- */
   .closing{
@@ -842,7 +855,8 @@ LANDING_CSS = """  :root{
   .lang-row span{ color:var(--teal); }
 
   @media (max-width:820px){
-    .hero-grid{ grid-template-columns:1fr; }
+    .plans{ grid-template-columns:1fr; }
+    .nav-links{ display:none; }
     .principles-grid{ grid-template-columns:1fr; }
     .tour-grid{ grid-template-columns:1fr; gap:40px; }
     .hero{ padding-top:56px; }
@@ -1094,15 +1108,30 @@ def render_landing(code, t):
           <p><strong>{strong}</strong> {rest}</p>
         </div>'''
         for tag, strong, rest in L["principles"])
-    tour = "\n".join(
-        f'''        <div class="tour-item">
-          <div class="shot-card">
-            <img src="/assets/{img}-{code}.jpg" alt="{alt}" width="1920" height="1920" loading="lazy" decoding="async">
-          </div>
-          <span class="tag">{tag}</span>
+
+    def tour(items, images, tier=None):
+        # tier: one entry per item, "free" / "pro" / None, shown as a small badge next to the tag.
+        tier = tier or [None] * len(items)
+        badge = {"free": f'<span class="tier">{L["tier_free"]}</span>',
+                 "pro": f'<span class="tier tier-pro">{L["tier_pro"]}</span>', None: ""}
+        return "\n".join(
+            f'''        <div class="tour-item">
+          <img src="/assets/{img}-{code}.webp" alt="{alt}" width="1200" height="1200" loading="lazy" decoding="async">
+          <span class="tag">{tag}{badge[tr]}</span>
           <p>{p}</p>
         </div>'''
-        for (tag, p, alt), img in zip(L["tour"], TOUR_IMAGES))
+            for (tag, p, alt), img, tr in zip(items, images, tier))
+
+    def plan(title, sub, items, cls):
+        lis = "\n".join(f"            <li>{i}</li>" for i in items)
+        return f'''        <div class="plan {cls}">
+          <span class="tag">{title}</span>
+          <p class="plan-sub">{sub}</p>
+          <ul>
+{lis}
+          </ul>
+        </div>'''
+
     return LANDING_HEAD.format(lang=code, title=L["title_tag"], css=LANDING_CSS,
                                seo=seo_head(code, "landing", L["title_tag"], L["meta_desc"]),
                                jsonld=app_json_ld(code, t)) + f"""<body>
@@ -1113,6 +1142,11 @@ def render_landing(code, t):
       <img src="/assets/icon-1024.png" alt="">
       vela
     </a>
+    <div class="nav-links">
+      <a href="#battery">{L['nav_battery']}</a>
+      <a href="#stress">{L['nav_stress']}</a>
+      <a href="#pricing">{L['nav_pricing']}</a>
+    </div>
     <a class="nav-cta" href="{APPSTORE_URL}" target="_blank" rel="noopener">{L['nav_cta']}</a>
   </nav>
 </header>
@@ -1120,8 +1154,8 @@ def render_landing(code, t):
 <main id="top">
 
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
+    <div class="wrap">
+      <div class="hero-text">
         <p class="eyebrow">{L['eyebrow1']}</p>
         <h1>{L['h1']}</h1>
         <p>{L['hero_p']}</p>
@@ -1131,35 +1165,13 @@ def render_landing(code, t):
           </a>
         </div>
       </div>
-      <div class="wave-panel">
-        <div class="wave-panel-head">
-          <span>{L['wave_kicker']}</span>
-          <span>{L['wave_state']}</span>
-        </div>
-        <canvas id="hero-wave" width="480" height="180"></canvas>
-        <div class="wave-readout">
-          <span>{L['wave_left']}</span>
-          <span>{L['wave_right_html']}</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="v2">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">{V['eyebrow']}</p>
-        <h2>{V['h2']}</h2>
-        <p>{V['p']}</p>
-        <a class="beta-cta" href="{APPSTORE_URL}" target="_blank" rel="noopener">{V['cta']}</a>
-      </div>
-      <div class="watch-showcase v2-showcase">
-        <a class="shot-card v2-zoom" href="/assets/{V2_IMAGE[code]}" aria-haspopup="dialog">
-          <img src="/assets/{V2_IMAGE[code]}" alt="{V['alt']}" width="2400" height="1600" loading="lazy" decoding="async">
+      <div class="hero-shot">
+        <a class="frame v2-zoom" href="/assets/{V2_IMAGE[code]}" aria-haspopup="dialog">
+          <img src="/assets/{V2_IMAGE[code]}" alt="{V['alt']}" width="2400" height="1600" decoding="async">
         </a>
         <p class="v2-hint">{V['zoom']}</p>
       </div>
-      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="{V['h2']}">
+      <dialog class="v2-lightbox" id="v2-lightbox" aria-label="{L['h1_plain']}">
         <button class="v2-close" type="button" aria-label="{V['close']}">×</button>
         <div class="v2-lightbox-scroll">
           <img src="/assets/{V2_IMAGE[code]}" alt="{V['alt']}" width="2400" height="1600" loading="lazy" decoding="async">
@@ -1202,6 +1214,32 @@ def render_landing(code, t):
     </div>
   </section>
 
+  <section id="battery">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">{L['battery_eyebrow']}</p>
+        <h2>{V['h2']}</h2>
+        <p>{L['battery_p']}</p>
+      </div>
+      <div class="tour-grid">
+{tour(L['battery_tour'], BATTERY_TOUR, ["free", "pro", "pro"])}
+      </div>
+    </div>
+  </section>
+
+  <section id="stress">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">{L['stress_eyebrow']}</p>
+        <h2>{L['stress_h2']}</h2>
+        <p>{L['stress_p']}</p>
+      </div>
+      <div class="tour-grid">
+{tour(L['tour'], STRESS_TOUR)}
+      </div>
+    </div>
+  </section>
+
   <section>
     <div class="wrap">
       <div class="section-head">
@@ -1214,29 +1252,16 @@ def render_landing(code, t):
     </div>
   </section>
 
-  <section>
+  <section id="pricing" class="baseline">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">{L['showcase_eyebrow']}</p>
-        <h2>{L['showcase_h2']}</h2>
-        <p>{L['showcase_p']}</p>
+        <p class="eyebrow">{L['pricing_eyebrow']}</p>
+        <h2>{L['pricing_h2']}</h2>
+        <p>{L['pricing_p']}</p>
       </div>
-      <div class="watch-showcase">
-        <div class="shot-card">
-          <img src="/assets/showcase-{code}.jpg" alt="{L['showcase_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">{L['tour_eyebrow']}</p>
-        <h2>{L['tour_h2']}</h2>
-      </div>
-      <div class="tour-grid">
-{tour}
+      <div class="plans">
+{plan(L['tier_free'], L['free_sub'], L['free_items'], "plan-free")}
+{plan("Vela Pro", L['pro_sub'], L['pro_items'], "plan-pro")}
       </div>
     </div>
   </section>
@@ -1249,7 +1274,7 @@ def render_landing(code, t):
         <p>{L['onboarding_p']}</p>
       </div>
       <div class="watch-showcase">
-        <div class="shot-card">
+        <div class="frame">
           <img src="/assets/onboarding-{code}.jpg" alt="{L['onboarding_alt']}" width="1920" height="1920" loading="lazy" decoding="async">
         </div>
       </div>
@@ -1299,74 +1324,6 @@ def render_landing(code, t):
     if(e.target === box || e.target.classList.contains('v2-lightbox-scroll') || window.innerWidth > 700) box.close();
   }});
   box.addEventListener('close', function(){{ zoom.focus(); }});
-}})();
-</script>
-
-<script>
-(function(){{
-  var canvas = document.getElementById('hero-wave');
-  var ctx = canvas.getContext('2d');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var W, H, dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  function resize(){{
-    var rect = canvas.getBoundingClientRect();
-    W = rect.width; H = rect.height;
-    canvas.width = W * dpr; canvas.height = H * dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }}
-  window.addEventListener('resize', resize);
-  resize();
-
-  var t = 0;
-  var noise = 1;
-
-  function drawWave(offsetY, amp, freq, phase, color, glow, lineWidth){{
-    ctx.beginPath();
-    for(var x=0; x<=W; x+=4){{
-      var n = reduceMotion ? 0 : (Math.random()-0.5) * noise * 6;
-      var y = offsetY + Math.sin((x*freq) + phase) * amp + n;
-      if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }}
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lineWidth;
-    if(glow){{
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
-    }} else {{
-      ctx.shadowBlur = 0;
-    }}
-    ctx.stroke();
-  }}
-
-  function frame(){{
-    ctx.clearRect(0,0,W,H);
-    t += 0.02;
-    if(!reduceMotion && noise > 0){{ noise = Math.max(0, noise - 0.0018); }}
-
-    ctx.beginPath();
-    ctx.setLineDash([6,7]);
-    ctx.moveTo(0, H*0.5);
-    ctx.lineTo(W, H*0.5);
-    ctx.strokeStyle = 'rgba(245,248,252,0.18)';
-    ctx.lineWidth = 1;
-    ctx.shadowBlur = 0;
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    drawWave(H*0.5, H*0.22, 0.045, t, '#3DCFCF', true, 2.4);
-
-    if(!reduceMotion){{
-      requestAnimationFrame(frame);
-    }}
-  }}
-
-  if(reduceMotion){{
-    noise = 0;
-    frame();
-  }} else {{
-    requestAnimationFrame(frame);
-  }}
 }})();
 </script>
 
@@ -1442,26 +1399,56 @@ L["es"] = {
   },
   "landing": {
     "nav_cta": "Descargar",
-    "title_tag": "Vela — HRV para Apple Watch. Sin suscripción. Nunca.",
-    "meta_desc": "Vela mide tu variabilidad de ritmo cardíaco (HRV/SDNN) en Apple Watch y construye tu propia línea base personal. Todo se procesa en el reloj. Sincroniza con tu iCloud. Sin suscripción, nunca.",
-    "eyebrow1": "HRV para Apple Watch",
-    "h1": "Tu calma no es <em>la media</em> de nadie.",
-    "hero_p": "Vela mide tu variabilidad de ritmo cardíaco (SDNN) directamente en tu Apple Watch y construye una línea base propia — no un umbral genérico de población. Todo el cálculo ocurre en el reloj. Nada pasa por nuestros servidores, porque no los tenemos.",
+    "nav_battery": "Batería", "nav_stress": "Estrés", "nav_pricing": "Precio",
+    "title_tag": "Vela — Estrés y Batería para Apple Watch. Sin suscripción. Nunca.",
+    "meta_desc": "Vela mide tu estrés y tu Batería en el Apple Watch contra tu propia línea base de HRV: cómo estás ahora, cuánto te ha cargado el sueño y en qué se te va la energía durante el día. Todo se calcula en el reloj. Sin suscripción, nunca.",
+    "eyebrow1": "Estrés y Batería para Apple Watch",
+    "h1": "Tu energía y tu calma no son <em>la media</em> de nadie.",
+    "h1_plain": "Tu energía y tu calma no son la media de nadie.",
+    "hero_p": "Vela lee tu variabilidad de ritmo cardíaco (SDNN) en el Apple Watch y la compara con tu propia línea base, no con un umbral de población. Con eso te dice cuánta energía te queda hoy, tu Batería, y cómo estás ahora, tu estrés. Todo el cálculo ocurre en el reloj. Nada pasa por nuestros servidores, porque no los tenemos.",
     "badge_alt": "Descargar en el App Store",
     "wave_kicker": "SDNN · TIEMPO REAL", "wave_state": "EN REPOSO",
     "wave_left": "ruido de población", "wave_right_html": "<b>tu línea base</b> se asienta",
     "story_eyebrow": "Sobre el nombre", "story_h2": "Por qué “Vela”",
-    "story_p": "“Vela” también es la vela de un barco — del latín velum. Un velero no lucha contra el viento: lo lee y ajusta el rumbo. Esa es la idea detrás de la app. En lugar de compararte con un estándar externo, Vela lee tu propia línea base personal y te ayuda a entender tus propios patrones. El estrés no se combate, se lee y se ajusta.",
+    "story_p": "“Vela” también es la vela de un barco — del latín velum. Un velero no lucha contra el viento: lo lee y ajusta el rumbo. Esa es la idea detrás de la app. En lugar de compararte con un estándar externo, Vela lee tu propia línea base personal y te ayuda a entender tus propios patrones. El estrés y el cansancio no se combaten: se leen, y se ajusta el rumbo.",
     "baseline_eyebrow": "Por qué el promedio no sirve",
     "baseline_h2": "25&nbsp;ms de HRV puede ser alto para ti y bajo para otra persona.",
-    "baseline_p": "El HRV varía enormemente entre personas. Un umbral de población trata a todo el mundo igual — y por eso casi siempre se equivoca. Vela construye tu propia línea base a partir de tu historial real: si ya tienes datos de HRV en tu Apple Watch, puede empezar desde el primer día; si eres nuevo, tarda entre 7 y 14 días en asentarse.",
+    "baseline_p": "El HRV varía enormemente entre personas. Un umbral de población trata a todo el mundo igual — y por eso casi siempre se equivoca. Vela construye tu propia línea base a partir de tu historial real: si ya tienes datos de HRV en tu Apple Watch, puede empezar desde el primer día; si eres nuevo, tarda entre 7 y 14 días en asentarse. Y vale para las dos cosas: tu estrés se mide contra tu HRV de siempre, y lo que te carga una noche también.",
     "legend1": "Umbral genérico de población", "legend2": "Muestras individuales", "legend3": "Tu línea base personal",
     "principles_eyebrow": "Cómo funciona", "principles_h2": "Cuatro decisiones, tomadas para no cambiar de idea.",
     "principles": [
-      ("On-device", "Todo el cálculo ocurre en tu Watch.", "HealthKit entrega los datos, el reloj hace el resto. Ningún dato de HRV sale de tu dispositivo hacia un servidor de Vela."),
+      ("On-device", "Todo el cálculo ocurre en tu Watch.", "HealthKit entrega los datos, el reloj hace el resto. Ni tu HRV, ni tu sueño, ni tu actividad salen de tu dispositivo hacia un servidor de Vela."),
       ("Tu iCloud, no el nuestro", "La sincronización usa tu propia cuenta de iCloud", "vía CloudKit. Vela no aloja tus datos en ningún sitio — no puede, porque no tiene dónde."),
-      ("Sin suscripción. Nunca.", "Sin cuotas mensuales ni anuales.", "Vela es gratis. Vela Pro es una compra única: la pagas una vez y es tuya — nunca una suscripción."),
+      ("Sin rastreo", "Sin analítica, sin anuncios, sin SDK de terceros.", "Vela no sabe quién eres ni cuándo abres la app: lo único que sale del reloj va a tu propio iCloud."),
       ("Accesible de serie", "VoiceOver, Dynamic Type, Reduce Motion", "y 12 idiomas: castellano, català, euskara, galego, English, français, Deutsch, italiano, português, čeština, ελληνικά y 日本語."),
+    ],
+    "battery_eyebrow": "Batería · Nuevo en Vela 2.0",
+    "battery_p": "Se carga solo mientras duermes, también con una siesta o con el sueño de día tras un turno de noche, y se gasta con el estrés, la actividad, los entrenos y las horas despierto. Si un día se te ha hecho largo, la Batería te enseña por qué.",
+    "battery_tour": [
+      ("Tu carga", "Cuánto te ha cargado la noche y de dónde sale: lo que has dormido y tu HRV durante el sueño frente a tu media.", "Pantalla de Vela con la carga de la noche: hasta 80, 27 puntos más durmiendo, 7 h 15 min de sueño y el HRV del sueño un 9 % por encima de la media."),
+      ("La curva del día", "Cómo ha subido mientras dormías y cómo baja desde que te levantas, con cada entreno marcado a su hora.", "Curva de batería del día: recarga en verde durante la noche hasta 80 y descarga en azul durante el día hasta 47, con dos entrenos marcados."),
+      ("En qué se ha ido", "Lo gastado desde que te despertaste, separado en estrés y actividad, entrenos y horas despierto. Describe lo que ha pasado, sin darte consejos.", "Desglose del gasto de hoy: 33 puntos desde que te despertaste, 7 por estrés y actividad, 12 por una hora de entreno y 14 por las horas de vigilia."),
+    ],
+    "tier_free": "Gratis", "tier_pro": "Pro",
+    "stress_eyebrow": "Estrés", "stress_h2": "Un score, un estado, una tendencia.",
+    "stress_p": "Tu nivel de estrés de ahora, el día hora a hora y qué significa cada rango. El color y la etiqueta de texto siempre van juntos, también pensado para quienes no distinguen bien los colores. Todo el estrés es gratis.",
+    "pricing_eyebrow": "Precio", "pricing_h2": "Gratis para empezar. Pro, una sola vez.",
+    "pricing_p": "Sin cuotas mensuales ni anuales. Vela Pro se paga una vez y es tuyo.",
+    "free_sub": "Para todos",
+    "free_items": [
+      "Tu nivel de estrés en tiempo real, con su estado y su explicación",
+      "El día de hoy hora a hora y el histórico de estrés",
+      "Análisis semanales y avisos de estrés alto",
+      "La carga de cada noche y de dónde sale",
+      "Complicaciones de estrés y de la carga de la noche",
+    ],
+    "pro_sub": "Compra única",
+    "pro_items": [
+      "La Batería en directo, a lo largo del día",
+      "La curva del día, con la recarga de la noche y cada entreno",
+      "En qué se ha ido: estrés y actividad, entrenos y horas despierto",
+      "Histórico de batería por mes, semana y día",
+      "Complicaciones con la Batería en directo y las barras por hora de hoy",
     ],
     "showcase_eyebrow": "En tu muñeca", "showcase_h2": "Un score, un estado, una tendencia.",
     "showcase_p": "El color y la etiqueta de texto siempre van juntos — también pensado para quienes no distinguen bien los colores. Cada score se explica: qué rango es “Normal”, cuándo pasa a “Alto” y por qué.",
@@ -3326,6 +3313,11 @@ for _code, _v in _V2.items():
     _cl["beta_note"] = _v["beta_note"].format(link=_V2_LINK, end="</a>")
     _cl["entries"].insert(0, {"version": "2.0.0", "date": _v["date"], "status": "released", "changes": _v["changes"]})
     L[_code]["landing"]["v2"] = {k: _v[k] for k in ("eyebrow", "h2", "p", "cta", "alt", "zoom", "close")}
+
+# TEMPORAL (portada 2.0 en revisión): los idiomas sin traducir toman las claves nuevas del castellano.
+for _code in ORDER:
+    for _k, _val in L["es"]["landing"].items():
+        L[_code]["landing"].setdefault(_k, _val)
 
 # ------------------------------------------------------------ generation
 
